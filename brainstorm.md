@@ -1,9 +1,9 @@
 *	Spaces
     * Objects?
     * Stored in an array corresponding to location on board?
-  	*	Properties can have nice Booleans like purchased, mortgaged, an enum for player who owns
-  	*	Because landing on a space will only do one thing, after rolling just do board[player_location].activate();
-    *	So properties, for instance, will: collect money, let you buy them, do nothing and will be determined within the “location” object
+  	 *	Properties can have nice Booleans like purchased, mortgaged, an enum for player who owns
+  	 *	Because landing on a space will only do one thing, after rolling just do board[player_location].activate();
+      *	So properties, for instance, will: collect money, let you buy them, or do nothing; and will be determined within the “location” object
 *	Players
     *	Objects?
     *	Arrayed objects?
@@ -31,7 +31,7 @@
     *	Some sort of event tracker
        *	Checked each time a property is obtained
        *	Location.checkMonopoly()
-        *	Location will contain an int for what set it belongs to
+       *	Location will contain an int for what set it belongs to
 *	Houses and Hotels
     *	Needs to be tied to player in case of being sold
         *	Then again you could just force them to be resolved before the underlying property is sold or mortgaged
@@ -45,5 +45,4 @@
     *	Globalish int with all of the money stored so far
 *	Means of getting out of jail
     *	Either store number of turns and enumerate each turn
-    *	Or store turn entered jail and do math
 *	Selling Property
