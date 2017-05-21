@@ -1,3 +1,3 @@
 # Oakland-Oligarch
 
-I don't know how to readme yet, be patient
+Oakland Oligarch project for Laboon's Summer 2017 Software Engineering course
