@@ -46,3 +46,10 @@
 *	Means of getting out of jail
     *	Either store number of turns and enumerate each turn
 *	Selling Property
+*  Multiple spaces per turn
+    * Can be caused by chance/community chest sending you to another space or by doubles
+*  Modified prices
+    * Caused by chance/community chest
+    * Need to track the fact that the previous space has modified prices
+      * Abuse the fact that any space you land on after a card that would cause a modified price will only have one possible thing it's doing (taken property: 2x rent, untaken property 0.5x cost)
+      * Store a boolean: modified_price, and check before you get the price/cost
