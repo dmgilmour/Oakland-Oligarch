@@ -11,3 +11,5 @@ Team 404 Members:
 
 # Notes:
 Dan: I'm a fan of Slack so I'd advocate using that. I've used Trello before but not much of a fan, if anyone has other project management software in mind I'm very open. I've started brainstorming things we'll have to do and for now I'll just put it on here as a document until we choose where to keep todo info.
+
+David: I got added to the pitt csc Slack if we decide to use it.
