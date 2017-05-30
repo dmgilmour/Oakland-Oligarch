@@ -5,7 +5,7 @@ Oakland Oligarch project for Laboon's Summer 2017 Software Engineering course
 Team 404 Members:
 
 * Dan Gilmour: dmgilmour@pitt.edu
-* Woodrow Fulmer: 
+* Woodrow Fulmer: awf9@pitt.edu
 * Eddie Hartman:
 * David Haskell: dah121@pitt.edu
 
