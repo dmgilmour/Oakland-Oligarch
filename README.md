@@ -6,7 +6,7 @@ Team 404 Members:
 
 * Dan Gilmour: dmgilmour@pitt.edu
 * Woodrow Fulmer: awf9@pitt.edu
-* Eddie Hartman:
+* Eddie Hartman: eeh42@pitt.edu
 * David Haskell: dah121@pitt.edu
 
 # Notes:
