@@ -1,6 +1,6 @@
 As a player of "Oakland Oligarchy",
-I would like to have currancy,
-so that I can have a starting resource, a distinct win/loss condition, and clear metrics of progress
+I would like to have currency,
+so that I can have a starting resource, a distinct win/loss condition, and clear metrics of progress.
 
 As a player of OO,
 I would like to have some player customizability,
@@ -12,7 +12,7 @@ so that I can pause and come back at another time to finish my match.
 
 As a player of OO,
 I would like to have tradable, sellable, buyable properties
-so that I can own spaces of the board and acquire more currancy.
+so that I can own spaces of the board and acquire more currency.
 
 As a customer of OO,
 I would like to have a "jail",
