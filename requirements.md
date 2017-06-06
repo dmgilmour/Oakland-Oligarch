@@ -22,3 +22,6 @@ Stuff that may be added later:
   Auction properties.
   Upgrades to rent (houses / hotels).
   Action cards (get out of jail free).
+
+Eddie's Google doc requirements
+[Here](https://docs.google.com/document/d/1TOZBt8NbHGjh6MV6D7ovaqoPY3TJvLXQnbaOnE5V_lY/edit?usp=sharing)
