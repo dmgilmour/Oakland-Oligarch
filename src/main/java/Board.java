@@ -11,30 +11,37 @@ public class Board extends JPanel {
 			JButton[] tiles = new JButton[36];
 			
 			for(int i=0; i<36; i++){
-				tiles[i]=new JButton("Propert");
+				tiles[i]=new JButton("Property");
 				//associate action listeners here
+				tiles[i].setPreferredSize(new Dimension(60, 60));
 			}
 
+			//r = button ROW
+			//c = button COLLUMN
+			//i = button number
+			int i=0;
 			GridBagConstraints constraint = new GridBagConstraints();
 			for(int r=0; r<10; r++){
 				if(r==0||r==9){
 					for(int c=0; c<10; c++){
 						constraint.gridx=c;
 						constraint.gridy=r;
-						this.add(tiles[r+c],constraint);
+						this.add(tiles[i],constraint);
+						i++;
 						
 					}
 				}
 				else{
 					for(int c=0; c<2; c++){
-						constraint.gridx=c;
-						if(r==1){
-							constraint.gridx=9;
-						}
-						else{
+						constraint.gridy=r;
+						if(c==0){
 							constraint.gridx=0;
 						}
-						this.add(tiles[r+c],constraint);
+						else{
+							constraint.gridx=9;
+						}
+						this.add(tiles[i],constraint);
+						i++;
 					}
 				}
 			}
