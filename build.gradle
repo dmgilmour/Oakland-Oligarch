@@ -1,6 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'application'
-mainClassName = "OaklandOligarchy"
+mainClassName = "game/OaklandOligarchy"
 repositories {
 	mavenCentral()
 }
