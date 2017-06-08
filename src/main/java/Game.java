@@ -1,9 +1,9 @@
 
 public class Game {
 
-	public Game() {
+	public Game(Player[] playerList) {
 
-		Window window = new Window();
+		Window window = new Window(playerList);
 
 		// Other random setup
 		

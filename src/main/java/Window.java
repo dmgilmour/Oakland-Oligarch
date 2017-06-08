@@ -6,7 +6,7 @@ public class Window {
 
 	public JFrame frame = new JFrame("Oakland Oligarchy");
 
-	public Window() {
+	public Window(Player[] playerList) {
 		frame.setSize(1000, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -24,7 +24,7 @@ public class Window {
 		c.anchor = GridBagConstraints.PAGE_START;
 		frame.add(topPanel, c);
 
-		StatusPanel statusPanel = new StatusPanel();
+		StatusPanel statusPanel = new StatusPanel(playerList);
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.gridx = 0;
