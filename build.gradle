@@ -1,0 +1,13 @@
+apply plugin: 'java'
+apply plugin: 'application'
+mainClassName = "OaklandOligarchy"
+repositories {
+	mavenCentral()
+}
+dependencies {
+	testCompile 'junit:junit:4.12'
+}
+task sequencehelp << {
+	println "Oakland Oligopoly"
+	println "A Software Engineering project for CS 1530 with Laboon in the summer of 2017 \n"
+}

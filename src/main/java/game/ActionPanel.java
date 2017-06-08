@@ -1,3 +1,5 @@
+package game;
+
 import java.util.Random;
 import java.awt.*;
 import java.awt.event.*;

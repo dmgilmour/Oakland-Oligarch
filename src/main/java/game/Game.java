@@ -1,4 +1,4 @@
-
+package game;
 public class Game {
 
 	public Game(Player[] playerList) {

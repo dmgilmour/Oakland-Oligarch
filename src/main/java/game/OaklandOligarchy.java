@@ -1,3 +1,5 @@
+package game;
+
 import java.awt.*;
 import java.awt.event.*; 
 import javax.swing.*;
@@ -39,7 +41,7 @@ public class OaklandOligarchy {
 		return num_players;
 	}
 
-	private static Player[] generatePlayers(int num_players) {
+	public static Player[] generatePlayers(int num_players) {
 
 		Player[] playerList = new Player[num_players];
 
