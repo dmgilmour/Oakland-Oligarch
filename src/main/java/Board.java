@@ -8,10 +8,10 @@ public class Board extends JPanel {
 		//The buttons are just place holders for tiles right now. The layout itself is complicated 
 		//current button size is 60X60 just for easy math
 		this.setLayout(new GridBagLayout());
-		JButton[] tiles = new JButton[36];
+		Tile[] tiles = new Tile[36];
 		
 		for(int i = 0; i < 36; i++){
-			tiles[i] = new JButton("Property" + i);
+			tiles[i] = new Tile(i);
 			//associate action listeners here
 			tiles[i].setPreferredSize(new Dimension(60, 60));
 		}
@@ -60,5 +60,10 @@ public class Board extends JPanel {
 				}
 			}
 		}
+		
+		tiles[35].addPlayer(1);
+		tiles[35].addPlayer(2);
+		tiles[35].addPlayer(3);
+		tiles[35].addPlayer(4);
 	}
 }
