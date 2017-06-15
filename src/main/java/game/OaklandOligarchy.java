@@ -34,7 +34,7 @@ public class OaklandOligarchy {
 				continue;	
 			}
 
-			if (num_players > 1 && num_players < 7) {
+			if (num_players > 1 && num_players < 5) {
 				valid_input = true;
 			}
 		}
@@ -55,7 +55,7 @@ public class OaklandOligarchy {
 
 	private static void promptPlayerNames(Player[] playerList) {
 		for (Player player : playerList) {
-			player.name = JOptionPane.showInputDialog("Input Name for Player " + (player.id + 1));	
+			player.setName(JOptionPane.showInputDialog("Input Name for Player " + (player.id + 1)));	
 			if (player.name == null) {
 				System.exit(0);
 			}
