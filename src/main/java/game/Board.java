@@ -6,11 +6,13 @@ import javax.swing.*;
 
 public class Board extends JPanel {
 
+	Tile[] tiles;
+	
 	public Board(){
 		//The buttons are just place holders for tiles right now. The layout itself is complicated 
 		//current button size is 60X60 just for easy math
 		this.setLayout(new GridBagLayout());
-		Tile[] tiles = new Tile[36];
+		tiles = new Tile[36];
 		
 		for(int i = 0; i < 36; i++){
 			tiles[i] = new Tile(i);
@@ -18,9 +20,6 @@ public class Board extends JPanel {
 			tiles[i].setPreferredSize(new Dimension(60, 60));
 		}
 
-		//r = button ROW
-		//c = button COLLUMN
-		//i = button number
 		int i=0;
 		GridBagConstraints constraint = new GridBagConstraints();
 
@@ -34,6 +33,10 @@ public class Board extends JPanel {
 		constraint.weighty = 0.8;
 		add(centerSquare, constraint);
 		*/
+		
+		//r = button ROW
+		//c = button COLLUMN
+		//i = button number
 
 		constraint.weightx = 0.1;
 		constraint.weighty = 0.1;
@@ -62,10 +65,9 @@ public class Board extends JPanel {
 				}
 			}
 		}
-		
-		tiles[35].addPlayer(1);
-		tiles[35].addPlayer(2);
-		tiles[35].addPlayer(3);
-		tiles[35].addPlayer(4);
+	}
+	
+	public void addPlayer(JLabel p){
+		tiles[0].addPlayer(p);
 	}
 }

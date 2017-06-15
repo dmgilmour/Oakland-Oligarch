@@ -7,6 +7,11 @@ import javax.swing.*;
 public class Window {
 
 	public JFrame frame = new JFrame("Oakland Oligarchy");
+	
+	TopPanel topPanel;
+	StatusPanel statusPanel;
+	ActionPanel actionPanel;
+	Board boardPanel;
 
 	public Window(Player[] playerList) {
 		frame.setSize(1000, 600);
@@ -17,7 +22,7 @@ public class Window {
 		c.fill = GridBagConstraints.BOTH;
 
 		
-		TopPanel topPanel = new TopPanel();
+		topPanel = new TopPanel();
 		c.gridwidth = 2; // Span left panel and board
 		c.gridheight = 1;
 		c.gridx = 0;
@@ -26,7 +31,7 @@ public class Window {
 		c.anchor = GridBagConstraints.PAGE_START;
 		frame.add(topPanel, c);
 
-		StatusPanel statusPanel = new StatusPanel(playerList);
+		statusPanel = new StatusPanel(playerList);
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.gridx = 0;
@@ -36,7 +41,7 @@ public class Window {
 		c.anchor = GridBagConstraints.LAST_LINE_START;
 		frame.add(statusPanel, c);
 
-		ActionPanel actionPanel = new ActionPanel();
+		actionPanel = new ActionPanel();
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.gridx = 0;
@@ -46,7 +51,7 @@ public class Window {
 		c.anchor = GridBagConstraints.LAST_LINE_START;
 		frame.add(actionPanel, c);
 
-		Board boardPanel = new Board();
+		boardPanel = new Board();
 		c.gridwidth = 1;
 		c.gridheight = 3;
 		c.gridx = 1;
@@ -57,5 +62,9 @@ public class Window {
 		frame.add(boardPanel, c);
 
 		frame.setVisible(true);
+	}
+	
+	public void addPlayer(JLabel p){
+		boardPanel.addPlayer(p);
 	}
 }
