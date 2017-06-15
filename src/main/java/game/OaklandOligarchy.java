@@ -1,5 +1,6 @@
 package game;
 
+import java.util.Random;
 import java.awt.*;
 import java.awt.event.*; 
 import javax.swing.*;
@@ -7,14 +8,18 @@ import javax.swing.*;
 public class OaklandOligarchy {
 
 	static Player[] playerList;
+	private static boolean rollTaken;
+	private static int playerTurn;
+	private static int num_players;
 
 	public static void main(String[] args) {
 		
 		// Get input for number of players
-		int num_players = promptNumPlayers();
+		num_players = promptNumPlayers();
 		playerList = generatePlayers(num_players);
 		promptPlayerNames(playerList);
-
+		playerTurn = 0;
+		rollTaken = false;
 		Game game = new Game(playerList);
 
 	}
@@ -22,7 +27,29 @@ public class OaklandOligarchy {
 	private static int promptNumPlayers() {
 
 		boolean valid_input = false;
-		int num_players = 0;
+		num_players = 0;
+
+		while (!valid_input) {
+			String numPlayers = JOptionPane.showInputDialog("Number of Players");
+			if (numPlayers == null) System.exit(0);
+			
+			try {
+				num_players = Integer.parseInt(numPlayers);
+			} catch (NumberFormatException e) {
+				continue;	
+			}
+
+			if (num_players > 1 && num_players < 7) {
+				valid_input = true;
+			}
+		}
+		return num_players;
+  }
+
+	private static int promptNumPlayers() {
+
+		boolean valid_input = false;
+		num_players = 0;
 
 		while (!valid_input) {
 			String numPlayers = JOptionPane.showInputDialog("Number of Players");
@@ -52,7 +79,6 @@ public class OaklandOligarchy {
 		return playerList;
 	}
 
-
 	private static void promptPlayerNames(Player[] playerList) {
 		for (Player player : playerList) {
 			player.setName(JOptionPane.showInputDialog("Input Name for Player " + (player.id + 1)));	
@@ -62,4 +88,30 @@ public class OaklandOligarchy {
 		}
 	}
 
+  public static void movePhase() {
+		int [] res = movePhase(System.currentTimeMillis());
+		System.out.println(playerList[res[0]].name + " rolled a " + res[1]);
+	}
+1 conflicting file
+OaklandOligarchy.java
+src/main/java/game/OaklandOligarchy.java
+src/main/java/game/OaklandOligarchy.java
+Resolved
+
+	
+	public static int[] movePhase(Long timeMillis) {
+		Random rand = new Random(timeMillis);
+		rollTaken = true;
+		int roll = rand.nextInt(5) + rand.nextInt(5) + 2;
+		/***	Insert the moving portion of the turn 
+				aka. the part having to do with the interface ***/
+			
+		int [] res = {playerTurn, roll};
+		
+		// These two lines need to go at the end of each turn, wherever that may be
+		playerTurn = (playerTurn + 1) % num_players;
+		rollTaken = false;
+		
+		return res;
+	}
 }

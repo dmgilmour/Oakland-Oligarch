@@ -23,11 +23,18 @@ public class ActionPanel extends JPanel {
 
 
 		JButton rollButton = new JButton("Roll The Dice Giant Button!");
+		rollButton.addActionListener(new rollListener());
 		c.gridy = 1;
 		c.weighty = 0.6;
 		c.ipadx = 100;
 		c.ipady = 40;
 
 		add(rollButton, c);
+	}
+	
+	private class rollListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			OaklandOligarchy.movePhase();
+		}
 	}
 }
