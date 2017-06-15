@@ -39,28 +39,6 @@ public class OaklandOligarchy {
 				continue;	
 			}
 
-			if (num_players > 1 && num_players < 7) {
-				valid_input = true;
-			}
-		}
-		return num_players;
-  }
-
-	private static int promptNumPlayers() {
-
-		boolean valid_input = false;
-		num_players = 0;
-
-		while (!valid_input) {
-			String numPlayers = JOptionPane.showInputDialog("Number of Players");
-			if (numPlayers == null) System.exit(0);
-			
-			try {
-				num_players = Integer.parseInt(numPlayers);
-			} catch (NumberFormatException e) {
-				continue;	
-			}
-
 			if (num_players > 1 && num_players < 5) {
 				valid_input = true;
 			}
@@ -88,16 +66,10 @@ public class OaklandOligarchy {
 		}
 	}
 
-  public static void movePhase() {
+	public static void movePhase() {
 		int [] res = movePhase(System.currentTimeMillis());
 		System.out.println(playerList[res[0]].name + " rolled a " + res[1]);
 	}
-1 conflicting file
-OaklandOligarchy.java
-src/main/java/game/OaklandOligarchy.java
-src/main/java/game/OaklandOligarchy.java
-Resolved
-
 	
 	public static int[] movePhase(Long timeMillis) {
 		Random rand = new Random(timeMillis);
