@@ -68,16 +68,23 @@ public class OaklandOligarchy {
 	}
 
 	public static void movePhase() {
+		int [] res = movePhase(System.currentTimeMillis());
+		System.out.println(playerList[res[0]].name + " rolled a " + res[1]);
+	}
+	
+	public static int[] movePhase(Long timeMillis) {
+		Random rand = new Random(timeMillis);
 		rollTaken = true;
-		Random rand = new Random(System.currentTimeMillis());
 		int roll = rand.nextInt(5) + rand.nextInt(5) + 2;
 		/***	Insert the moving portion of the turn 
 				aka. the part having to do with the interface ***/
-		System.out.println(playerList[playerTurn].name + " rolled a " + roll);	
-		
+			
+		int [] res = {playerTurn, roll};
 		
 		// These two lines need to go at the end of each turn, wherever that may be
 		playerTurn = (playerTurn + 1) % num_players;
 		rollTaken = false;
+		
+		return res;
 	}
 }
