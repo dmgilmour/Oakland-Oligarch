@@ -4,9 +4,9 @@ public class Property{
     String name;
     int price;
     int rent;
-    int owner;
+    Player owner;
 
-    public Property(String name, int price, int rent, int owner){
+    public Property(String name, int price, int rent, Player owner){
         this.name = name;
         this.price = price;
         this.rent = rent;
@@ -25,7 +25,7 @@ public class Property{
         return rent;
     }
 
-    public int getPropertyOwner(){
+    public Player getPropertyOwner(){
         return owner;
     }
 }
