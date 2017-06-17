@@ -10,6 +10,10 @@ public class Tile extends JPanel{
 		
 		JPanel players;
 		
+		public Tile(){
+			
+		}
+		
 		public Tile(int n){
 			number=n;
 			this.setLayout(new GridBagLayout());
