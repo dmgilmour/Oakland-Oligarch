@@ -16,7 +16,7 @@ public class PropertyTile extends Tile {
 		players = new JPanel();
 		players.setLayout(new GridLayout(1, 4));
 		
-		JButton button = new JButton("Property " + n);
+		JButton button = new JButton(prop.getPropertyName());
 		button.setPreferredSize(new Dimension(40, 30));
 		
 		JPanel owner = new JPanel();

@@ -2,12 +2,13 @@ package game;
 public class Game {
 
 	public Game(Player[] playerList) {
-
-		Window window = new Window(playerList);
 		
-		for(Player p: playerList){
-			window.addPlayer(p.getToken());
+		Property[] properties = new Property[36];
+		for(int i = 0; i<36; i++){
+			properties[i]=new Property("Property "+i, i, i);
 		}
+
+		Window window = new Window(playerList, properties);
 
 		// Other random setup
 		
