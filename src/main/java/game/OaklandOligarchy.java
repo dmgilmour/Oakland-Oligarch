@@ -5,6 +5,10 @@ import java.awt.*;
 import java.awt.event.*; 
 import javax.swing.*;
 
+/**
+ * @author Dan
+ *
+ */
 public class OaklandOligarchy {
 
 	static Player[] playerList;

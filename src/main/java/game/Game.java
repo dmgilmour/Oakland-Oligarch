@@ -1,4 +1,8 @@
 package game;
+/**
+ * @author Dan
+ *
+ */
 public class Game {
 
 	public Game(Player[] playerList) {

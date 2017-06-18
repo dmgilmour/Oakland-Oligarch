@@ -5,6 +5,10 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+/**
+ * @author Dan
+ *
+ */
 public class ActionPanel extends JPanel {
 	
 	public ActionPanel() {

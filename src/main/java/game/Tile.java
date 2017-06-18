@@ -4,6 +4,12 @@ import java.awt.*;
 import java.awt.event.*; 
 import javax.swing.*;
 
+/**
+ * Class that is the base class for every Tile Object on the board.
+ * 
+ * @author Eddie
+ *
+ */
 public class Tile extends JPanel{
 
 		int number; // what number this tile is, identifier for the board
@@ -14,6 +20,9 @@ public class Tile extends JPanel{
 			
 		}
 		
+		/**
+		 * @param n	Tile number identifier so that the tile knows what number it is.
+		 */
 		public Tile(int n){
 			number=n;
 			this.setLayout(new GridBagLayout());
@@ -43,12 +52,18 @@ public class Tile extends JPanel{
 			
 		}
 		
-		//Put a player onto this tile. Takes an object that represents the player token.
+		/**
+		 * Put a player onto this tile. Takes an object that represents the player token.
+		 * @param p	The player to put onto this tile.
+		 */
 		public void addPlayer(JLabel p){
 			players.add(p);
 		}
 		
-		//Remove a player from this tile. Takes an object that represents the player token.
+		/**
+		 * Remove a player from this tile. Takes an object that represents the player token.
+		 * @param p	The player to remove from this tile.
+		 */
 		public void removePlayer(JLabel p){
 			players.remove(p);
 		}

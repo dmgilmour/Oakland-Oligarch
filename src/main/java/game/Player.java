@@ -2,6 +2,10 @@ package game;
 
 import javax.swing.*;
 
+/**
+ * @author Woody
+ *
+ */
 public class Player {
 
 	int id;
