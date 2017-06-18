@@ -4,6 +4,10 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+/**
+ * @author Dan
+ *
+ */
 public class Window {
 
 	public JFrame frame = new JFrame("Oakland Oligarchy");

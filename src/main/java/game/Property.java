@@ -1,5 +1,9 @@
 package game;
 
+/**
+ * @author David
+ *
+ */
 public class Property{
     String name;
     int price;

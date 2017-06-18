@@ -4,10 +4,20 @@ import java.awt.*;
 import java.awt.event.*; 
 import javax.swing.*;
 
+/**
+ * Extends Tile to hold a property within the tile.
+ * 
+ * @author Eddie
+ *
+ */
 public class PropertyTile extends Tile {
 	
 	Property property;
 	
+	/**
+	 * @param n		Tile number identifier so that the tile knows what number it is.
+	 * @param prop	The property object that is corresponding to this tile.
+	 */
 	public PropertyTile(int n, Property prop){
 		number=n;
 		property=prop;

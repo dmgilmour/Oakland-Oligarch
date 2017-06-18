@@ -4,12 +4,22 @@ import java.awt.*;
 import java.awt.event.*; 
 import javax.swing.*;
 
+/**
+ * @author Dan
+ *
+ */
 public class Board extends JPanel {
 
 	Tile[] tiles;
 	
 	static final int NUMBER_OF_TILES=36; // currently actually correlates to number of tiles AND number of properties
 	
+	/**
+	 * Constructor to build the board object.
+	 * 
+	 * @param playerList	Array of players to be added to the game.
+	 * @param properties	Array of properties to add to the game.
+	 */
 	public Board(Player[] playerList, Property[] properties){
 		//The buttons are just place holders for tiles right now. The layout itself is complicated 
 		//current button size is 60X60 just for easy math
