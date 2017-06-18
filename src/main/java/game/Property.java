@@ -4,15 +4,14 @@ public class Property{
     String name;
     int price;
     int rent;
-    Player owner;
+    Player owner=null;
 
-    public Property(String name, int price, int rent, Player owner){
+    public Property(String name, int price, int rent){
         this.name = name;
         this.price = price;
         this.rent = rent;
-        this.owner = owner;
     }
-//getters for all the Property fields
+    //getters for all the Property fields
     public String getPropertyName(){
         return name;
     }
@@ -28,4 +27,11 @@ public class Property{
     public Player getPropertyOwner(){
         return owner;
     }
+    
+    //setters for Property fields
+    
+    public void setPropertyOwner(Player p){
+    	owner=p;
+    }
+    
 }

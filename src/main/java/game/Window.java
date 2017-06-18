@@ -13,7 +13,7 @@ public class Window {
 	ActionPanel actionPanel;
 	Board boardPanel;
 
-	public Window(Player[] playerList) {
+	public Window(Player[] playerList, Property[] properties) {
 		frame.setSize(1000, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -51,7 +51,7 @@ public class Window {
 		c.anchor = GridBagConstraints.LAST_LINE_START;
 		frame.add(actionPanel, c);
 
-		boardPanel = new Board();
+		boardPanel = new Board(playerList, properties);
 		c.gridwidth = 1;
 		c.gridheight = 3;
 		c.gridx = 1;
@@ -62,9 +62,5 @@ public class Window {
 		frame.add(boardPanel, c);
 
 		frame.setVisible(true);
-	}
-	
-	public void addPlayer(JLabel p){
-		boardPanel.addPlayer(p);
 	}
 }
