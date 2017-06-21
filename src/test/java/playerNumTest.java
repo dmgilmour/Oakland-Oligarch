@@ -17,7 +17,7 @@ public class playerNumTest {
 		assertEquals(Game.roll(timeMillis), -1);
 		Game g = new Game(null);
 		Random rand = new Random(timeMillis);
-		int roll = rand.nextInt(5) + rand.nextInt(5) + 2;
+		int roll = rand.nextInt(6) + rand.nextInt(6) + 2;
 		assertEquals(g.roll(timeMillis), roll);
 	}
 }

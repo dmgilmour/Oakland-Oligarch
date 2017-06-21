@@ -23,5 +23,27 @@ public class playerTest {
 		assertEquals(p1.getProperties().size(), 2);					//Test that properties are stored
 	}
 	
+	@Test
+	public void testRent1()
+	{
+		Player p1 = new Player(0, 0, "P1", null);
+		Player p2 = new Player(0, 10, "P2", null);
+		Property prop1 = new Property("Boardwalk", 0, 10);
+		prop1.setOwner(p1);
+		assertEquals(p2.payRent(prop1), true);
+		assertEquals(p2.getMoney(), 0);
+		assertEquals(p1.getMoney(), 10);
+	}
 	
+	@Test
+	public void testRent2()
+	{
+		Player p1 = new Player(0, 0, "P1", null);
+		Player p2 = new Player(0, 0, "P2", null);
+		Property prop1 = new Property("Boardwalk", 0, 10);
+		prop1.setOwner(p1);
+		assertEquals(p2.payRent(prop1), false);
+		assertEquals(p2.getMoney(), 0);
+		assertEquals(p1.getMoney(), 0);
+	}
 }

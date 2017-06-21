@@ -87,8 +87,9 @@ public class Player {
 			return false;
 	}
 	
-	public boolean payRent(Player owner, Property property) {
+	public boolean payRent(Property property) {
 		int cost = property.getRent();
+		Player owner = property.getOwner();
 		boolean success = charge(cost);
 		if(success)
 			owner.getPaid(cost);

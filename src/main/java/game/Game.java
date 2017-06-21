@@ -72,7 +72,7 @@ public class Game {
 			Property property = ((PropertyTile)tile).getProperty();
 			Player owner = property.getOwner();
 			if(owner != null) {
-				player.payRent(owner, property);
+				player.payRent(property);
 				JOptionPane.showMessageDialog(null, player.getName()+ " pays $" + property.getRent() + "  to " + owner.getName());
 			}
 			else {
