@@ -38,7 +38,7 @@ public class ActionPanel extends JPanel {
 	
 	private class rollListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			OaklandOligarchy.movePhase();
+			Game.movePhase();
 		}
 	}
 }

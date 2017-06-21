@@ -31,6 +31,10 @@ public class Player {
 		position=0;
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
 	public void setName(String n){
 		name=n;
 		token = new JLabel(name);

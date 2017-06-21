@@ -84,4 +84,15 @@ public class Board extends JPanel {
 			i++;
 		}
 	}
+	
+	public void movePlayer(Player p, int roll)
+	{
+		int pos = p.getPosition();
+		tiles[pos].removePlayer(p.getToken());
+		System.out.println(p.getName() + " removed from tile " + pos);
+		pos = (roll + pos) % NUMBER_OF_TILES;
+		p.setPosition(pos);
+		tiles[pos].addPlayer(p.getToken());
+		System.out.println(p.getName() + " added to tile " + pos);
+	}
 }
