@@ -59,9 +59,9 @@ public class OaklandOligarchy {
 	}
 
 	private static void promptPlayerNames(Player[] playerList) {
-		for (Player player : playerList) {
-			player.setName(JOptionPane.showInputDialog("Input Name for Player " + (player.id + 1)));	
-			if (player.name == null) {
+		for (int id = 0; id < playerList.length; id++) {
+			playerList[id].setName(JOptionPane.showInputDialog("Input Name for Player " + (id + 1)));	
+			if (playerList[id].getName() == null) {
 				System.exit(0);
 			}
 		}

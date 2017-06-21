@@ -9,12 +9,12 @@ import java.util.ArrayList;
  */
 public class Player {
 
-	int id;
-	int money;
-	String name;
-	ArrayList<Property> properties;
-	JLabel token; //this can be changed to whatever we decide player tokens should be
-	int position; //current space the player is on
+	private int id;
+	private int money;
+	private String name;
+	private ArrayList<Property> properties;
+	private JLabel token; //this can be changed to whatever we decide player tokens should be
+	private int position; //current space the player is on
 
 	public Player (int id, int money, String name, Property[] properties) {
 		this.id = id;
@@ -61,12 +61,12 @@ public class Player {
 	}
 	
 	public boolean buy(Property prop) {
-		if(prop.getPropertyOwner() == null)
+		if(prop.getOwner() == null)
 		{
-			int cost = prop.getPropertyPrice();
+			int cost = prop.getPrice();
 			if(charge(cost))
 			{
-				prop.setPropertyOwner(this);
+				prop.setOwner(this);
 				properties.add(prop);
 				return true;
 			}
@@ -77,7 +77,7 @@ public class Player {
 			return false;
 	}
 	
-	public boolean charge(int cost) {
+	private boolean charge(int cost) {
 		if(money >= cost)
 		{
 			money -= cost;
@@ -85,5 +85,18 @@ public class Player {
 		}
 		else
 			return false;
+	}
+	
+	public boolean payRent(Player owner, Property property) {
+		int cost = property.getRent();
+		boolean success = charge(cost);
+		if(success)
+			owner.getPaid(cost);
+		return success;
+	}
+	
+	private void getPaid(int payment) {
+		if(payment > 0)
+			money += payment;
 	}
 }

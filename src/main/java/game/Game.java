@@ -1,5 +1,8 @@
 package game;
+
 import java.util.Random;
+import javax.swing.*;
+
 /**
  * @author Dan
  *
@@ -34,11 +37,10 @@ public class Game {
 	// More things when we get to do non UI
 	
 	public static void movePhase() {
-		int roll = roll(System.currentTimeMillis());
-		System.out.println(playerList[playerTurn].name + " rolled a " + roll);
-		
+		int roll = roll(System.currentTimeMillis());		
 		board.movePlayer(playerList[playerTurn], roll);
-		window.setVisible(true);
+		window.update();
+		actionPhase();
 		endPhase();
 	}
 	
@@ -46,6 +48,7 @@ public class Game {
 		// These two lines need to go at the end of each turn, wherever that may be
 		playerTurn = (playerTurn + 1) % num_players;
 		rollTaken = false;
+		window.update();
 	}
 	
 	public static int roll(Long timeMillis) {
@@ -53,10 +56,32 @@ public class Game {
 		{
 			Random rand = new Random(timeMillis);
 			rollTaken = true;
-			int roll = rand.nextInt(5) + rand.nextInt(5) + 2;
+			int roll = rand.nextInt(6) + rand.nextInt(6) + 2;
 			return roll;
 		}
 		else
 			return -1;
+	}
+	
+	public static void actionPhase() {
+		Player player = playerList[playerTurn];
+		Tile tile = board.getTile(player.getPosition());
+		if(tile == null)
+			return;
+		if(tile instanceof PropertyTile) {
+			Property property = ((PropertyTile)tile).getProperty();
+			Player owner = property.getOwner();
+			if(owner != null) {
+				player.payRent(owner, property);
+				JOptionPane.showMessageDialog(null, player.getName()+ " pays $" + property.getRent() + "  to " + owner.getName());
+			}
+			else {
+				int choice = JOptionPane.showConfirmDialog(null, "Would you like to buy " + property.getName() + "?", "Buy property?", JOptionPane.YES_NO_OPTION);
+				if(choice == JOptionPane.YES_OPTION) {
+					player.buy(property);
+				}
+			}
+		}
+		window.update();
 	}
 }

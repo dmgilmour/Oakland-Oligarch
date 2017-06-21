@@ -67,7 +67,8 @@ public class Window {
 		frame.setVisible(true);
 	}
 	
-	public void setVisible(boolean b) {
-		frame.setVisible(b);
+	public void update() {
+		statusPanel.update();
+		frame.setVisible(true);
 	}
 }

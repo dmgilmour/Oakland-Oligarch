@@ -4,19 +4,7 @@ import java.util.ArrayList;
 import game.Player;
 import game.Property;
 
-public class playerTest {
-	@Test
-	public void testCharge()
-	{
-		Player p1 = new Player(0, 2000, "P1", null);
-		assertEquals(true, p1.charge(1200));						//Test cost < money
-		assertEquals(800, p1.getMoney());
-		assertEquals(false, p1.charge(1200));						//Test cost > money
-		assertEquals(800, p1.getMoney());
-		assertEquals(true, p1.charge(800));							//Test cost == money
-		assertEquals(0, p1.getMoney());
-	}
-	
+public class playerTest {	
 	@Test
 	public void testBuy()
 	{
@@ -34,4 +22,6 @@ public class playerTest {
 		assertEquals(p1.getMoney(), 0);
 		assertEquals(p1.getProperties().size(), 2);					//Test that properties are stored
 	}
+	
+	
 }
