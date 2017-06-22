@@ -18,10 +18,12 @@ public class OaklandOligarchy {
 	public static void main(String[] args) {
 		
 		// Get input for number of players
+		Game game = new Game();
+
 		num_players = promptNumPlayers();
 		playerList = generatePlayers(num_players);
-		
-		Game game = new Game(playerList);
+
+		game.setPlayers(playerList);
 
 	}
 

@@ -20,7 +20,7 @@ public class Board extends JPanel {
 	 * @param playerList	Array of players to be added to the game.
 	 * @param properties	Array of properties to add to the game.
 	 */
-	public Board(Player[] playerList, Property[] properties){
+	public Board(Property[] properties){
 		//The buttons are just place holders for tiles right now. The layout itself is complicated 
 		//current button size is 60X60 just for easy math
 		this.setLayout(new GridBagLayout());
@@ -32,9 +32,6 @@ public class Board extends JPanel {
 			tiles[i].setPreferredSize(new Dimension(60, 60));
 		}
 		
-		for(Player p: playerList){ //adds players to the game
-			tiles[0].addPlayer(p.getToken());
-		}
 
 		GridBagConstraints constraint = new GridBagConstraints();
 
@@ -82,6 +79,12 @@ public class Board extends JPanel {
 			constraint.gridy = l;
 			this.add(tiles[i],constraint);
 			i++;
+		}
+	}
+
+	public void setPlayers(Player[] playerList) {
+		for (Player p: playerList) { //adds players to the game
+			tiles[0].addPlayer(p.getToken());
 		}
 	}
 	

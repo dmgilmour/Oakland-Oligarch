@@ -12,25 +12,30 @@ public class Game {
 	private static boolean rollTaken;
 	private static int playerTurn;
 	private Property[] properties;
-	private static Board board;
+	public static Board board;
 	private static Window window;
 	private static int num_players;
 	private static Player[] playerList;
 	
-	public Game(Player[] _playerList) {
-		
-		playerList = _playerList;
+	public Game() {
 		properties = new Property[36];
-		num_players = playerList.length;
 		playerTurn = 0;
 		rollTaken = false;
-		for(int i = 0; i<36; i++){
-			properties[i]=new Property("Property "+i, i, i);
+		for (int i = 0; i<36; i++){
+			properties[i] = new Property("Property "+i, i, i);
 		}
-		board = new Board(playerList, properties);
-		window = new Window(playerList, properties, board);		
+		board = new Board(properties);
+		window = new Window();		
 	}
 	
+	public void setPlayers(Player[] _playerList) {
+		playerList = _playerList;
+		num_players = playerList.length;
+		board.setPlayers(playerList);
+		window.setPlayers(playerList);
+	}
+
+
 	/**
 	 * Runs the game phase during which players roll and move
 	 */
