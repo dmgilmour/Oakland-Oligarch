@@ -4,19 +4,7 @@ import java.util.ArrayList;
 import game.Player;
 import game.Property;
 
-public class playerTest {
-	@Test
-	public void testCharge()
-	{
-		Player p1 = new Player(0, 2000, "P1", null);
-		assertEquals(true, p1.charge(1200));						//Test cost < money
-		assertEquals(800, p1.getMoney());
-		assertEquals(false, p1.charge(1200));						//Test cost > money
-		assertEquals(800, p1.getMoney());
-		assertEquals(true, p1.charge(800));							//Test cost == money
-		assertEquals(0, p1.getMoney());
-	}
-	
+public class playerTest {	
 	@Test
 	public void testBuy()
 	{
@@ -33,5 +21,29 @@ public class playerTest {
 		assertEquals(false, p1.buy(prop3));							//Test property cost > money
 		assertEquals(p1.getMoney(), 0);
 		assertEquals(p1.getProperties().size(), 2);					//Test that properties are stored
+	}
+	
+	@Test
+	public void testRent1()
+	{
+		Player p1 = new Player(0, 0, "P1", null);
+		Player p2 = new Player(0, 10, "P2", null);
+		Property prop1 = new Property("Boardwalk", 0, 10);
+		prop1.setOwner(p1);
+		assertEquals(p2.payRent(prop1), true);
+		assertEquals(p2.getMoney(), 0);
+		assertEquals(p1.getMoney(), 10);
+	}
+	
+	@Test
+	public void testRent2()
+	{
+		Player p1 = new Player(0, 0, "P1", null);
+		Player p2 = new Player(0, 0, "P2", null);
+		Property prop1 = new Property("Boardwalk", 0, 10);
+		prop1.setOwner(p1);
+		assertEquals(p2.payRent(prop1), false);
+		assertEquals(p2.getMoney(), 0);
+		assertEquals(p1.getMoney(), 0);
 	}
 }

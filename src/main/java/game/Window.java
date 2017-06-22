@@ -10,14 +10,14 @@ import javax.swing.*;
  */
 public class Window {
 
-	public JFrame frame = new JFrame("Oakland Oligarchy");
+	private JFrame frame = new JFrame("Oakland Oligarchy");
 	
-	TopPanel topPanel;
-	StatusPanel statusPanel;
-	ActionPanel actionPanel;
-	Board boardPanel;
+	private TopPanel topPanel;
+	private StatusPanel statusPanel;
+	private ActionPanel actionPanel;
+	private Board boardPanel;
 
-	public Window(Player[] playerList, Property[] properties) {
+	public Window(Player[] playerList, Property[] properties, Board boardPanel) {
 		frame.setSize(1000, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -55,7 +55,6 @@ public class Window {
 		c.anchor = GridBagConstraints.LAST_LINE_START;
 		frame.add(actionPanel, c);
 
-		boardPanel = new Board(playerList, properties);
 		c.gridwidth = 1;
 		c.gridheight = 3;
 		c.gridx = 1;
@@ -65,6 +64,11 @@ public class Window {
 		c.anchor = GridBagConstraints.CENTER;
 		frame.add(boardPanel, c);
 
+		frame.setVisible(true);
+	}
+	
+	public void update() {
+		statusPanel.update();
 		frame.setVisible(true);
 	}
 }

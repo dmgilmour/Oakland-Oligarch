@@ -12,7 +12,7 @@ import javax.swing.*;
  */
 public class PropertyTile extends Tile {
 	
-	Property property;
+	private Property property;
 	
 	/**
 	 * @param n		Tile number identifier so that the tile knows what number it is.
@@ -26,7 +26,7 @@ public class PropertyTile extends Tile {
 		players = new JPanel();
 		players.setLayout(new GridLayout(1, 4));
 		
-		JButton button = new JButton(prop.getPropertyName());
+		JButton button = new JButton(prop.getName());
 		button.setPreferredSize(new Dimension(40, 30));
 		
 		JPanel owner = new JPanel();
@@ -54,4 +54,7 @@ public class PropertyTile extends Tile {
 		this.add(players, constraint);
 	}
 
+	public Property getProperty() {
+		return property;
+	}
 }

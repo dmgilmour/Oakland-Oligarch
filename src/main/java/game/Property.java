@@ -16,25 +16,25 @@ public class Property{
         this.rent = rent;
     }
     //getters for all the Property fields
-    public String getPropertyName(){
+    public String getName(){
         return name;
     }
 
-    public int getPropertyPrice(){
+    public int getPrice(){
         return price;
     }
 
-    public int getPropertyRent(){
+    public int getRent(){
         return rent;
     }
 
-    public Player getPropertyOwner(){
+    public Player getOwner(){
         return owner;
     }
     
     //setters for Property fields
     
-    public void setPropertyOwner(Player p){
+    public void setOwner(Player p){
     	owner=p;
     }
     
