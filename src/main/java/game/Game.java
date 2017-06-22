@@ -28,14 +28,12 @@ public class Game {
 			properties[i]=new Property("Property "+i, i, i);
 		}
 		board = new Board(playerList, properties);
-		window = new Window(playerList, properties, board);
-
-		// Other random setup
-		
+		window = new Window(playerList, properties, board);		
 	}
-
-	// More things when we get to do non UI
 	
+	/**
+	 * Runs the game phase during which players roll and move
+	 */
 	public static void movePhase() {
 		int roll = roll(System.currentTimeMillis());		
 		board.movePlayer(playerList[playerTurn], roll);
@@ -44,40 +42,51 @@ public class Game {
 		endPhase();
 	}
 	
+	/**
+	 * Runs the game phase that ends each players turn
+	 */
 	public static void endPhase() {
-		// These two lines need to go at the end of each turn, wherever that may be
-		playerTurn = (playerTurn + 1) % num_players;
-		rollTaken = false;
+		playerTurn = (playerTurn + 1) % num_players;	//Increment to the next player's turn
+		rollTaken = false;								//Enable the "roll" button again
 		window.update();
 	}
 	
+	/**
+	 *	A psuedo-random roll that simulates 2 six-sided dice
+	 *
+	 * @param	timeMillis		A long integer used to the seed the random roll
+	 * @returns					An integer value between 2-12 that is the result of rolling 2 six-sided dice
+	 */
 	public static int roll(Long timeMillis) {
 		if(!rollTaken)
 		{
 			Random rand = new Random(timeMillis);
 			rollTaken = true;
-			int roll = rand.nextInt(6) + rand.nextInt(6) + 2;
+			int roll = rand.nextInt(6) + rand.nextInt(6) + 2;	//Simulates two dice rolls by retriving integers from 0-5 and adding 2
 			return roll;
 		}
 		else
 			return -1;
 	}
 	
+	/**
+	 * Runs the game phase where the player performs an action based on the tile they are on
+	 */
 	public static void actionPhase() {
 		Player player = playerList[playerTurn];
 		Tile tile = board.getTile(player.getPosition());
-		if(tile == null)
+		if(tile == null)									//Check to ensure that a tile was retrived properly from the board
 			return;
-		if(tile instanceof PropertyTile) {
-			Property property = ((PropertyTile)tile).getProperty();
+		if(tile instanceof PropertyTile) {					//If the tile retrived is a property:
+			Property property = ((PropertyTile)tile).getProperty(); 
 			Player owner = property.getOwner();
-			if(owner != null) {
-				player.payRent(property);
+			if(owner != null) {								//If this property is owned:
+				player.payRent(property);					//Pay rent on the property and alert the player
 				JOptionPane.showMessageDialog(null, player.getName()+ " pays $" + property.getRent() + "  to " + owner.getName());
 			}
-			else {
+			else {		//The property is unowned
 				int choice = JOptionPane.showConfirmDialog(null, "Would you like to buy " + property.getName() + "?", "Buy property?", JOptionPane.YES_NO_OPTION);
-				if(choice == JOptionPane.YES_OPTION) {
+				if(choice == JOptionPane.YES_OPTION) {		//Ask of the player would like to purchase this property
 					player.buy(property);
 				}
 			}

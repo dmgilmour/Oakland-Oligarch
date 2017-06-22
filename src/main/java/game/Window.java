@@ -17,6 +17,13 @@ public class Window {
 	private ActionPanel actionPanel;
 	private Board boardPanel;
 
+	/**
+	 * Initializes the UI window 
+	 *
+	 * @param	playerList		The list of Players in the game
+	 * @param	properties		The list of Properties to be used for this match
+	 * @param	boardPanel		The board that will be displayed in the window
+	 */
 	public Window(Player[] playerList, Property[] properties, Board boardPanel) {
 		frame.setSize(1000, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,6 +74,9 @@ public class Window {
 		frame.setVisible(true);
 	}
 	
+	/**
+	 * Refreshes the UI
+	 */	
 	public void update() {
 		statusPanel.update();
 		frame.setVisible(true);

@@ -85,15 +85,28 @@ public class Board extends JPanel {
 		}
 	}
 	
-	public void movePlayer(Player p, int roll)
+	/**
+	 * Changes the position of the player both logically and on the UI
+	 *
+	 * @param 	player		Player object that is the player to be moved
+	 * @param	roll		Integer value of a roll that is how far the player should move
+	 */
+	public void movePlayer(Player player, int roll)
 	{
-		int pos = p.getPosition();
-		tiles[pos].removePlayer(p.getToken());
-		pos = (roll + pos) % NUMBER_OF_TILES;
-		p.setPosition(pos);
-		tiles[pos].addPlayer(p.getToken());
+		int position = player.getPosition();
+		tiles[position].removePlayer(player.getToken());		//Remove the player from the tile
+		position = (roll + position) % NUMBER_OF_TILES;			//Increment the player position
+		player.setPosition(position);							//Set the new player position
+		tiles[position].addPlayer(player.getToken());			//Add the player to the tile at the new position
 	}
 	
+	
+	/**
+	 * Retrival function to get a particular tile from the board
+	 * 
+	 * @param 	num			The integer value identifying which tile to get
+	 * @return				The Tile in the board at location num
+	 */
 	public Tile getTile(int num) {
 		if(num < NUMBER_OF_TILES)
 			return tiles[num];

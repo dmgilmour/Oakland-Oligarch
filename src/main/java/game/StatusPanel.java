@@ -15,6 +15,11 @@ public class StatusPanel extends JPanel {
 	private Player[] playerList;
 	private int num_players;
 	
+	/**
+	 * Initializes the status panel showing players and their properties
+	 *
+	 * @param	playerList		the list of Players to be listed on this panel
+	 */
 	public StatusPanel(Player[] playerList) {
 		this.playerList = playerList;
 		num_players = playerList.length;
@@ -61,9 +66,12 @@ public class StatusPanel extends JPanel {
 		}
 	}
 	
+	/**
+	 * Updates the panel with the new money values of the players
+	 */
 	public void update()
 	{
-		for(int i = 0; i < num_players; i++)
+		for(int i = 0; i < num_players; i++)		//Visit each status button and update the test to indicate player currency
 			playerButtons[i].setText(playerList[i].getName() + ": $" + playerList[i].getMoney());
 	}
 }
