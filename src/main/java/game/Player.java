@@ -20,6 +20,7 @@ public class Player {
 		this.id = id;
 		this.money = money;
 		this.name = name;
+		token = new JLabel(name);
 		if(properties == null)
 			this.properties = new ArrayList<Property>();
 		else
@@ -33,11 +34,6 @@ public class Player {
 	
 	public String getName() {
 		return name;
-	}
-	
-	public void setName(String n){
-		name=n;
-		token = new JLabel(name);
 	}
 	
 	public JLabel getToken(){

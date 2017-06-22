@@ -20,7 +20,7 @@ public class OaklandOligarchy {
 		// Get input for number of players
 		num_players = promptNumPlayers();
 		playerList = generatePlayers(num_players);
-		promptPlayerNames(playerList);
+		
 		Game game = new Game(playerList);
 
 	}
@@ -52,18 +52,20 @@ public class OaklandOligarchy {
 		Player[] playerList = new Player[num_players];
 
 		for (int i = 0; i < num_players; i++) {
-			playerList[i] = new Player(i, 2000, null, null);
+			System.err.println(i);
+			String playerName = promptName(i);
+			playerList[i] = new Player(i, 2000, playerName, null);
 		}
 
 		return playerList;
 	}
 
-	private static void promptPlayerNames(Player[] playerList) {
-		for (int id = 0; id < playerList.length; id++) {
-			playerList[id].setName(JOptionPane.showInputDialog("Input Name for Player " + (id + 1)));	
-			if (playerList[id].getName() == null) {
-				System.exit(0);
-			}
+	private static String promptName(int playerID) {
+		String toReturn;
+		toReturn = JOptionPane.showInputDialog("Input Name for Player " + (playerID + 1));	
+		if (toReturn == null) {
+			System.exit(0);
 		}
+		return toReturn;
 	}	
 }

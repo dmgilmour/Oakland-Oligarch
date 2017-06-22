@@ -17,9 +17,9 @@ public class Game {
 	private static int num_players;
 	private static Player[] playerList;
 	
-	public Game(Player[] playerList) {
+	public Game(Player[] _playerList) {
 		
-		this.playerList = playerList;
+		playerList = _playerList;
 		properties = new Property[36];
 		num_players = playerList.length;
 		playerTurn = 0;
