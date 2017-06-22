@@ -24,7 +24,7 @@ public class playerTest {
 	}
 	
 	@Test
-	public void testRent1()
+	public void testRent1()			//Tests a successfully rent payment
 	{
 		Player p1 = new Player(0, 0, "P1", null);
 		Player p2 = new Player(0, 10, "P2", null);
@@ -36,7 +36,7 @@ public class playerTest {
 	}
 	
 	@Test
-	public void testRent2()
+	public void testRent2()			//Tests a failed rent payment
 	{
 		Player p1 = new Player(0, 0, "P1", null);
 		Player p2 = new Player(0, 0, "P2", null);

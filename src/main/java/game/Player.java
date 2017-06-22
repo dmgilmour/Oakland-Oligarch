@@ -60,14 +60,20 @@ public class Player {
 		return properties;
 	}
 	
-	public boolean buy(Property prop) {
-		if(prop.getOwner() == null)
+	/**
+	 * Purchases a property for this player
+	 *
+	 * @param	property	A property that this player is buying
+	 * @return 				A boolean indicating success of the purchase
+	 */
+	public boolean buy(Property property) {
+		if(property.getOwner() == null)			//check that the property is owned
 		{
-			int cost = prop.getPrice();
-			if(charge(cost))
+			int cost = property.getPrice();		
+			if(charge(cost))					//If the charge to this player is successful:
 			{
-				prop.setOwner(this);
-				properties.add(prop);
+				property.setOwner(this);		//Change the ownership of the property
+				properties.add(property);		//Add the property to the list of those owned by this players
 				return true;
 			}
 			else
@@ -77,6 +83,12 @@ public class Player {
 			return false;
 	}
 	
+	/**
+	 * Charges a money value to the account of this player
+	 *
+	 * @param	cost		An integer value indicating the cost incurred
+	 * @returns				A boolean indicating the success of the transaction
+	 */
 	private boolean charge(int cost) {
 		if(money >= cost)
 		{
@@ -87,15 +99,26 @@ public class Player {
 			return false;
 	}
 	
+	/**
+	 * This player pays the rent on a given property
+	 *
+	 * @param	property	A Property that this player should pay rent on
+	 * @return 				A boolean indicating the sucesss of the payment
+	 */
 	public boolean payRent(Property property) {
-		int cost = property.getRent();
+		int cost = property.getRent();			
 		Player owner = property.getOwner();
-		boolean success = charge(cost);
-		if(success)
-			owner.getPaid(cost);
+		boolean success = charge(cost);			//Attempt to charge this player
+		if(success)								//If the charge is successful:
+			owner.getPaid(cost);				//then pay the owner of the property
 		return success;
 	}
 	
+	/**
+	 *	Deposits funds into this player's account
+	 *
+	 * @param	payment		An integer value that the player should receive
+	 */
 	private void getPaid(int payment) {
 		if(payment > 0)
 			money += payment;

@@ -15,7 +15,7 @@ public class Property{
         this.price = price;
         this.rent = rent;
     }
-    //getters for all the Property fields
+    
     public String getName(){
         return name;
     }
@@ -31,8 +31,6 @@ public class Property{
     public Player getOwner(){
         return owner;
     }
-    
-    //setters for Property fields
     
     public void setOwner(Player p){
     	owner=p;
