@@ -5,6 +5,10 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+/**
+ * @author Dan
+ *
+ */
 public class ActionPanel extends JPanel {
 	
 	public ActionPanel() {
@@ -34,7 +38,7 @@ public class ActionPanel extends JPanel {
 	
 	private class rollListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			OaklandOligarchy.movePhase();
+			Game.movePhase();
 		}
 	}
 }

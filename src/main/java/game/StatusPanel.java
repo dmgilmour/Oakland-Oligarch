@@ -5,11 +5,24 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+/**
+ * @author Dan
+ *
+ */
 public class StatusPanel extends JPanel {
 	
+	private JButton[] playerButtons;
+	private Player[] playerList;
+	private int num_players;
+	
+	/**
+	 * Initializes the status panel showing players and their properties
+	 *
+	 * @param	playerList		the list of Players to be listed on this panel
+	 */
 	public StatusPanel(Player[] playerList) {
-
-		int num_players = playerList.length;
+		this.playerList = playerList;
+		num_players = playerList.length;
 
 		Random rand = new Random(System.currentTimeMillis());
                 setBackground(new Color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
@@ -23,13 +36,11 @@ public class StatusPanel extends JPanel {
 		c.weighty = (1 / num_players);
 		c.gridx = 0;
 
-		JButton[] playerButtons = new JButton[num_players];
+		playerButtons = new JButton[num_players];
 
-		for (Player player : playerList) {
-			int id = player.id;
-
-			playerButtons[id] = new JButton(player.name + ": $" + player.money);	
-			ActionListener playerButtonListener = new PlayerButtonListener(player);
+		for (int id = 0; id < num_players; id++) {
+			playerButtons[id] = new JButton(playerList[id].getName() + ": $" + playerList[id].getMoney());	
+			ActionListener playerButtonListener = new PlayerButtonListener(playerList[id]);
 			playerButtons[id].addActionListener(playerButtonListener);
 
 			c.gridy = id;
@@ -46,10 +57,21 @@ public class StatusPanel extends JPanel {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			JFrame playerInfo = new JFrame(player.name);
+			JFrame playerInfo = new JFrame(player.getName());
 			playerInfo.setSize(400, 600);
-			
-			JOptionPane.showMessageDialog(playerInfo, "Money: $" + player.money + "\nProperties", player.name, JOptionPane.PLAIN_MESSAGE);	
+			String dialog = "Money: $" + player.getMoney() + "\nProperties: ";
+			for(Property property: player.getProperties())
+				dialog += "\n" + property.getName();
+			JOptionPane.showMessageDialog(playerInfo, dialog, player.getName(), JOptionPane.PLAIN_MESSAGE);	
 		}
+	}
+	
+	/**
+	 * Updates the panel with the new money values of the players
+	 */
+	public void update()
+	{
+		for(int i = 0; i < num_players; i++)		//Visit each status button and update the test to indicate player currency
+			playerButtons[i].setText(playerList[i].getName() + ": $" + playerList[i].getMoney());
 	}
 }

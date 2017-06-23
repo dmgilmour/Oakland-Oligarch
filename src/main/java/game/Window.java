@@ -4,16 +4,27 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+/**
+ * @author Dan
+ *
+ */
 public class Window {
 
-	public JFrame frame = new JFrame("Oakland Oligarchy");
+	private JFrame frame = new JFrame("Oakland Oligarchy");
 	
-	TopPanel topPanel;
-	StatusPanel statusPanel;
-	ActionPanel actionPanel;
-	Board boardPanel;
+	private TopPanel topPanel;
+	private StatusPanel statusPanel;
+	private ActionPanel actionPanel;
+	private Board boardPanel;
 
-	public Window(Player[] playerList) {
+	/**
+	 * Initializes the UI window 
+	 *
+	 * @param	playerList		The list of Players in the game
+	 * @param	properties		The list of Properties to be used for this match
+	 * @param	boardPanel		The board that will be displayed in the window
+	 */
+	public Window(Player[] playerList, Property[] properties, Board boardPanel) {
 		frame.setSize(1000, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -51,7 +62,6 @@ public class Window {
 		c.anchor = GridBagConstraints.LAST_LINE_START;
 		frame.add(actionPanel, c);
 
-		boardPanel = new Board();
 		c.gridwidth = 1;
 		c.gridheight = 3;
 		c.gridx = 1;
@@ -64,7 +74,11 @@ public class Window {
 		frame.setVisible(true);
 	}
 	
-	public void addPlayer(JLabel p){
-		boardPanel.addPlayer(p);
+	/**
+	 * Refreshes the UI
+	 */	
+	public void update() {
+		statusPanel.update();
+		frame.setVisible(true);
 	}
 }
