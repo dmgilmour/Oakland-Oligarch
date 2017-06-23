@@ -113,4 +113,12 @@ public class Window extends JFrame {
 		actionPanel.endButton.setEnabled(false);
 	}
 
+	public void enableBuy() {
+		actionPanel.buyButton.setEnabled(true);
+	}
+
+	public void disableBuy() {
+		actionPanel.buyButton.setEnabled(false);
+	}
+
 }

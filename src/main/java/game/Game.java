@@ -117,6 +117,13 @@ public class Game {
 			return -1;
 	}
 
+	public static void buyProperty() {
+		Property property = ((PropertyTile)curTile).getProperty(); 
+		curPlayer.buy(property);
+		window.disableBuy();
+		window.update();
+	}
+
 	public static void doTheTilesThing() {
 
 		if (curTile == null) { 
@@ -136,6 +143,13 @@ public class Game {
 					curPlayer.buy(property);
 				}
 			}
+
+			if (property.getOwner() == null) {
+				window.enableBuy();
+			} else {
+				window.disableBuy();
+			}
+				
 		}
 	}
 
