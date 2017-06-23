@@ -96,4 +96,21 @@ public class Window extends JFrame {
 		statusPanel.update();
 		this.setVisible(true);
 	}
+
+	public void enableRoll() {
+		actionPanel.rollButton.setEnabled(true);
+	}
+
+	public void disableRoll() {
+		actionPanel.rollButton.setEnabled(false);
+	}
+
+	public void enableEnd() {
+		actionPanel.endButton.setEnabled(true);
+	}
+
+	public void disableEnd() {
+		actionPanel.endButton.setEnabled(false);
+	}
+
 }

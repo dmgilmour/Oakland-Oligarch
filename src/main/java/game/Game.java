@@ -30,6 +30,7 @@ public class Game {
 
 	public void setWindow(Window _window) {
 		window = _window;
+		startPhase();
 	}
 	
 	public Property[] generateProperties() { 
@@ -48,14 +49,59 @@ public class Game {
 
 
 	/**
+	 * Runs the game phase for the start of a turn during which a player can click info
+	 * buttons and roll the dice giant button
+	 */
+	public static void startPhase() {
+		window.disableEnd();
+		window.enableRoll();
+		window.update();
+	}
+
+	
+
+
+
+	/**
 	 * Runs the game phase during which players roll and move
 	 */
 	public static void movePhase() {
 		int roll = roll(System.currentTimeMillis());		
 		board.movePlayer(playerList[playerTurn], roll);
+		window.disableRoll();
+		window.enableEnd();
 		window.update();
 		actionPhase();
-		endPhase();
+	}
+
+	/**
+	 * Runs the game phase where the player performs an action based on the tile they are on
+	 */
+	public static void actionPhase() {
+		Player player = playerList[playerTurn];
+		Tile tile = board.getTile(player.getPosition());
+
+		// Check to ensure that a tile was retrived properly from the board
+		if (tile == null) { 
+			return;
+		}
+
+		// If the tile retrived is a property:
+		if (tile instanceof PropertyTile) { 
+			Property property = ((PropertyTile)tile).getProperty(); 
+			Player owner = property.getOwner();
+			if(owner != null) {								//If this property is owned:
+				player.payRent(property);					//Pay rent on the property and alert the player
+				JOptionPane.showMessageDialog(null, player.getName()+ " pays $" + property.getRent() + "  to " + owner.getName());
+			}
+			else {		//The property is unowned
+				int choice = JOptionPane.showConfirmDialog(null, "Would you like to buy " + property.getName() + "?", "Buy property?", JOptionPane.YES_NO_OPTION);
+				if(choice == JOptionPane.YES_OPTION) {		//Ask of the player would like to purchase this property
+					player.buy(property);
+				}
+			}
+		}
+		window.update();
 	}
 	
 	/**
@@ -64,7 +110,7 @@ public class Game {
 	public static void endPhase() {
 		playerTurn = (playerTurn + 1) % num_players;	//Increment to the next player's turn
 		rollTaken = false;								//Enable the "roll" button again
-		window.update();
+		startPhase();
 	}
 	
 	/**
@@ -85,28 +131,4 @@ public class Game {
 			return -1;
 	}
 	
-	/**
-	 * Runs the game phase where the player performs an action based on the tile they are on
-	 */
-	public static void actionPhase() {
-		Player player = playerList[playerTurn];
-		Tile tile = board.getTile(player.getPosition());
-		if(tile == null)									//Check to ensure that a tile was retrived properly from the board
-			return;
-		if(tile instanceof PropertyTile) {					//If the tile retrived is a property:
-			Property property = ((PropertyTile)tile).getProperty(); 
-			Player owner = property.getOwner();
-			if(owner != null) {								//If this property is owned:
-				player.payRent(property);					//Pay rent on the property and alert the player
-				JOptionPane.showMessageDialog(null, player.getName()+ " pays $" + property.getRent() + "  to " + owner.getName());
-			}
-			else {		//The property is unowned
-				int choice = JOptionPane.showConfirmDialog(null, "Would you like to buy " + property.getName() + "?", "Buy property?", JOptionPane.YES_NO_OPTION);
-				if(choice == JOptionPane.YES_OPTION) {		//Ask of the player would like to purchase this property
-					player.buy(property);
-				}
-			}
-		}
-		window.update();
-	}
 }
