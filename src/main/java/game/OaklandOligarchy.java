@@ -32,6 +32,9 @@ public class OaklandOligarchy {
 		game.setPlayers(playerList);
 		window.setPlayers(playerList);
 
+		// Start the game by initiating the first start phase
+		game.startPhase();
+
 	}
 
 	private static int promptNumPlayers() {
