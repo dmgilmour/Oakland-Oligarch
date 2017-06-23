@@ -10,7 +10,11 @@ import javax.swing.*;
  *
  */
 public class OaklandOligarchy {
-
+	
+	public static final int NUMBER_OF_TILES = 36;
+	public static final int NUMBER_OF_PROPERTIES = 36;
+	public static final int MAX_NUMBER_OF_PLAYERS = 4;
+	
 	static Player[] playerList;
 	
 	private static int num_players;

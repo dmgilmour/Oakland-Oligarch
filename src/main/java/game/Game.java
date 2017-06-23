@@ -9,8 +9,6 @@ import javax.swing.*;
  */
 public class Game {
 
-	private static final int NUM_PROPERTIES = 36;
-
 	private static boolean rollTaken;
 	private static int playerTurn;
 	private static int num_players;
@@ -33,7 +31,7 @@ public class Game {
 	}
 	
 	public Properties[] generateProperties(); 
-		properties = new Property[NUM_PROPERTIES];
+		properties = new Property[OaklandOligarchy.NUMBER_OF_PROPERTIES];
 		for (int i = 0; i < NUM_PROPERTIES; i++){
 			properties[i] = new Property("Property "+i, i, i);
 		}
@@ -89,22 +87,12 @@ public class Game {
 	 */
 	public static void actionPhase() {
 		Player player = playerList[playerTurn];
-		Tile tile = board.getTile(player.getPosition());
-		if(tile == null)									//Check to ensure that a tile was retrived properly from the board
+		Square square = board.getSquare(player.getPosition());
+		if(tile == null) {									//Check to ensure that a tile was retrived properly from the board
 			return;
-		if(tile instanceof PropertyTile) {					//If the tile retrived is a property:
-			Property property = ((PropertyTile)tile).getProperty(); 
-			Player owner = property.getOwner();
-			if(owner != null) {								//If this property is owned:
-				player.payRent(property);					//Pay rent on the property and alert the player
-				JOptionPane.showMessageDialog(null, player.getName()+ " pays $" + property.getRent() + "  to " + owner.getName());
-			}
-			else {		//The property is unowned
-				int choice = JOptionPane.showConfirmDialog(null, "Would you like to buy " + property.getName() + "?", "Buy property?", JOptionPane.YES_NO_OPTION);
-				if(choice == JOptionPane.YES_OPTION) {		//Ask of the player would like to purchase this property
-					player.buy(property);
-				}
-			}
+		}
+		else {												//If the tile retrived is a property:
+			square.act(player);			
 		}
 		window.update();
 	}
