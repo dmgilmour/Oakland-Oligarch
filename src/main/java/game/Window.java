@@ -13,6 +13,7 @@ public class Window extends JFrame {
 	private int height = 2700;
 	private int width = 4000;
 	
+	private Game game;
 	private static Player[] playerList;
 
 	private TopPanel topPanel;
@@ -27,9 +28,11 @@ public class Window extends JFrame {
 	 * @param	properties		The list of Properties to be used for this match
 	 * @param	boardPanel		The board that will be displayed in the window
 	 */
-	public Window() {
+	public Window(Game _game) {
 
-		boardPanel = Game.board;
+		game = _game;
+
+		boardPanel = game.board;
 
 		this.setSize(width, height);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

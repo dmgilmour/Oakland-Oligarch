@@ -32,11 +32,12 @@ public class Game {
 		window = _window;
 	}
 	
-	public Properties[] generateProperties(); 
-		properties = new Property[NUM_PROPERTIES];
+	public Property[] generateProperties() { 
+		Property[] properties = new Property[NUM_PROPERTIES];
 		for (int i = 0; i < NUM_PROPERTIES; i++){
 			properties[i] = new Property("Property "+i, i, i);
 		}
+		return properties;
 	}
 
 	public void setPlayers(Player[] _playerList) {
