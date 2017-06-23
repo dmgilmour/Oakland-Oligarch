@@ -17,13 +17,20 @@ public class OaklandOligarchy {
 
 	public static void main(String[] args) {
 		
-		// Get input for number of players
+		// Initialize the window to display basic screen when prompting
+		// player information. Window and Game won't have any player info yet
 		Game game = new Game();
+		Window window = new Window();
+		game.setWindow();
 
+		// Prompt the number of players, then generate the playerlist
+		// and prompt their names
 		num_players = promptNumPlayers();
 		playerList = generatePlayers(num_players);
 
+		// Set the playerlists in Game and Window
 		game.setPlayers(playerList);
+		window.setPlayers(playerList);
 
 	}
 

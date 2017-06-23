@@ -9,30 +9,40 @@ import javax.swing.*;
  */
 public class Game {
 
+	private static final int NUM_PROPERTIES = 36;
+
 	private static boolean rollTaken;
 	private static int playerTurn;
-	private Property[] properties;
-	public static Board board;
-	private static Window window;
 	private static int num_players;
+
+	public static  Board board;
+	private static Property[] properties;
+	private static Window window;
 	private static Player[] playerList;
 	
 	public Game() {
-		properties = new Property[36];
+		properties = generateProperties();
+		board = new Board(properties);
+
 		playerTurn = 0;
 		rollTaken = false;
-		for (int i = 0; i<36; i++){
-			properties[i] = new Property("Property "+i, i, i);
-		}
-		board = new Board(properties);
-		window = new Window();		
+	}
+
+	public void setWindow(Window _window) {
+		window = _window;
 	}
 	
+	public Properties[] generateProperties(); 
+		properties = new Property[NUM_PROPERTIES];
+		for (int i = 0; i < NUM_PROPERTIES; i++){
+			properties[i] = new Property("Property "+i, i, i);
+		}
+	}
+
 	public void setPlayers(Player[] _playerList) {
 		playerList = _playerList;
 		num_players = playerList.length;
 		board.setPlayers(playerList);
-		window.setPlayers(playerList);
 	}
 
 
