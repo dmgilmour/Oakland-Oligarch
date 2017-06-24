@@ -61,6 +61,7 @@ public class Game {
 		rollTaken = false;			
 		curPlayer = playerList[playerTurn];
 		window.disableEnd();
+		window.disableBuy();
 		window.enableRoll();
 		window.update();
 	}
@@ -72,11 +73,11 @@ public class Game {
 	public static void movePhase() {
 		int roll = roll(System.currentTimeMillis());		
 		board.movePlayer(curPlayer, roll);
+		window.update();
 		curTile = board.getTile(curPlayer.getPosition());
 
 		doTheTilesThing();
 
-		window.update();
 		actionPhase();
 	}
 

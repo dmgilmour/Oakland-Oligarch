@@ -19,9 +19,9 @@ public class ActionPanel extends JPanel {
 	
 	public ActionPanel() {
 		Random rand = new Random(System.currentTimeMillis());
-		setBackground(new Color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
-		setOpaque(true);
-		setLayout(new GridBagLayout());
+		this.setBackground(new Color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
+		this.setOpaque(true);
+		this.setLayout(new GridBagLayout());
 
 		GridBagConstraints c = new GridBagConstraints();
 
