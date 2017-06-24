@@ -18,23 +18,20 @@ public class Game {
 	private static Window window;
 	private static Player[] playerList;
 	
-	public Game() {
-		properties = generateProperties();
+	public Game(Property[] propertyList) {
+		properties = propertyList;
 		board = new Board(properties);
 
 		playerTurn = 0;
 		rollTaken = false;
 	}
 
-	public void setWindow(Window _window) {
-		window = _window;
+	public int getTurn() {
+		return playerTurn;
 	}
 	
-	public Properties[] generateProperties(); 
-		properties = new Property[OaklandOligarchy.NUMBER_OF_PROPERTIES];
-		for (int i = 0; i < NUM_PROPERTIES; i++){
-			properties[i] = new Property("Property "+i, i, i);
-		}
+	public void setWindow(Window _window) {
+		window = _window;
 	}
 
 	public void setPlayers(Player[] _playerList) {
@@ -50,7 +47,7 @@ public class Game {
 	public static void movePhase() {
 		int roll = roll(System.currentTimeMillis());		
 		board.movePlayer(playerList[playerTurn], roll);
-		window.update();
+		window.update(playerList[playerTurn]);
 		actionPhase();
 		endPhase();
 	}
@@ -61,7 +58,7 @@ public class Game {
 	public static void endPhase() {
 		playerTurn = (playerTurn + 1) % num_players;	//Increment to the next player's turn
 		rollTaken = false;								//Enable the "roll" button again
-		window.update();
+		window.update(playerList[playerTurn]);
 	}
 	
 	/**
@@ -88,12 +85,12 @@ public class Game {
 	public static void actionPhase() {
 		Player player = playerList[playerTurn];
 		Square square = board.getSquare(player.getPosition());
-		if(tile == null) {									//Check to ensure that a tile was retrived properly from the board
+		if(square == null) {									//Check to ensure that a tile was retrived properly from the board
 			return;
 		}
 		else {												//If the tile retrived is a property:
 			square.act(player);			
 		}
-		window.update();
+		window.update(playerList[playerTurn]);
 	}
 }

@@ -24,7 +24,7 @@ public class BoardPanel extends JPanel {
 		this.setLayout(new GridBagLayout());
 		tiles = new Tile[OaklandOligarchy.NUMBER_OF_TILES];
 		
-		for(int i = 0; i < NUMBER_OF_TILES; i++){ //property numbers are currently hard coded
+		for(int i = 0; i < OaklandOligarchy.NUMBER_OF_TILES; i++){ //property numbers are currently hard coded
 			tiles[i] = new PropertyTile(i, properties[i]);
 			//associate action listeners here
 			tiles[i].setPreferredSize(new Dimension(60, 60));

@@ -26,11 +26,10 @@ public class Board {
 	public void movePlayer(Player player, int roll)
 	{
 		int oldPosition = player.getPosition();
-		int id = player.getId();
 		int newPosition = (oldPosition + roll) % OaklandOligarchy.NUMBER_OF_TILES;
 		squareList[oldPosition].remove(player);
 		squareList[newPosition].add(player);
-		player.setPostion(newPosition);
+		player.setPosition(newPosition);
 	}
 	
 	/**

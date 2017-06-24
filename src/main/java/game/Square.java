@@ -1,8 +1,8 @@
 package game;
 
-public abstract Square{	
-	boolean changed = false;
-	boolean[] occupants = new boolean[OaklandOligarchy.MAX_NUMBER_OF_PLAYERS];
+public abstract class Square{	
+	protected boolean changed = false;
+	private boolean[] occupants = new boolean[OaklandOligarchy.MAX_NUMBER_OF_PLAYERS];
 	
 	public void add(Player player) {
 		occupants[player.getId()] = true;

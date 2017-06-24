@@ -16,16 +16,17 @@ public class OaklandOligarchy {
 	public static final int MAX_NUMBER_OF_PLAYERS = 4;
 	
 	static Player[] playerList;
+	static Property[] propertyList;
 	
 	private static int num_players;
 
 	public static void main(String[] args) {
-		
+		propertyList = generateProperties();
 		// Initialize the window to display basic screen when prompting
 		// player information. Window and Game won't have any player info yet
-		Game game = new Game();
-		Window window = new Window();
-		game.setWindow();
+		Game game = new Game(propertyList);
+		Window window = new Window(propertyList);
+		game.setWindow(window);
 
 		// Prompt the number of players, then generate the playerlist
 		// and prompt their names
@@ -36,6 +37,14 @@ public class OaklandOligarchy {
 		game.setPlayers(playerList);
 		window.setPlayers(playerList);
 
+	}
+	
+	public static Property[] generateProperties() {
+		Property[] properties = new Property[OaklandOligarchy.NUMBER_OF_PROPERTIES];
+		for (int i = 0; i < OaklandOligarchy.NUMBER_OF_PROPERTIES; i++){
+			properties[i] = new Property("Property "+i, i, i);
+		}
+		return properties;
 	}
 
 	private static int promptNumPlayers() {

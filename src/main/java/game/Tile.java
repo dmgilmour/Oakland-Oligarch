@@ -12,10 +12,10 @@ import javax.swing.*;
  */
 public class Tile extends JPanel{
 
-		private int number; // what number this tile is, identifier for the board
-		private Square square;
+		protected int number; // what number this tile is, identifier for the board
+		protected Square square;
 		
-		private JPanel players;
+		protected JPanel players;
 		
 		public Tile(){
 			

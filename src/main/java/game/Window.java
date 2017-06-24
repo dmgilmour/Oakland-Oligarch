@@ -18,7 +18,7 @@ public class Window extends JFrame {
 	private TopPanel topPanel;
 	private StatusPanel statusPanel;
 	private ActionPanel actionPanel;
-	private Board boardPanel;
+	private BoardPanel boardPanel;
 
 	/**
 	 * Initializes the UI window 
@@ -27,9 +27,9 @@ public class Window extends JFrame {
 	 * @param	properties		The list of Properties to be used for this match
 	 * @param	boardPanel		The board that will be displayed in the window
 	 */
-	public Window() {
+	public Window(Property[] propertyList) {
 
-		boardPanel = Game.board;
+		boardPanel = new BoardPanel(propertyList);
 
 		this.setSize(width, height);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -83,14 +83,15 @@ public class Window extends JFrame {
 	public void setPlayers(Player[] _playerList) {
 		playerList = _playerList;
 		statusPanel.setPlayers(playerList);
-		this.update();
+		this.update(playerList[0]);
 	}
 	
 	/**
 	 * Refreshes the UI
 	 */	
-	public void update() {
+	public void update(Player player) {
 		statusPanel.update();
+		boardPanel.update(player);
 		this.setVisible(true);
 	}
 }

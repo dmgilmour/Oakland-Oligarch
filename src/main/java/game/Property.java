@@ -1,5 +1,7 @@
 package game;
 
+import javax.swing.*;
+
 /**
  * @author David
  *
