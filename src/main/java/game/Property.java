@@ -41,16 +41,25 @@ public class Property extends Square{
 		owner=p;
 	}
 	
-	public void act(Player player) {
+	/**
+	 * Performs the action on a property square
+	 *
+	 * @param	player		The player that this property is interacting with
+	 * @return				A boolean determining if the "buy" button should be disabled or not
+	 */
+	public boolean act(Player player) {
 		if(owner != null) {								//If this property is owned:
 				player.payRent(this);					//Pay rent on the property and alert the player
 				JOptionPane.showMessageDialog(null, player.getName()+ " pays $" + getRent() + "  to " + owner.getName());
+				return true;
 		}
 		else {		//The property is unowned
 			int choice = JOptionPane.showConfirmDialog(null, "Would you like to buy " + getName() + "?", "Buy property?", JOptionPane.YES_NO_OPTION);
 			if(choice == JOptionPane.YES_OPTION) {		//Ask of the player would like to purchase this property
 				player.buy(this);
+				return true;
 			}
+			return false;
 		}
 	}
 

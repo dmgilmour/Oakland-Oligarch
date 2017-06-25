@@ -40,8 +40,14 @@ public class OaklandOligarchy {
 		// Set the playerlists in Game and Window
 		game.setPlayers(playerList);
 		window.setPlayers(playerList);
+		game.startPhase();
 	}
 	
+	/**
+	 * Changes which phase the game is in currently. Is called by various ActionListeners
+	 *
+	 * @param	gamePhase		Which phase the game should be set to
+	 */
 	public static void switchPhase(GamePhase gamePhase) {
 		switch(gamePhase) {
 			case MOVE:

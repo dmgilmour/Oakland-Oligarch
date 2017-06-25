@@ -17,11 +17,6 @@ public class Game {
 	private Property[] properties;
 	private Window window;
 	private Player[] playerList;
-
-	// Tracking objects
-	public static Player curPlayer;
-	public static Tile curTile;
-
 	
 	public Game(Property[] propertyList) {
 		properties = propertyList;
@@ -42,9 +37,7 @@ public class Game {
 	public void setPlayers(Player[] _playerList) {
 		playerList = _playerList;
 		num_players = playerList.length;
-		board.setPlayers(playerList);
 	}
-
 
 	/**
 	 * Runs the game phase for the start of a turn during which a player can click info
@@ -52,7 +45,6 @@ public class Game {
 	 */
 	public void startPhase() {
 		rollTaken = false;			
-		curPlayer = playerList[playerTurn];
 		window.disableEnd();
 		window.disableBuy();
 		window.enableRoll();
@@ -67,6 +59,7 @@ public class Game {
 		int roll = roll(System.currentTimeMillis());		
 		board.movePlayer(playerList[playerTurn], roll);
 		window.update();
+		window.disableRoll();
 		actionPhase();
 	}
 	
@@ -106,17 +99,26 @@ public class Game {
 			return;
 		}
 		else {												//If the tile retrived is a property:
-			square.act(player);			
+			boolean cannotBuy = square.act(player);
+			if(!cannotBuy)
+			{
+				window.enableBuy();
+			}
 		}
-		window.disableRoll();
 		window.enableEnd();
 		window.update();
-  }
+	}
 
+	/**
+	 * Runs the game phase where the player can purchase a property
+	 */
 	public void buyPhase() {
-		Property property = ((PropertyTile)curTile).getProperty(); 
-		curPlayer.buy(property);
-		window.disableBuy();
+		Player player = playerList[playerTurn]; 
+		Square square = board.getSquare(player.getPosition());
+		if(square.act(player))
+		{
+			window.disableBuy();
+		}
 		window.update();
 	}
 }

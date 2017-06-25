@@ -92,6 +92,11 @@ public class BoardPanel extends JPanel {
 		return null;
 	}
 	
+	/**
+	 * Updates the board for a given player's movement
+	 *
+	 * @param	p		The player that the board should be updated based on
+	 */
 	public void update(Player p) {
 		if(p.hasMoved())
 		{
