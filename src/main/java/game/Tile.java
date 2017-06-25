@@ -53,12 +53,11 @@ public class Tile extends JPanel{
 			
 		}
 		
-		public void update(Player player) {
-			if(square.hasPlayer(player)) {
-				players.add(player.getToken());
-			}
-			else {
-				players.remove(player.getToken());
-			}
+		public void add(Player player) {
+			players.add(player.getToken());
+		}
+		
+		public void remove(Player player) {
+			players.remove(player.getToken());
 		}
 }

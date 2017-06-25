@@ -56,7 +56,7 @@ public class Game {
 		window.disableEnd();
 		window.disableBuy();
 		window.enableRoll();
-		window.update(curPlayer);
+		window.update();
 	}
 
 
@@ -66,7 +66,7 @@ public class Game {
 	public void movePhase() {
 		int roll = roll(System.currentTimeMillis());		
 		board.movePlayer(playerList[playerTurn], roll);
-		window.update(playerList[playerTurn]);
+		window.update();
 		actionPhase();
 	}
 	
@@ -110,13 +110,13 @@ public class Game {
 		}
 		window.disableRoll();
 		window.enableEnd();
-		window.update(playerList[playerTurn]);
+		window.update();
   }
 
 	public void buyPhase() {
 		Property property = ((PropertyTile)curTile).getProperty(); 
 		curPlayer.buy(property);
 		window.disableBuy();
-		window.update(curPlayer);
+		window.update();
 	}
 }

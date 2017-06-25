@@ -15,7 +15,7 @@ public class Window extends JFrame {
 	private final int width = 1820;
 	
 	private Game game;
-	private static Player[] playerList;
+	private Player[] playerList;
 
 	private TopPanel topPanel;
 	private StatusPanel statusPanel;
@@ -87,17 +87,17 @@ public class Window extends JFrame {
 	public void setPlayers(Player[] _playerList) {
 		playerList = _playerList;
 		statusPanel.setPlayers(playerList);
-		for(Player p: playerList) {
-			this.update(p);
-		}
+		this.update();
 	}
 	
 	/**
 	 * Refreshes the UI
 	 */	
-	public void update(Player player) {
+	public void update() {
 		statusPanel.update();
-		boardPanel.update(player);
+		for(Player p: playerList) {
+			boardPanel.update(p);
+		}
 		setVisible(true);
 	}
 

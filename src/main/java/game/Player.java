@@ -15,6 +15,8 @@ public class Player {
 	private ArrayList<Property> properties;
 	private JLabel token; //this can be changed to whatever we decide player tokens should be
 	private int position; //current space the player is on
+	private int oldPos;
+	private boolean hasMoved;
 
 	public Player (int id, int money, String name, Property[] properties) {
 		this.id = id;
@@ -29,7 +31,21 @@ public class Player {
 			for(int i = 0; i < properties.length; i++)
 				this.properties.add(properties[i]);
 		}
-		position=0;
+		position = 0;
+		hasMoved = true;
+		oldPos = 0;
+	}
+	
+	public int getOldPos() {
+		return oldPos;
+	}
+	
+	public void setMoved(boolean b) {
+		hasMoved = b;
+	}
+	
+	public boolean hasMoved() {
+		return hasMoved;
 	}
 	
 	public int getId() {
@@ -48,7 +64,9 @@ public class Player {
 	}
 	
 	public void setPosition(int p){
-		position=p;
+		oldPos = position;
+		position = p;
+		hasMoved = true;
 	}
 	
 	public int getMoney() {

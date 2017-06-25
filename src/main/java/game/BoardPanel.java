@@ -93,8 +93,11 @@ public class BoardPanel extends JPanel {
 	}
 	
 	public void update(Player p) {
-		for(Tile t: tiles) {
-			t.update(p);
+		if(p.hasMoved())
+		{
+			tiles[p.getOldPos()].remove(p);
+			tiles[p.getPosition()].add(p);
+			p.setMoved(false);
 		}
 	}
 }
