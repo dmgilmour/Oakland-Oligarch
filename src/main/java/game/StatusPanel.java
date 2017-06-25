@@ -21,9 +21,9 @@ public class StatusPanel extends JPanel {
 	 * @param	playerList		the list of Players to be listed on this panel
 	 */
 	public StatusPanel(Random random) {
-		setBackground(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
-		setOpaque(true);
-		setLayout(new GridBagLayout());
+		this.setBackground(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
+		this.setOpaque(true);
+		this.setLayout(new GridBagLayout());
 	}
 
 

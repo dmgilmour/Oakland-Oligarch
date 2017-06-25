@@ -11,6 +11,8 @@ import javax.swing.*;
  */
 public class OaklandOligarchy {
 	
+	public enum GamePhase {MOVE, ACTION, END, START, BUY};
+	
 	public static final int NUMBER_OF_TILES = 36;
 	public static final int NUMBER_OF_PROPERTIES = 36;
 	public static final int MAX_NUMBER_OF_PLAYERS = 4;
@@ -40,16 +42,19 @@ public class OaklandOligarchy {
 		window.setPlayers(playerList);
 	}
 	
-	public static void switchPhase(int gamePhase) {
+	public static void switchPhase(GamePhase gamePhase) {
 		switch(gamePhase) {
-			case 0:
+			case MOVE:
 				game.movePhase();
 				break;
-			case 1:
+			case ACTION:
 				game.actionPhase();
 				break;
-			case 2:
+			case END:
 				game.endPhase();
+				break;
+			case BUY:
+				game.buyPhase();
 				break;
 			default:
 				break;

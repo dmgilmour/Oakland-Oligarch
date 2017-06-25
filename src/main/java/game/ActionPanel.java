@@ -54,19 +54,19 @@ public class ActionPanel extends JPanel {
 
 	private class buyListener  implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			Game.buyProperty();
+			OaklandOligarchy.switchPhase(OaklandOligarchy.GamePhase.BUY);
 		}
 	}
 
 	private class endListener  implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			Game.endPhase();
+			OaklandOligarchy.switchPhase(OaklandOligarchy.GamePhase.END);
 		}
 	}
 	
 	private class rollListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			OaklandOligarchy.switchPhase(0);
+			OaklandOligarchy.switchPhase(OaklandOligarchy.GamePhase.MOVE);
 		}
 	}
 }

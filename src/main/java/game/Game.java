@@ -50,13 +50,13 @@ public class Game {
 	 * Runs the game phase for the start of a turn during which a player can click info
 	 * buttons and roll the dice giant button
 	 */
-	public static void startPhase() {
+	public void startPhase() {
 		rollTaken = false;			
 		curPlayer = playerList[playerTurn];
 		window.disableEnd();
 		window.disableBuy();
 		window.enableRoll();
-		window.update();
+		window.update(curPlayer);
 	}
 
 
@@ -68,17 +68,6 @@ public class Game {
 		board.movePlayer(playerList[playerTurn], roll);
 		window.update(playerList[playerTurn]);
 		actionPhase();
-	}
-
-
-	/**
-	 * Runs the game phase where the player performs an action based on the tile they are on
-	 */
-	public static void actionPhase() {
-		// Check to ensure that a tile was retrived properly from the board
-		window.disableRoll();
-		window.enableEnd();
-		window.update();
 	}
 	
 	/**
@@ -119,13 +108,15 @@ public class Game {
 		else {												//If the tile retrived is a property:
 			square.act(player);			
 		}
+		window.disableRoll();
+		window.enableEnd();
 		window.update(playerList[playerTurn]);
   }
 
-	public static void buyProperty() {
+	public void buyPhase() {
 		Property property = ((PropertyTile)curTile).getProperty(); 
 		curPlayer.buy(property);
 		window.disableBuy();
-		window.update();
+		window.update(curPlayer);
 	}
 }
