@@ -11,9 +11,8 @@ import javax.swing.*;
  */
 public class TopPanel extends JPanel {
 	
-	public TopPanel() {
-		Random rand = new Random(System.currentTimeMillis());
-		setBackground(new Color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
+	public TopPanel(Random random) {
+		setBackground(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
 		setOpaque(true);
 		GridBagConstraints constraints = new GridBagConstraints();
 

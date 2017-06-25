@@ -10,7 +10,7 @@ import javax.swing.*;
  */
 public class BoardPanel extends JPanel {
 
-	Tile[] tiles;
+	private Tile[] tiles;
 	
 	/**
 	 * Constructor to build the board object.
@@ -93,12 +93,8 @@ public class BoardPanel extends JPanel {
 	}
 	
 	public void update(Player p) {
-		//int pos = p.getPosition();
 		for(Tile t: tiles) {
 			t.update(p);
 		}
-		/*if(pos < 12) {
-			tiles[pos].update(p);	
-		}*/
 	}
 }

@@ -9,14 +9,14 @@ import javax.swing.*;
  */
 public class Game {
 
-	private static boolean rollTaken;
-	private static int playerTurn;
-	private static int num_players;
+	private boolean rollTaken;
+	private int playerTurn;
+	private int num_players;
 
-	public static  Board board;
-	private static Property[] properties;
-	private static Window window;
-	private static Player[] playerList;
+	private Board board;
+	private Property[] properties;
+	private Window window;
+	private Player[] playerList;
 	
 	public Game(Property[] propertyList) {
 		properties = propertyList;
@@ -44,7 +44,7 @@ public class Game {
 	/**
 	 * Runs the game phase during which players roll and move
 	 */
-	public static void movePhase() {
+	public void movePhase() {
 		int roll = roll(System.currentTimeMillis());		
 		board.movePlayer(playerList[playerTurn], roll);
 		window.update(playerList[playerTurn]);
@@ -55,7 +55,7 @@ public class Game {
 	/**
 	 * Runs the game phase that ends each players turn
 	 */
-	public static void endPhase() {
+	public void endPhase() {
 		playerTurn = (playerTurn + 1) % num_players;	//Increment to the next player's turn
 		rollTaken = false;								//Enable the "roll" button again
 		window.update(playerList[playerTurn]);
@@ -67,7 +67,7 @@ public class Game {
 	 * @param	timeMillis		A long integer used to the seed the random roll
 	 * @returns					An integer value between 2-12 that is the result of rolling 2 six-sided dice
 	 */
-	public static int roll(Long timeMillis) {
+	public int roll(Long timeMillis) {
 		if(!rollTaken) {
 			Random rand = new Random(timeMillis);
 			rollTaken = true;
@@ -82,7 +82,7 @@ public class Game {
 	/**
 	 * Runs the game phase where the player performs an action based on the tile they are on
 	 */
-	public static void actionPhase() {
+	public void actionPhase() {
 		Player player = playerList[playerTurn];
 		Square square = board.getSquare(player.getPosition());
 		if(square == null) {									//Check to ensure that a tile was retrived properly from the board

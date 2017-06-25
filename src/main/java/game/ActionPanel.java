@@ -11,9 +11,8 @@ import javax.swing.*;
  */
 public class ActionPanel extends JPanel {
 	
-	public ActionPanel() {
-		Random rand = new Random(System.currentTimeMillis());
-		setBackground(new Color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
+	public ActionPanel(Random random) {
+		setBackground(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
 		setOpaque(true);
 		setLayout(new GridBagLayout());
 
@@ -38,7 +37,7 @@ public class ActionPanel extends JPanel {
 	
 	private class rollListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			Game.movePhase();
+			OaklandOligarchy.switchPhase(0);
 		}
 	}
 }

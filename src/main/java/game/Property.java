@@ -7,37 +7,38 @@ import javax.swing.*;
  *
  */
 public class Property extends Square{
-    String name;
-    int price;
-    int rent;
-    Player owner=null;
+	private String name;
+	private int price;
+	private int rent;
+	private Player owner;
 
-    public Property(String name, int price, int rent){
-        this.name = name;
-        this.price = price;
-        this.rent = rent;
-    }
-    
-    public String getName(){
-        return name;
-    }
+	public Property(String n, int p, int r){
+		name = n;
+		price = p;
+		rent = r;
+		owner = null;
+	}
+	
+	public String getName(){
+		return name;
+	}
 
-    public int getPrice(){
-        return price;
-    }
+	public int getPrice(){
+		return price;
+	}
 
-    public int getRent(){
-        return rent;
-    }
+	public int getRent(){
+		return rent;
+	}
 
-    public Player getOwner(){
-        return owner;
-    }
-    
-    public void setOwner(Player p){
-    	owner=p;
-    }
-    
+	public Player getOwner(){
+		return owner;
+	}
+	
+	public void setOwner(Player p){
+		owner=p;
+	}
+	
 	public void act(Player player) {
 		if(owner != null) {								//If this property is owned:
 				player.payRent(this);					//Pay rent on the property and alert the player

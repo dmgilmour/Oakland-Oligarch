@@ -3,6 +3,7 @@ package game;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.Random;
 
 /**
  * @author Dan
@@ -10,8 +11,8 @@ import javax.swing.*;
  */
 public class Window extends JFrame {
 
-	private int height = 1080;
-	private int width = 1920;
+	private final int height = 980;
+	private final int width = 1820;
 	
 	private static Player[] playerList;
 
@@ -27,7 +28,7 @@ public class Window extends JFrame {
 	 * @param	properties		The list of Properties to be used for this match
 	 * @param	boardPanel		The board that will be displayed in the window
 	 */
-	public Window(Property[] propertyList) {
+	public Window(Property[] propertyList, Random random) {
 
 		boardPanel = new BoardPanel(propertyList);
 
@@ -39,7 +40,7 @@ public class Window extends JFrame {
 		c.fill = GridBagConstraints.BOTH;
 
 		
-		topPanel = new TopPanel();
+		topPanel = new TopPanel(random);
 		c.gridwidth = 2; // Span left panel and board
 		c.gridheight = 1;
 		c.gridx = 0;
@@ -48,7 +49,7 @@ public class Window extends JFrame {
 		c.anchor = GridBagConstraints.PAGE_START;
 		this.add(topPanel, c);
 
-		statusPanel = new StatusPanel();
+		statusPanel = new StatusPanel(random);
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.gridx = 0;
@@ -58,7 +59,7 @@ public class Window extends JFrame {
 		c.anchor = GridBagConstraints.LAST_LINE_START;
 		this.add(statusPanel, c);
 
-		actionPanel = new ActionPanel();
+		actionPanel = new ActionPanel(random);
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.gridx = 0;
@@ -94,6 +95,6 @@ public class Window extends JFrame {
 	public void update(Player player) {
 		statusPanel.update();
 		boardPanel.update(player);
-		this.setVisible(true);
+		setVisible(true);
 	}
 }

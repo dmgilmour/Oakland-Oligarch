@@ -1,6 +1,6 @@
 package game;
 
-
+import java.util.Random;
 import java.awt.*;
 import java.awt.event.*; 
 import javax.swing.*;
@@ -15,17 +15,19 @@ public class OaklandOligarchy {
 	public static final int NUMBER_OF_PROPERTIES = 36;
 	public static final int MAX_NUMBER_OF_PLAYERS = 4;
 	
-	static Player[] playerList;
-	static Property[] propertyList;
+	private static Player[] playerList;
+	private static Property[] propertyList;
+	private static Game game;
 	
 	private static int num_players;
 
 	public static void main(String[] args) {
+		Random random = new Random(System.currentTimeMillis());
 		propertyList = generateProperties();
 		// Initialize the window to display basic screen when prompting
 		// player information. Window and Game won't have any player info yet
-		Game game = new Game(propertyList);
-		Window window = new Window(propertyList);
+		game = new Game(propertyList);
+		Window window = new Window(propertyList, random);
 		game.setWindow(window);
 
 		// Prompt the number of players, then generate the playerlist
@@ -36,7 +38,22 @@ public class OaklandOligarchy {
 		// Set the playerlists in Game and Window
 		game.setPlayers(playerList);
 		window.setPlayers(playerList);
-
+	}
+	
+	public static void switchPhase(int gamePhase) {
+		switch(gamePhase) {
+			case 0:
+				game.movePhase();
+				break;
+			case 1:
+				game.actionPhase();
+				break;
+			case 2:
+				game.endPhase();
+				break;
+			default:
+				break;
+		}
 	}
 	
 	public static Property[] generateProperties() {

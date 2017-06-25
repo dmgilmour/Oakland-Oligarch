@@ -5,7 +5,7 @@ package game;
  *
  */
 public class Board {
-	Square[] squareList;
+	private Square[] squareList;
 	
 	public Board(Square[] _sl) {
 		squareList = _sl;
