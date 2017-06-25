@@ -16,6 +16,8 @@ public class Tile extends JPanel{
 		protected Square square;
 		protected JPanel players;
 		
+		public Tile() {	}
+		
 		/**
 		 * @param n	Tile number identifier so that the tile knows what number it is.
 		 */
