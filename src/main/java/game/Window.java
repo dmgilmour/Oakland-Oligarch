@@ -14,6 +14,7 @@ public class Window extends JFrame {
 	private final int height = 980;
 	private final int width = 1820;
 	
+	private Game game;
 	private static Player[] playerList;
 
 	private TopPanel topPanel;
@@ -28,9 +29,11 @@ public class Window extends JFrame {
 	 * @param	properties		The list of Properties to be used for this match
 	 * @param	boardPanel		The board that will be displayed in the window
 	 */
+
 	public Window(Property[] propertyList, Random random) {
 
 		boardPanel = new BoardPanel(propertyList);
+
 
 		this.setSize(width, height);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -97,4 +100,29 @@ public class Window extends JFrame {
 		boardPanel.update(player);
 		setVisible(true);
 	}
+
+	public void enableRoll() {
+		actionPanel.rollButton.setEnabled(true);
+	}
+
+	public void disableRoll() {
+		actionPanel.rollButton.setEnabled(false);
+	}
+
+	public void enableEnd() {
+		actionPanel.endButton.setEnabled(true);
+	}
+
+	public void disableEnd() {
+		actionPanel.endButton.setEnabled(false);
+	}
+
+	public void enableBuy() {
+		actionPanel.buyButton.setEnabled(true);
+	}
+
+	public void disableBuy() {
+		actionPanel.buyButton.setEnabled(false);
+	}
+
 }
