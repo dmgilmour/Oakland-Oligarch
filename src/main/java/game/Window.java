@@ -10,8 +10,8 @@ import javax.swing.*;
  */
 public class Window extends JFrame {
 
-	private int height = 2700;
-	private int width = 4000;
+	private int height = 1080;
+	private int width = 1920;
 	
 	private static Player[] playerList;
 
@@ -83,7 +83,9 @@ public class Window extends JFrame {
 	public void setPlayers(Player[] _playerList) {
 		playerList = _playerList;
 		statusPanel.setPlayers(playerList);
-		this.update(playerList[0]);
+		for(Player p: playerList) {
+			this.update(p);
+		}
 	}
 	
 	/**

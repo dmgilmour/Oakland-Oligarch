@@ -68,15 +68,15 @@ public class Game {
 	 * @returns					An integer value between 2-12 that is the result of rolling 2 six-sided dice
 	 */
 	public static int roll(Long timeMillis) {
-		if(!rollTaken)
-		{
+		if(!rollTaken) {
 			Random rand = new Random(timeMillis);
 			rollTaken = true;
 			int roll = rand.nextInt(6) + rand.nextInt(6) + 2;	//Simulates two dice rolls by retriving integers from 0-5 and adding 2
 			return roll;
 		}
-		else
+		else {
 			return -1;
+		}
 	}
 	
 	/**

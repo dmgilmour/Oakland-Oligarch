@@ -93,8 +93,12 @@ public class BoardPanel extends JPanel {
 	}
 	
 	public void update(Player p) {
+		//int pos = p.getPosition();
 		for(Tile t: tiles) {
 			t.update(p);
 		}
+		/*if(pos < 12) {
+			tiles[pos].update(p);	
+		}*/
 	}
 }
