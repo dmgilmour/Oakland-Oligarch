@@ -3,6 +3,7 @@ package game;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.Random;
 
 /**
  * @author Dan
@@ -10,16 +11,16 @@ import javax.swing.*;
  */
 public class Window extends JFrame {
 
-	private int height = 2700;
-	private int width = 4000;
+	private final int height = 980;
+	private final int width = 1820;
 	
 	private Game game;
-	private static Player[] playerList;
+	private Player[] playerList;
 
 	private TopPanel topPanel;
 	private StatusPanel statusPanel;
 	private ActionPanel actionPanel;
-	private Board boardPanel;
+	private BoardPanel boardPanel;
 
 	/**
 	 * Initializes the UI window 
@@ -28,11 +29,11 @@ public class Window extends JFrame {
 	 * @param	properties		The list of Properties to be used for this match
 	 * @param	boardPanel		The board that will be displayed in the window
 	 */
-	public Window(Game _game) {
 
-		game = _game;
+	public Window(Property[] propertyList, Random random) {
 
-		boardPanel = game.board;
+		boardPanel = new BoardPanel(propertyList);
+
 
 		this.setSize(width, height);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -42,7 +43,7 @@ public class Window extends JFrame {
 		c.fill = GridBagConstraints.BOTH;
 
 		
-		topPanel = new TopPanel();
+		topPanel = new TopPanel(random);
 		c.gridwidth = 2; // Span left panel and board
 		c.gridheight = 1;
 		c.gridx = 0;
@@ -51,7 +52,7 @@ public class Window extends JFrame {
 		c.anchor = GridBagConstraints.PAGE_START;
 		this.add(topPanel, c);
 
-		statusPanel = new StatusPanel();
+		statusPanel = new StatusPanel(random);
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.gridx = 0;
@@ -61,7 +62,7 @@ public class Window extends JFrame {
 		c.anchor = GridBagConstraints.LAST_LINE_START;
 		this.add(statusPanel, c);
 
-		actionPanel = new ActionPanel();
+		actionPanel = new ActionPanel(random);
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.gridx = 0;
@@ -94,7 +95,10 @@ public class Window extends JFrame {
 	 */	
 	public void update() {
 		statusPanel.update();
-		this.setVisible(true);
+		for(Player p: playerList) {
+			boardPanel.update(p);
+		}
+		setVisible(true);
 	}
 
 	public void enableRoll() {

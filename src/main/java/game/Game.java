@@ -9,57 +9,42 @@ import javax.swing.*;
  */
 public class Game {
 
-	private static final int NUM_PROPERTIES = 36;
+	private boolean rollTaken;
+	private int playerTurn;
+	private int num_players;
 
-	// Tracking primative variables
-	private static boolean rollTaken;
-	private static int playerTurn;
-	private static int num_players;
-
-	// Tracking objects
-	public static Player curPlayer;
-	public static Tile curTile;
-
-	// Overall objects
-	public static  Board board;
-	private static Property[] properties;
-	private static Window window;
-	private static Player[] playerList;
+	private Board board;
+	private Property[] properties;
+	private Window window;
+	private Player[] playerList;
 	
-	public Game() {
-		properties = generateProperties();
+	public Game(Property[] propertyList) {
+		properties = propertyList;
 		board = new Board(properties);
 
 		playerTurn = 0;
 		rollTaken = false;
 	}
 
-	public void setWindow(Window _window) {
-		window = _window;
+	public int getTurn() {
+		return playerTurn;
 	}
 	
-	public Property[] generateProperties() { 
-		Property[] properties = new Property[NUM_PROPERTIES];
-		for (int i = 0; i < NUM_PROPERTIES; i++){
-			properties[i] = new Property("Property "+i, i, i);
-		}
-		return properties;
+	public void setWindow(Window _window) {
+		window = _window;
 	}
 
 	public void setPlayers(Player[] _playerList) {
 		playerList = _playerList;
 		num_players = playerList.length;
-		board.setPlayers(playerList);
 	}
-
 
 	/**
 	 * Runs the game phase for the start of a turn during which a player can click info
 	 * buttons and roll the dice giant button
 	 */
-	public static void startPhase() {
+	public void startPhase() {
 		rollTaken = false;			
-		curPlayer = playerList[playerTurn];
 		window.disableEnd();
 		window.disableBuy();
 		window.enableRoll();
@@ -70,32 +55,18 @@ public class Game {
 	/**
 	 * Runs the game phase during which players roll and move
 	 */
-	public static void movePhase() {
+	public void movePhase() {
 		int roll = roll(System.currentTimeMillis());		
-		board.movePlayer(curPlayer, roll);
+		board.movePlayer(playerList[playerTurn], roll);
 		window.update();
-		curTile = board.getTile(curPlayer.getPosition());
-
-		doTheTilesThing();
-
-		actionPhase();
-	}
-
-
-	/**
-	 * Runs the game phase where the player performs an action based on the tile they are on
-	 */
-	public static void actionPhase() {
-		// Check to ensure that a tile was retrived properly from the board
 		window.disableRoll();
-		window.enableEnd();
-		window.update();
+		actionPhase();
 	}
 	
 	/**
 	 * Runs the game phase that ends each players turn
 	 */
-	public static void endPhase() {
+	public void endPhase() {
 		playerTurn = (playerTurn + 1) % num_players;	//Increment to the next player's turn
 		startPhase();
 	}
@@ -106,53 +77,48 @@ public class Game {
 	 * @param	timeMillis		A long integer used to the seed the random roll
 	 * @returns					An integer value between 2-12 that is the result of rolling 2 six-sided dice
 	 */
-	public static int roll(Long timeMillis) {
-		if(!rollTaken)
-		{
+	public int roll(Long timeMillis) {
+		if(!rollTaken) {
 			Random rand = new Random(timeMillis);
 			rollTaken = true;
 			int roll = rand.nextInt(6) + rand.nextInt(6) + 2;	//Simulates two dice rolls by retriving integers from 0-5 and adding 2
 			return roll;
 		}
-		else
+		else {
 			return -1;
+		}
 	}
 
-	public static void buyProperty() {
-		Property property = ((PropertyTile)curTile).getProperty(); 
-		curPlayer.buy(property);
-		window.disableBuy();
+	/**
+	 * Runs the game phase where the player performs an action based on the tile they are on
+	 */
+	public void actionPhase() {
+		Player player = playerList[playerTurn];
+		Square square = board.getSquare(player.getPosition());
+		if(square == null) {									//Check to ensure that a tile was retrived properly from the board
+			return;
+		}
+		else {												//If the tile retrived is a property:
+			boolean cannotBuy = square.act(player);
+			if(!cannotBuy)
+			{
+				window.enableBuy();
+			}
+		}
+		window.enableEnd();
 		window.update();
 	}
 
-	public static void doTheTilesThing() {
-
-		if (curTile == null) { 
-			throw new IllegalArgumentException("Unable to fetch Tile");	
+	/**
+	 * Runs the game phase where the player can purchase a property
+	 */
+	public void buyPhase() {
+		Player player = playerList[playerTurn]; 
+		Square square = board.getSquare(player.getPosition());
+		if(square.act(player))
+		{
+			window.disableBuy();
 		}
-
-		// If the tile retrived is a property:
-		if (curTile instanceof PropertyTile) { 
-			Property property = ((PropertyTile)curTile).getProperty(); 
-			Player owner = property.getOwner();
-			if(owner != null) {								//If this property is owned:
-				curPlayer.payRent(property);					//Pay rent on the property and alert the player
-				JOptionPane.showMessageDialog(null, curPlayer.getName()+ " pays $" + property.getRent() + "  to " + owner.getName());
-			} else { // The property is unowned
-				int choice = JOptionPane.showConfirmDialog(null, "Would you like to buy " + property.getName() + "?", "Buy property?", JOptionPane.YES_NO_OPTION);
-				if(choice == JOptionPane.YES_OPTION) {		//Ask of the player would like to purchase this property
-					curPlayer.buy(property);
-				}
-			}
-
-			if (property.getOwner() == null) {
-				window.enableBuy();
-			} else {
-				window.disableBuy();
-			}
-				
-		}
+		window.update();
 	}
-
-
 }

@@ -17,11 +17,11 @@ public class ActionPanel extends JPanel {
 	public JButton rollButton;
 
 	
-	public ActionPanel() {
-		Random rand = new Random(System.currentTimeMillis());
-		this.setBackground(new Color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
+	public ActionPanel(Random random) {
+		this.setBackground(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
 		this.setOpaque(true);
 		this.setLayout(new GridBagLayout());
+
 
 		GridBagConstraints c = new GridBagConstraints();
 
@@ -54,19 +54,19 @@ public class ActionPanel extends JPanel {
 
 	private class buyListener  implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			Game.buyProperty();
+			OaklandOligarchy.switchPhase(OaklandOligarchy.GamePhase.BUY);
 		}
 	}
 
 	private class endListener  implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			Game.endPhase();
+			OaklandOligarchy.switchPhase(OaklandOligarchy.GamePhase.END);
 		}
 	}
 	
 	private class rollListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			Game.movePhase();
+			OaklandOligarchy.switchPhase(OaklandOligarchy.GamePhase.MOVE);
 		}
 	}
 }
