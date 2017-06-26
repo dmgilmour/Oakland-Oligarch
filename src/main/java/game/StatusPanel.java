@@ -20,15 +20,18 @@ public class StatusPanel extends JPanel {
 	 *
 	 * @param	playerList		the list of Players to be listed on this panel
 	 */
-	public StatusPanel(Player[] playerList) {
-		this.playerList = playerList;
+	public StatusPanel(Random random) {
+		this.setBackground(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
+		this.setOpaque(true);
+		this.setLayout(new GridBagLayout());
+	}
+
+
+
+	public void setPlayers(Player[] _playerList) {
+		playerList = _playerList;
 		num_players = playerList.length;
 
-		Random rand = new Random(System.currentTimeMillis());
-                setBackground(new Color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
-                setOpaque(true);
-
-		setLayout(new GridBagLayout());
 
 		GridBagConstraints c = new GridBagConstraints();
 
@@ -69,9 +72,10 @@ public class StatusPanel extends JPanel {
 	/**
 	 * Updates the panel with the new money values of the players
 	 */
-	public void update()
-	{
-		for(int i = 0; i < num_players; i++)		//Visit each status button and update the test to indicate player currency
+	public void update() {
+
+		for (int i = 0; i < num_players; i++) {	//Visit each status button and update the test to indicate player currency
 			playerButtons[i].setText(playerList[i].getName() + ": $" + playerList[i].getMoney());
+		}
 	}
 }

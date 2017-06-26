@@ -12,15 +12,13 @@ import javax.swing.*;
  */
 public class PropertyTile extends Tile {
 	
-	private Property property;
-	
 	/**
 	 * @param n		Tile number identifier so that the tile knows what number it is.
 	 * @param prop	The property object that is corresponding to this tile.
 	 */
 	public PropertyTile(int n, Property prop){
-		number=n;
-		property=prop;
+		number = n;
+		square = prop;
 		this.setLayout(new GridBagLayout());
 		
 		players = new JPanel();
@@ -55,6 +53,6 @@ public class PropertyTile extends Tile {
 	}
 
 	public Property getProperty() {
-		return property;
+		return (Property)square;
 	}
 }

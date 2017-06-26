@@ -12,13 +12,11 @@ import javax.swing.*;
  */
 public class Tile extends JPanel{
 
-		int number; // what number this tile is, identifier for the board
+		protected int number; // what number this tile is, identifier for the board
+		protected Square square;
+		protected JPanel players;
 		
-		JPanel players;
-		
-		public Tile(){
-			
-		}
+		public Tile() {	}
 		
 		/**
 		 * @param n	Tile number identifier so that the tile knows what number it is.
@@ -52,19 +50,11 @@ public class Tile extends JPanel{
 			
 		}
 		
-		/**
-		 * Put a player onto this tile. Takes an object that represents the player token.
-		 * @param p	The player to put onto this tile.
-		 */
-		public void addPlayer(JLabel p){
-			players.add(p);
+		public void add(Player player) {
+			players.add(player.getToken());
 		}
 		
-		/**
-		 * Remove a player from this tile. Takes an object that represents the player token.
-		 * @param p	The player to remove from this tile.
-		 */
-		public void removePlayer(JLabel p){
-			players.remove(p);
+		public void remove(Player player) {
+			players.remove(player.getToken());
 		}
 }
