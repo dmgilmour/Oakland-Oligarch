@@ -11,14 +11,14 @@ public class Property extends Square{
 	private int price;
 	private int rent;
 	private Player owner;
-  private boolean mortgaged;
+	private boolean mortgaged;
 
 	public Property(String n, int p, int r){
 		name = n;
 		price = p;
 		rent = r;
 		owner = null;
-    mortgaged = false;
+	mortgaged = false;
 	}
 
 	public String getName(){
@@ -64,7 +64,7 @@ public class Property extends Square{
 	}
 
 	public void setMortgaged(boolean _mortgaged) {
-    		mortgaged = _mortgaged;
+			mortgaged = _mortgaged;
 	}
 
 	public boolean getMortgaged() {

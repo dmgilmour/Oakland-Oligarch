@@ -25,15 +25,15 @@ public class Window extends JFrame {
 	/**
 	 * Initializes the UI window 
 	 *
-	 * @param	playerList		The list of Players in the game
-	 * @param	properties		The list of Properties to be used for this match
-	 * @param	boardPanel		The board that will be displayed in the window
+	 * @param	propertyList	The list of properties to be used in this game
+	 * @param	random			A seeded psuedo-random number generator used to stylize the UI
+	 * @param	bl				An ActionListener for the Buy phase of a turn
+	 * @param	ml				An ActionListener for the Move phase of a turn
+	 * @param	el				An ActionListener for the End phase of a turn
 	 */
-
-	public Window(Property[] propertyList, Random random) {
+	public Window(Property[] propertyList, Random random, ActionListener bl, ActionListener ml, ActionListener el) {
 
 		boardPanel = new BoardPanel(propertyList);
-
 
 		this.setSize(width, height);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -41,7 +41,6 @@ public class Window extends JFrame {
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
-
 		
 		topPanel = new TopPanel(random);
 		c.gridwidth = 2; // Span left panel and board
@@ -62,7 +61,7 @@ public class Window extends JFrame {
 		c.anchor = GridBagConstraints.LAST_LINE_START;
 		this.add(statusPanel, c);
 
-		actionPanel = new ActionPanel(random);
+		actionPanel = new ActionPanel(random, bl, ml, el);
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.gridx = 0;
