@@ -17,7 +17,7 @@ public class ActionPanel extends JPanel {
 	public JButton rollButton;
 
 	
-	public ActionPanel(Random random) {
+	public ActionPanel(Random random, ActionListener bl, ActionListener ml, ActionListener el) {
 		this.setBackground(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
 		this.setOpaque(true);
 		this.setLayout(new GridBagLayout());
@@ -31,42 +31,24 @@ public class ActionPanel extends JPanel {
 		add(tradeButton, c);
 
 		buyButton = new JButton("Buy");
-		buyButton.addActionListener(new buyListener());
+		buyButton.addActionListener(bl);
 		c.gridy = 1;
 		c.weighty = 0.1;
 		add(buyButton, c);
 
 		endButton = new JButton("End");
-		endButton.addActionListener(new endListener());
+		endButton.addActionListener(el);
 		c.gridy = 2;
 		c.weighty = 0.1;
 		add(endButton, c);
 
 		rollButton = new JButton("Roll The Dice Giant Button!");
-		rollButton.addActionListener(new rollListener());
+		rollButton.addActionListener(ml);
 		c.gridy = 3;
 		c.weighty = 0.6;
 		c.ipadx = 100;
 		c.ipady = 40;
 
 		add(rollButton, c);
-	}
-
-	private class buyListener  implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			OaklandOligarchy.switchPhase(OaklandOligarchy.GamePhase.BUY);
-		}
-	}
-
-	private class endListener  implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			OaklandOligarchy.switchPhase(OaklandOligarchy.GamePhase.END);
-		}
-	}
-	
-	private class rollListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			OaklandOligarchy.switchPhase(OaklandOligarchy.GamePhase.MOVE);
-		}
 	}
 }

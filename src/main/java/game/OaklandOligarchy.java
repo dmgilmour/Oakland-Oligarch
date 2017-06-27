@@ -11,34 +11,27 @@ import javax.swing.*;
  */
 public class OaklandOligarchy {
 	
-	public enum GamePhase {MOVE, ACTION, END, START, BUY};
+	private enum GamePhase {MOVE, ACTION, END, START, BUY};
 	
 	public static final int NUMBER_OF_TILES = 36;
 	public static final int NUMBER_OF_PROPERTIES = 36;
 	public static final int MAX_NUMBER_OF_PLAYERS = 4;
 	
-	private static Player[] playerList;
-	private static Property[] propertyList;
 	private static Game game;
-	
-	private static int num_players;
 
 	public static void main(String[] args) {
 		Random random = new Random(System.currentTimeMillis());
-		propertyList = generateProperties();
-		// Initialize the window to display basic screen when prompting
-		// player information. Window and Game won't have any player info yet
-		game = new Game(propertyList);
-		Window window = new Window(propertyList, random);
-		game.setWindow(window);
-
-		// Prompt the number of players, then generate the playerlist
-		// and prompt their names
-		num_players = promptNumPlayers();
-		playerList = generatePlayers(num_players);
-
-		// Set the playerlists in Game and Window
-		game.setPlayers(playerList);
+		Property[] propertyList = generateProperties();
+		
+		PhaseListener buyListener = new PhaseListener(GamePhase.BUY);
+		PhaseListener moveListener = new PhaseListener(GamePhase.MOVE);
+		PhaseListener endListener = new PhaseListener(GamePhase.END);
+		Window window = new Window(propertyList, random, buyListener, moveListener, endListener);
+		
+		int num_players = promptNumPlayers();
+		Player[] playerList = generatePlayers(num_players);
+	
+		game = new Game(playerList, propertyList, window);
 		window.setPlayers(playerList);
 		game.startPhase();
 	}
@@ -48,7 +41,7 @@ public class OaklandOligarchy {
 	 *
 	 * @param	gamePhase		Which phase the game should be set to
 	 */
-	public static void switchPhase(GamePhase gamePhase) {
+	private static void switchPhase(GamePhase gamePhase) {
 		switch(gamePhase) {
 			case MOVE:
 				game.movePhase();
@@ -67,7 +60,7 @@ public class OaklandOligarchy {
 		}
 	}
 	
-	public static Property[] generateProperties() {
+	private static Property[] generateProperties() {
 		Property[] properties = new Property[OaklandOligarchy.NUMBER_OF_PROPERTIES];
 		for (int i = 0; i < OaklandOligarchy.NUMBER_OF_PROPERTIES; i++){
 			properties[i] = new Property("Property "+i, i, i);
@@ -78,7 +71,7 @@ public class OaklandOligarchy {
 	private static int promptNumPlayers() {
 
 		boolean valid_input = false;
-		num_players = 0;
+		int num_players = 0;
 
 		while (!valid_input) {
 			String numPlayers = JOptionPane.showInputDialog("Number of Players");
@@ -97,7 +90,7 @@ public class OaklandOligarchy {
 		return num_players;
 	}
 
-	public static Player[] generatePlayers(int num_players) {
+	private static Player[] generatePlayers(int num_players) {
 
 		Player[] playerList = new Player[num_players];
 
@@ -118,4 +111,15 @@ public class OaklandOligarchy {
 		}
 		return toReturn;
 	}	
+	
+	private static class PhaseListener implements ActionListener {
+		GamePhase gamePhase;
+		
+		PhaseListener(GamePhase gp) {
+			gamePhase = gp;
+		}
+		public void actionPerformed(ActionEvent e) {
+			OaklandOligarchy.switchPhase(gamePhase);
+		}
+	}
 }
