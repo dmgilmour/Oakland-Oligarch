@@ -22,23 +22,16 @@ public class OaklandOligarchy {
 	public static void main(String[] args) {
 		Random random = new Random(System.currentTimeMillis());
 		Property[] propertyList = generateProperties();
+		
 		PhaseListener buyListener = new PhaseListener(GamePhase.BUY);
 		PhaseListener moveListener = new PhaseListener(GamePhase.MOVE);
 		PhaseListener endListener = new PhaseListener(GamePhase.END);
-		
-		// Initialize the window to display basic screen when prompting
-		// player information. Window and Game won't have any player info yet
-		game = new Game(propertyList);
 		Window window = new Window(propertyList, random, buyListener, moveListener, endListener);
-		game.setWindow(window);
-
-		// Prompt the number of players, then generate the playerlist
-		// and prompt their names
+		
 		int num_players = promptNumPlayers();
 		Player[] playerList = generatePlayers(num_players);
-
-		// Set the playerlists in Game and Window
-		game.setPlayers(playerList);
+	
+		game = new Game(playerList, propertyList, window);
 		window.setPlayers(playerList);
 		game.startPhase();
 	}

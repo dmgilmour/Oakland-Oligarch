@@ -11,32 +11,21 @@ public class Game {
 
 	private boolean rollTaken;
 	private int playerTurn;
-	private int num_players;
 
 	private Board board;
-	private Property[] properties;
 	private Window window;
 	private Player[] playerList;
 	
-	public Game(Property[] propertyList) {
-		properties = propertyList;
-		board = new Board(properties);
-
+	public Game(Player[] _playerList, Property[] propertyList, Window w) {
+		playerList = _playerList;
+		board = new Board(propertyList);
+		window = w;
 		playerTurn = 0;
 		rollTaken = false;
 	}
 
-	public int getTurn() {
-		return playerTurn;
-	}
-	
-	public void setWindow(Window _window) {
-		window = _window;
-	}
-
-	public void setPlayers(Player[] _playerList) {
-		playerList = _playerList;
-		num_players = playerList.length;
+	private Player getCurrentPlayer() {
+		return playerList[playerTurn];
 	}
 
 	/**
@@ -48,7 +37,7 @@ public class Game {
 		window.disableEnd();
 		window.disableBuy();
 		window.enableRoll();
-		window.update();
+		window.update(this.getCurrentPlayer());
 	}
 
 
@@ -58,7 +47,7 @@ public class Game {
 	public void movePhase() {
 		int roll = roll(System.currentTimeMillis());		
 		board.movePlayer(playerList[playerTurn], roll);
-		window.update();
+		window.update(this.getCurrentPlayer());
 		window.disableRoll();
 		actionPhase();
 	}
@@ -67,7 +56,7 @@ public class Game {
 	 * Runs the game phase that ends each players turn
 	 */
 	public void endPhase() {
-		playerTurn = (playerTurn + 1) % num_players;	//Increment to the next player's turn
+		playerTurn = (playerTurn + 1) % playerList.length;	//Increment to the next player's turn
 		startPhase();
 	}
 	
@@ -106,7 +95,7 @@ public class Game {
 			}
 		}
 		window.enableEnd();
-		window.update();
+		window.update(this.getCurrentPlayer());
 	}
 
 	/**
@@ -119,6 +108,6 @@ public class Game {
 		{
 			window.disableBuy();
 		}
-		window.update();
+		window.update(this.getCurrentPlayer());
 	}
 }
