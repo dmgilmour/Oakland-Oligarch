@@ -22,15 +22,15 @@ public class Window extends JFrame {
 	/**
 	 * Initializes the UI window 
 	 *
-	 * @param	propertyList	The list of properties to be used in this game
+	 * @param	squareList		The list of squares to be used in this game
 	 * @param	random			A seeded psuedo-random number generator used to stylize the UI
 	 * @param	bl				An ActionListener for the Buy phase of a turn
 	 * @param	ml				An ActionListener for the Move phase of a turn
 	 * @param	el				An ActionListener for the End phase of a turn
 	 */
-	public Window(Property[] propertyList, Random random, ActionListener bl, ActionListener ml, ActionListener el) {
+	public Window(Square[] squareList, Random random, ActionListener bl, ActionListener ml, ActionListener el) {
 
-		boardPanel = new BoardPanel(propertyList);
+		boardPanel = new BoardPanel(squareList);
 
 		this.setSize(width, height);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

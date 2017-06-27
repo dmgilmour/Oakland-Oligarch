@@ -21,17 +21,17 @@ public class OaklandOligarchy {
 
 	public static void main(String[] args) {
 		Random random = new Random(System.currentTimeMillis());
-		Property[] propertyList = generateProperties();
+		Square[] squareList = generateSquares();
 		
 		PhaseListener buyListener = new PhaseListener(GamePhase.BUY);
 		PhaseListener moveListener = new PhaseListener(GamePhase.MOVE);
 		PhaseListener endListener = new PhaseListener(GamePhase.END);
-		Window window = new Window(propertyList, random, buyListener, moveListener, endListener);
+		Window window = new Window(squareList, random, buyListener, moveListener, endListener);
 		
 		int num_players = promptNumPlayers();
 		Player[] playerList = generatePlayers(num_players);
 	
-		game = new Game(playerList, propertyList, window);
+		game = new Game(playerList, squareList, window);
 		window.setPlayers(playerList);
 		game.startPhase();
 	}
@@ -60,12 +60,12 @@ public class OaklandOligarchy {
 		}
 	}
 	
-	private static Property[] generateProperties() {
-		Property[] properties = new Property[OaklandOligarchy.NUMBER_OF_PROPERTIES];
-		for (int i = 0; i < OaklandOligarchy.NUMBER_OF_PROPERTIES; i++){
-			properties[i] = new Property("Property "+i, i, i);
+	private static Square[] generateSquares() {
+		Square[] squareList = new Square[OaklandOligarchy.NUMBER_OF_TILES];
+		for (int i = 0; i < squareList.length; i++){
+			squareList[i] = new Property("Property "+i, i, i);
 		}
-		return properties;
+		return squareList;
 	}
 
 	private static int promptNumPlayers() {

@@ -7,7 +7,6 @@ import javax.swing.*;
  *
  */
 public class Property extends Square{
-	private String name;
 	private int price;
 	private int rent;
 	private Player owner;

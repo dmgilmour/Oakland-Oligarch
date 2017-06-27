@@ -16,9 +16,16 @@ public class Game {
 	private Window window;
 	private Player[] playerList;
 	
-	public Game(Player[] _playerList, Property[] propertyList, Window w) {
+	/**
+	 * Initializes the Game object
+	 *
+	 * @param	_playerList		The array of players in this game
+	 * @param	squareList		The array of squares to be used in this game
+	 * @param	w				The window this game is running in
+	 */
+	public Game(Player[] _playerList, Square[] squareList, Window w) {
 		playerList = _playerList;
-		board = new Board(propertyList);
+		board = new Board(squareList);
 		window = w;
 		playerTurn = 0;
 		rollTaken = false;
