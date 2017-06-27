@@ -66,7 +66,7 @@ public class Game {
 	 * @param	timeMillis		A long integer used to the seed the random roll
 	 * @returns					An integer value between 2-12 that is the result of rolling 2 six-sided dice
 	 */
-	public int roll(Long timeMillis) {
+	private int roll(Long timeMillis) {
 		if(!rollTaken) {
 			Random rand = new Random(timeMillis);
 			rollTaken = true;
