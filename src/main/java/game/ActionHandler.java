@@ -10,6 +10,8 @@ public class ActionHandler {
 	private Random random;
 	
 	private final int COST_OF_WATER = 100;
+	private final int TAPINGO_FEE = 100;
+	private final int QDOBA_DAMAGES = 500;
 	
 	public ActionHandler(Board b, Player[] pll, Random r) {
 		random = r;
@@ -20,7 +22,7 @@ public class ActionHandler {
 	public void run(Player p) {
 		switch(random.nextInt(OaklandOligarchy.NUMBER_OF_ACTIONS)){
 			case 0:
-				firstOfMonth(p);
+				qdoba(p);
 				break;
 			case 1:
 				endOfTerm();
@@ -33,6 +35,15 @@ public class ActionHandler {
 				break;
 			case 4:
 				bacteria(p);
+				break;
+			case 5:
+				firstOfMonth(p);
+				break;
+			case 6:
+				tapingo(p);
+				break;
+			case 7:
+				significantOther(p);
 				break;
 			default:
 				System.err.println("Action Handler: default case");
@@ -98,5 +109,35 @@ public class ActionHandler {
 		}
 		p.getPaid(total);
 		JOptionPane.showMessageDialog(null, "First of the month!\nYou have been paid rent by all tenants\n" + p.getName() + " recieved $" + total);
+	}
+	
+	private void tapingo(Player p) {
+		for(Player player: playerList) {
+			if(player != p) {
+				if(player.charge(TAPINGO_FEE)) {
+					p.getPaid(TAPINGO_FEE);
+				}
+			}
+		}
+		JOptionPane.showMessageDialog(null, "Work for Tapingo delievery:\nAll players pay " + p.getName() + " $" + TAPINGO_FEE);
+	}
+	
+	private void significantOther(Player p) {
+		Square randSquare = board.getSquare(random.nextInt(OaklandOligarchy.NUMBER_OF_TILES));
+		while(!(randSquare instanceof Property) || !p.addProperty((Property)randSquare))
+			randSquare = board.getSquare(random.nextInt(OaklandOligarchy.NUMBER_OF_TILES));
+		p.charge(p.getMoney());
+		JOptionPane.showMessageDialog(null, "You found a significant other!\n" + p.getName() + " gained " + ((Property)randSquare).getName() + ",\nbut lost all money");
+	}
+	
+	private void qdoba(Player p) {
+		p.charge(QDOBA_DAMAGES);
+		for(Player player: playerList) {
+			if(player != p) {
+				player.getPaid(QDOBA_DAMAGES / 10);
+			}
+		}
+		JOptionPane.showMessageDialog(null, "To impress a girl\nyou try to jump the gap\nin the roof of Qdoba...\nand fail!");
+		JOptionPane.showMessageDialog(null, p.getName() + " pays $" + QDOBA_DAMAGES + "\nAll other plays recieve a $" + (QDOBA_DAMAGES / 10) + " gift card\nwhen it reopens");
 	}
 }
