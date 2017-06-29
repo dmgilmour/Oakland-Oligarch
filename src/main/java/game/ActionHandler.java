@@ -12,6 +12,7 @@ public class ActionHandler {
 	private final int COST_OF_WATER = 100;
 	private final int TAPINGO_FEE = 100;
 	private final int QDOBA_DAMAGES = 500;
+	private final int UBER_COST = 50;
 	
 	public ActionHandler(Board b, Player[] pll, Random r) {
 		random = r;
@@ -22,13 +23,13 @@ public class ActionHandler {
 	public void run(Player p) {
 		switch(random.nextInt(OaklandOligarchy.NUMBER_OF_ACTIONS)){
 			case 0:
-				qdoba(p);
+				uber(p);
 				break;
 			case 1:
-				endOfTerm();
+				summer();
 				break;
 			case 2:
-				beginTerm(p);
+				oweek(p);
 				break;
 			case 3:
 				badWeek(p);
@@ -45,21 +46,24 @@ public class ActionHandler {
 			case 7:
 				significantOther(p);
 				break;
+			case 8:
+				qdoba(p);
+				break;
 			default:
 				System.err.println("Action Handler: default case");
 				break;
 		}
 	}
 	
-	private void beginTerm(Player p) {
+	private void oweek(Player p) {
 		Square randSquare = board.getSquare(random.nextInt(OaklandOligarchy.NUMBER_OF_TILES));
 		while(!(randSquare instanceof Property) || !p.addProperty((Property)randSquare))
 			randSquare = board.getSquare(random.nextInt(OaklandOligarchy.NUMBER_OF_TILES));
-		JOptionPane.showMessageDialog(null, "Beginning of Term!\n" + p.getName() + " recieved property: " + ((Property)randSquare).getName());
+		JOptionPane.showMessageDialog(null, "Orientation Week!\nFreshmen move in and " + p.getName() + "\ngains the property: " + ((Property)randSquare).getName());
 	}
 	
-	private void endOfTerm() {
-		String message = "End of Term!\n";
+	private void summer() {
+		String message = "Summer Break!!! (woo)\nStudent tenants move out and:\n";
 		for(Player player: playerList) {
 			ArrayList<Property> properties = player.getProperties();
 			int size = properties.size();
@@ -139,5 +143,11 @@ public class ActionHandler {
 		}
 		JOptionPane.showMessageDialog(null, "To impress a girl\nyou try to jump the gap\nin the roof of Qdoba...\nand fail!");
 		JOptionPane.showMessageDialog(null, p.getName() + " pays $" + QDOBA_DAMAGES + "\nAll other plays recieve a $" + (QDOBA_DAMAGES / 10) + " gift card\nwhen it reopens");
+	}
+	
+	private void uber(Player p) {
+		p.charge(UBER_COST);
+		JOptionPane.showMessageDialog(null, "Order an \"autonomous\" Uber\nYou pay $" + UBER_COST + "\nand take another turn!");
+		OaklandOligarchy.switchPhase(OaklandOligarchy.GamePhase.START);
 	}
 }

@@ -11,7 +11,7 @@ import javax.swing.*;
  */
 public class OaklandOligarchy {
 	
-	private enum GamePhase {MOVE, ACTION, END, START, BUY};
+	public enum GamePhase {MOVE, ACTION, END, START, BUY};
 	
 	public static final int NUMBER_OF_TILES = 36;
 	public static final int NUMBER_OF_PROPERTIES = 33;
@@ -42,7 +42,7 @@ public class OaklandOligarchy {
 	 *
 	 * @param	gamePhase		Which phase the game should be set to
 	 */
-	private static void switchPhase(GamePhase gamePhase) {
+	public static void switchPhase(GamePhase gamePhase) {
 		switch(gamePhase) {
 			case MOVE:
 				game.movePhase();
@@ -55,6 +55,9 @@ public class OaklandOligarchy {
 				break;
 			case BUY:
 				game.buyPhase();
+				break;
+			case START:
+				game.startPhase();
 				break;
 			default:
 				break;

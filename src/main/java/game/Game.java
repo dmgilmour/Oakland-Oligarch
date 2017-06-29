@@ -96,16 +96,14 @@ public class Game {
 		if(square == null) {									//Check to ensure that a tile was retrived properly from the board
 			return;
 		}
-		else {												//If the tile retrived is a property:
-			boolean cannotBuy = square.act(player);
-			if(!cannotBuy) {
-				window.enableBuy();
-			}
-			if(square instanceof ActionSquare) {
-				actionHandler.run(player);
-			}
+		boolean cannotBuy = square.act(player);
+		if(!cannotBuy) {
+			window.enableBuy();
 		}
 		window.enableEnd();
+		if(square instanceof ActionSquare) {
+			actionHandler.run(player);
+		}
 		window.update(player);
 	}
 
