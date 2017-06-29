@@ -11,6 +11,7 @@ import javax.swing.*;
  *
  */
 public class PropertyTile extends Tile {
+	JPanel owner;
 	
 	/**
 	 * @param n		Tile number identifier so that the tile knows what number it is.
@@ -19,9 +20,15 @@ public class PropertyTile extends Tile {
 	public PropertyTile(int n, Property prop){
 		super(n, prop);
 		
-		JPanel owner = new JPanel();
+		owner = new JPanel();
 		owner.setBackground(Color.white);
 		owner.setPreferredSize(new Dimension(20,30));
 		this.add(owner);
+	}
+	
+	public void update() {
+		if(((Property)square).getOwner() != null) {
+			owner.add(((Property)square).getOwnerToken(),0);
+		}
 	}
 }

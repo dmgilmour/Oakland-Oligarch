@@ -11,6 +11,7 @@ public class Property extends Square{
 	private int rent;
 	private Player owner;
 	private boolean mortgaged;
+	private JLabel ownerToken;
 
 	public Property(String n, int p, int r){
 		name = n;
@@ -18,6 +19,7 @@ public class Property extends Square{
 		rent = r;
 		owner = null;
 		mortgaged = false;
+		ownerToken = null;
 	}
 
 	public String getName(){
@@ -36,8 +38,18 @@ public class Property extends Square{
 		return owner;
 	}
 	
+	public JLabel getOwnerToken() {
+		return ownerToken;
+	}
+	
 	public void setOwner(Player p){
 		owner=p;
+		if(owner == null) {
+			ownerToken = null;
+		}
+		else {
+			ownerToken = new JLabel("P"+owner.getId());
+		}
 	}
 	
 	/**

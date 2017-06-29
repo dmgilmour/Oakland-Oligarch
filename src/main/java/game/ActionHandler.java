@@ -118,8 +118,9 @@ public class ActionHandler {
 			String message = owner.getName() + " is selling water:\n";
 			for(Player player: playerList) {
 				if(player != owner) {
-					player.charge(COST_OF_WATER);
-					message += player.getName() + " paid $" + COST_OF_WATER + "\n";
+					if(player.charge(COST_OF_WATER)) {
+						message += player.getName() + " paid $" + COST_OF_WATER + "\n";
+					}
 				}
 			}
 			JOptionPane.showMessageDialog(null, message);

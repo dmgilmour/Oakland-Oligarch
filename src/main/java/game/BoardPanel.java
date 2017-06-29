@@ -108,5 +108,10 @@ public class BoardPanel extends JPanel {
 			tiles[p.getPosition()].add(p);
 			p.setMoved(false);
 		}
+		for(Tile t: tiles) {
+			if(t instanceof PropertyTile) {
+				((PropertyTile)t).update();
+			}
+		}
 	}
 }
