@@ -1,0 +1,29 @@
+DONE	Student Activities Fee - Gain $n for each property you own
+
+DONE	Order an "autonomous" Uber - Pay $n, and roll again
+
+DONE	Work at Tapingo Delievery! - Each player pays you $n
+
+DONE	Rainstorms - All players pay 2 times the rent of the tile they are on plus $n
+
+DONE	First of the Month - Collect money from the bank equal to the rent of all properties owned
+
+DONE	Summer Break!!! - All players lose one property at random
+
+DONE	Orientation Week - Gain one random property
+
+DONE	Arrange sublet - Move to a random property square you do not own, and pay rent to the owner
+	
+DONE	Have a bad week - Lose all your currency
+
+DONE	Bacteria in the water - If random property is unowned, you can purchase it for twice the price. Otherwise, all players pay owner $n.
+
+DONE	Rush a fraternity/sorority - Gain a property OR Lose a property OR go to jail OR Pay $n OR Other players pay you $n
+
+DONE	Find a significant other - Gain a property, but lose all currancy
+
+DONE	Indefinite construction - 3 consectutive properties become unowned
+
+DONE	Attempt to jump the gap over Qdoba - Lose $x and all other players gain $n dollars
+
+	Maggot in the Market Pasta

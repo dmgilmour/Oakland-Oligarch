@@ -93,6 +93,15 @@ public class Player {
 		return prop;
 	}
 	
+	public Property removeProperty(Property prop) {
+		if(!properties.contains(prop)) {
+			return null;
+		}
+		prop.setOwner(null);
+		properties.remove(prop);
+		return prop;
+	}
+	
 	/**
 	 * Purchases a property for this player
 	 *

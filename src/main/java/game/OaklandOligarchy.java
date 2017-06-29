@@ -14,9 +14,9 @@ public class OaklandOligarchy {
 	public enum GamePhase {MOVE, ACTION, END, START, BUY};
 	
 	public static final int NUMBER_OF_TILES = 36;
-	public static final int NUMBER_OF_PROPERTIES = 33;
+	public static final int NUMBER_OF_PROPERTIES = 28;
 	public static final int MAX_NUMBER_OF_PLAYERS = 4;
-	public static final int NUMBER_OF_ACTIONS = 1;
+	public static final int NUMBER_OF_ACTIONS = 14;
 	
 	private static Game game;
 
@@ -67,7 +67,7 @@ public class OaklandOligarchy {
 	private static Square[] generateSquares() {
 		Square[] squareList = new Square[OaklandOligarchy.NUMBER_OF_TILES];
 		for (int i = 0; i < squareList.length; i++){
-			if(i > 5 && i < 9) {
+			if(i == 4 || i == 5 || i == 13 || i == 14 || i == 22 || i == 23 || i == 31 || i == 32) {
 				squareList[i] = new ActionSquare("Action "+i);
 			}
 			else {

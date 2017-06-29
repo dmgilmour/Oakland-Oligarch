@@ -13,6 +13,9 @@ public class ActionHandler {
 	private final int TAPINGO_FEE = 100;
 	private final int QDOBA_DAMAGES = 500;
 	private final int UBER_COST = 50;
+	private final int FRAT_DUES = 40;
+	private final int STUDENT_ACTIVITY_FEE = 25;
+	private final int SMELL_COMPLAINT = 32;
 	
 	public ActionHandler(Board b, Player[] pll, Random r) {
 		random = r;
@@ -23,7 +26,7 @@ public class ActionHandler {
 	public void run(Player p) {
 		switch(random.nextInt(OaklandOligarchy.NUMBER_OF_ACTIONS)){
 			case 0:
-				uber(p);
+				sublet(p);
 				break;
 			case 1:
 				summer();
@@ -49,6 +52,21 @@ public class ActionHandler {
 			case 8:
 				qdoba(p);
 				break;
+			case 9:
+				uber(p);
+				break;
+			case 10:
+				frat(p);
+				break;
+			case 11:
+				studAct(p);
+				break;
+			case 12:
+				rain();
+				break;
+			case 13:
+				construction();
+				break;
 			default:
 				System.err.println("Action Handler: default case");
 				break;
@@ -57,8 +75,9 @@ public class ActionHandler {
 	
 	private void oweek(Player p) {
 		Square randSquare = board.getSquare(random.nextInt(OaklandOligarchy.NUMBER_OF_TILES));
-		while(!(randSquare instanceof Property) || !p.addProperty((Property)randSquare))
+		while(!(randSquare instanceof Property) || !p.addProperty((Property)randSquare)) {
 			randSquare = board.getSquare(random.nextInt(OaklandOligarchy.NUMBER_OF_TILES));
+		}
 		JOptionPane.showMessageDialog(null, "Orientation Week!\nFreshmen move in and " + p.getName() + "\ngains the property: " + ((Property)randSquare).getName());
 	}
 	
@@ -83,8 +102,9 @@ public class ActionHandler {
 	
 	private void bacteria(Player p) {
 		Square randSquare = board.getSquare(random.nextInt(OaklandOligarchy.NUMBER_OF_TILES));
-		while(!(randSquare instanceof Property))
+		while(!(randSquare instanceof Property)) {
 			randSquare = board.getSquare(random.nextInt(OaklandOligarchy.NUMBER_OF_TILES));
+		}
 		Property prop = (Property)randSquare;
 		JOptionPane.showMessageDialog(null, "Bacteria in the water!!!\n" + prop.getName() + " has safe water...");
 		Player owner = prop.getOwner();
@@ -128,8 +148,9 @@ public class ActionHandler {
 	
 	private void significantOther(Player p) {
 		Square randSquare = board.getSquare(random.nextInt(OaklandOligarchy.NUMBER_OF_TILES));
-		while(!(randSquare instanceof Property) || !p.addProperty((Property)randSquare))
+		while(!(randSquare instanceof Property) || !p.addProperty((Property)randSquare)) {
 			randSquare = board.getSquare(random.nextInt(OaklandOligarchy.NUMBER_OF_TILES));
+		}
 		p.charge(p.getMoney());
 		JOptionPane.showMessageDialog(null, "You found a significant other!\n" + p.getName() + " gained " + ((Property)randSquare).getName() + ",\nbut lost all money");
 	}
@@ -149,5 +170,129 @@ public class ActionHandler {
 		p.charge(UBER_COST);
 		JOptionPane.showMessageDialog(null, "Order an \"autonomous\" Uber\nYou pay $" + UBER_COST + "\nand take another turn!");
 		OaklandOligarchy.switchPhase(OaklandOligarchy.GamePhase.START);
+	}
+	
+	private void frat(Player p) {
+		JOptionPane.showMessageDialog(null, "You rush a Fraternity...");
+		switch(random.nextInt(5)) {
+			case 0:
+				ArrayList<Property> properties = p.getProperties();
+				int size = properties.size();
+				if(size > 0) {
+					int randProp = random.nextInt(size);
+					Property prop = p.removeProperty(randProp);
+					JOptionPane.showMessageDialog(null, "...And the police come to your house party\n" + p.getName() + " loses the property: " + prop.getName());
+					break;
+				}
+			case 1:
+				Square randSquare = board.getSquare(random.nextInt(OaklandOligarchy.NUMBER_OF_TILES));
+				while(!(randSquare instanceof Property) || !p.addProperty((Property)randSquare)) {
+					randSquare = board.getSquare(random.nextInt(OaklandOligarchy.NUMBER_OF_TILES));
+				}
+				JOptionPane.showMessageDialog(null, "And move into the frat house!\n" + p.getName() + " gains the property: " + ((Property)randSquare).getName());
+				break;
+			case 2:
+				p.charge(FRAT_DUES);
+				JOptionPane.showMessageDialog(null, "...And need to pay your dues\n" + p.getName() + " pays $" + FRAT_DUES);
+				break;
+			case 3:
+				String message = "...And all members pay you dues\n";
+				for(Player player: playerList) {
+					if(player != p) {
+						if(player.charge(FRAT_DUES)) {
+							p.getPaid(FRAT_DUES);
+							message += player.getName() + " pays $" + FRAT_DUES;
+						}
+					}
+				}
+				JOptionPane.showMessageDialog(null, message);
+				break;
+			case 4:
+				JOptionPane.showMessageDialog(null, "...And spend a night in Jail\n(choose your favorite misdemeanor)");
+				break;
+			default:
+				System.err.println("Frat Method: default case");
+				break;
+		}
+	}
+	
+	private void studAct(Player p) {
+		int totalGain = 0;
+		for(Property prop: p.getProperties()) {
+			totalGain += STUDENT_ACTIVITY_FEE;
+		}
+		p.getPaid(totalGain);
+		JOptionPane.showMessageDialog(null, "Student Activities Fee:\nCollect $" + STUDENT_ACTIVITY_FEE + " for each property you own\n" + p.getName() + " gains $" + totalGain);
+	}
+	
+	private void rain() {
+		JOptionPane.showMessageDialog(null, "Major Rainstorm!\nThe drainage system overflows into the river and tenants complain about the smell...");
+		String message = "Pay twice the rent of your current tile plus $" + SMELL_COMPLAINT + "\n";
+		for(Player player: playerList) {
+			int charges = 0;
+			Square s = board.getSquare(player.getPosition());
+			if(s instanceof Property) {
+				charges += ((Property)s).getRent() * 2;
+			}
+			charges += SMELL_COMPLAINT;
+			if(player.charge(charges)){
+				message += player.getName() + " pays $" + charges + "\n";
+			}
+		}
+		JOptionPane.showMessageDialog(null, message);
+	}
+	
+	private void construction() {
+		int randInt = random.nextInt(OaklandOligarchy.NUMBER_OF_TILES);
+		Square randSquare = board.getSquare(randInt);
+		while(!(randSquare instanceof Property)) {
+			randInt = random.nextInt(OaklandOligarchy.NUMBER_OF_TILES);
+			randSquare = board.getSquare(randInt);
+		}
+		Property midProp = (Property)randSquare;
+		int randInt2 = (randInt - 1) % OaklandOligarchy.NUMBER_OF_TILES;
+		Square s = board.getSquare(randInt2);
+		while(!(s instanceof Property)) {
+			randInt2 = (randInt2 - 1) % OaklandOligarchy.NUMBER_OF_TILES;
+			s = board.getSquare(randInt2);
+		}
+		Property prevProp = (Property)s;
+		randInt = (randInt + 1) % OaklandOligarchy.NUMBER_OF_TILES;
+		s = board.getSquare(randInt);
+		while(!(s instanceof Property)) {
+			randInt = (randInt2 + 1) % OaklandOligarchy.NUMBER_OF_TILES;
+			s = board.getSquare(randInt);
+		}
+		Property nextProp = (Property)s;
+		Player owner = prevProp.getOwner();
+		if(owner != null) {
+			owner.removeProperty(prevProp);
+		}
+		owner = midProp.getOwner();
+		if(owner != null) {
+			owner.removeProperty(midProp);
+		}
+		owner = nextProp.getOwner();
+		if(owner != null) {
+			owner.removeProperty(nextProp);
+		}
+		JOptionPane.showMessageDialog(null, "INDEFINITE Construction:\n" + prevProp.getName() + " becomes unowned\n" + midProp.getName() + " becomes unowned\n" + nextProp.getName() + " becomes unowned\n");
+	}
+	
+	private void sublet(Player p) {
+		int moveTo = random.nextInt(OaklandOligarchy.NUMBER_OF_TILES);
+		Square randSquare = board.getSquare(moveTo);
+		while(!(randSquare instanceof Property) || ((Property)randSquare).getOwner() == p) {
+			moveTo = random.nextInt(OaklandOligarchy.NUMBER_OF_TILES);
+			randSquare = board.getSquare(moveTo);
+		}
+		int moveAmount = moveTo - p.getPosition();
+		if(moveAmount < 0) {
+			moveAmount += OaklandOligarchy.NUMBER_OF_TILES;
+		}
+		board.movePlayer(p, moveAmount);
+		Property randProp = (Property)randSquare;
+		p.payRent(randProp);
+		JOptionPane.showMessageDialog(null, "Become a subletter:\n" + p.getName() + " moves to " + randProp.getName() + "\nand pays $" + randProp.getRent());
 	}
 }
