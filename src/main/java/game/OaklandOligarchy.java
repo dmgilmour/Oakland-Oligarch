@@ -11,27 +11,28 @@ import javax.swing.*;
  */
 public class OaklandOligarchy {
 	
-	private enum GamePhase {MOVE, ACTION, END, START, BUY};
+	public enum GamePhase {MOVE, ACTION, END, START, BUY};
 	
 	public static final int NUMBER_OF_TILES = 36;
-	public static final int NUMBER_OF_PROPERTIES = 36;
+	public static final int NUMBER_OF_PROPERTIES = 28;
 	public static final int MAX_NUMBER_OF_PLAYERS = 4;
+	public static final int NUMBER_OF_ACTIONS = 14;
 	
 	private static Game game;
 
 	public static void main(String[] args) {
 		Random random = new Random(System.currentTimeMillis());
-		Property[] propertyList = generateProperties();
+		Square[] squareList = generateSquares();
 		
 		PhaseListener buyListener = new PhaseListener(GamePhase.BUY);
 		PhaseListener moveListener = new PhaseListener(GamePhase.MOVE);
 		PhaseListener endListener = new PhaseListener(GamePhase.END);
-		Window window = new Window(propertyList, random, buyListener, moveListener, endListener);
+		Window window = new Window(squareList, random, buyListener, moveListener, endListener);
 		
 		int num_players = promptNumPlayers();
 		Player[] playerList = generatePlayers(num_players);
 	
-		game = new Game(playerList, propertyList, window);
+		game = new Game(playerList, squareList, window, random);
 		window.setPlayers(playerList);
 		game.startPhase();
 	}
@@ -41,7 +42,7 @@ public class OaklandOligarchy {
 	 *
 	 * @param	gamePhase		Which phase the game should be set to
 	 */
-	private static void switchPhase(GamePhase gamePhase) {
+	public static void switchPhase(GamePhase gamePhase) {
 		switch(gamePhase) {
 			case MOVE:
 				game.movePhase();
@@ -55,17 +56,25 @@ public class OaklandOligarchy {
 			case BUY:
 				game.buyPhase();
 				break;
+			case START:
+				game.startPhase();
+				break;
 			default:
 				break;
 		}
 	}
 	
-	private static Property[] generateProperties() {
-		Property[] properties = new Property[OaklandOligarchy.NUMBER_OF_PROPERTIES];
-		for (int i = 0; i < OaklandOligarchy.NUMBER_OF_PROPERTIES; i++){
-			properties[i] = new Property("Property "+i, i, i);
+	private static Square[] generateSquares() {
+		Square[] squareList = new Square[OaklandOligarchy.NUMBER_OF_TILES];
+		for (int i = 0; i < squareList.length; i++){
+			if(i == 4 || i == 5 || i == 13 || i == 14 || i == 22 || i == 23 || i == 31 || i == 32) {
+				squareList[i] = new ActionSquare("Action "+i);
+			}
+			else {
+				squareList[i] = new Property("Property "+i, i, i);
+			}
 		}
-		return properties;
+		return squareList;
 	}
 
 	private static int promptNumPlayers() {
