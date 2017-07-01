@@ -144,7 +144,7 @@ public class ActionHandler {
 				}
 			}
 		}
-		JOptionPane.showMessageDialog(null, "Work for Tapingo delievery:\nAll players pay " + p.getName() + " $" + TAPINGO_FEE);
+		JOptionPane.showMessageDialog(null, "Work for Tapingo delivery:\nAll players pay " + p.getName() + " $" + TAPINGO_FEE);
 	}
 	
 	private void significantOther(Player p) {
