@@ -145,8 +145,7 @@ public class Game {
 	 */
 	private void loserCheck(){
 		for(int i = 0; i < playerList.length; i++){
-			if(playerList[i].getMoney() < 0){
-				System.out.println("loser from, loserCheck: " + playerList[i].getName());
+			if(playerList[i].getMoney() < 0 && playerlist[i].getLoser() == false){
 				playerList[i].setLoser(true);
 				active_players --;
 				if(active_players > 1){
@@ -169,7 +168,6 @@ public class Game {
 	 * @param player player that has just lost the game
 	 */
 	private void loserCleanUp(Player player){
-		System.out.println("loser from, loserCleanUp.");
 		for(int i = 0; i < player.getProperties().size(); i++){
 			Property pReset = player.getProperties().get(i);
 			pReset.setOwner(null);
