@@ -145,7 +145,7 @@ public class Game {
 	 */
 	private void loserCheck(){
 		for(int i = 0; i < playerList.length; i++){
-			if(playerList[i].getMoney() < 0 && playerlist[i].getLoser() == false){
+			if(playerList[i].getMoney() < 0 && playerList[i].getLoser() == false){
 				playerList[i].setLoser(true);
 				active_players --;
 				if(active_players > 1){
