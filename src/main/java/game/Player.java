@@ -17,6 +17,7 @@ public class Player {
 	private int position; //current space the player is on
 	private int oldPos;
 	private boolean hasMoved;
+	private boolean loser;
 
 	public Player (int id, int money, String name, Property[] properties) {
 		this.id = id;
@@ -34,49 +35,58 @@ public class Player {
 		position = 0;
 		hasMoved = true;
 		oldPos = 0;
+		loser = false;
 	}
-	
+
+	public boolean getLoser(){
+		return loser;
+	}
+
+	public void setLoser(boolean b){
+		loser = b;
+	}
+
 	public int getOldPos() {
 		return oldPos;
 	}
-	
+
 	public void setMoved(boolean b) {
 		hasMoved = b;
 	}
-	
+
 	public boolean hasMoved() {
 		return hasMoved;
 	}
-	
+
 	public int getId() {
 		return id;
 	}
 	public String getName() {
 		return name;
 	}
-	
+
 	public JLabel getToken(){
 		return token;
 	}
-	
+
 	public int getPosition(){
 		return position;
 	}
-	
+
 	public void setPosition(int p){
 		oldPos = position;
 		position = p;
 		hasMoved = true;
 	}
-	
+
 	public int getMoney() {
 		return money;
 	}
-	
+
 	public ArrayList<Property> getProperties() {
 		return properties;
 	}
-	
+
 	/**
 	 * Purchases a property for this player
 	 *
@@ -86,7 +96,7 @@ public class Player {
 	public boolean buy(Property property) {
 		if(property.getOwner() == null)			//check that the property is owned
 		{
-			int cost = property.getPrice();		
+			int cost = property.getPrice();
 			if(charge(cost))					//If the charge to this player is successful:
 			{
 				property.setOwner(this);		//Change the ownership of the property
@@ -99,7 +109,7 @@ public class Player {
 		else
 			return false;
 	}
-	
+
 	/**
 	 * Charges a money value to the account of this player
 	 *
@@ -115,7 +125,7 @@ public class Player {
 		else
 			return false;
 	}
-	
+
 	/**
 	 * This player pays the rent on a given property
 	 *
@@ -123,14 +133,14 @@ public class Player {
 	 * @return 				A boolean indicating the sucesss of the payment
 	 */
 	public boolean payRent(Property property) {
-		int cost = property.getRent();			
+		int cost = property.getRent();
 		Player owner = property.getOwner();
 		boolean success = charge(cost);			//Attempt to charge this player
 		if(success)								//If the charge is successful:
 			owner.getPaid(cost);				//then pay the owner of the property
 		return success;
 	}
-	
+
 	/**
 	 *	Deposits funds into this player's account
 	 *

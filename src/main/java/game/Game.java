@@ -12,12 +12,13 @@ public class Game {
 	private boolean rollTaken;
 	private int playerTurn;
 	private int num_players;
+	private int active_players;
 
 	private Board board;
 	private Property[] properties;
 	private Window window;
 	private Player[] playerList;
-	
+
 	public Game(Property[] propertyList) {
 		properties = propertyList;
 		board = new Board(properties);
@@ -29,14 +30,23 @@ public class Game {
 	public int getTurn() {
 		return playerTurn;
 	}
-	
+
 	public void setWindow(Window _window) {
 		window = _window;
+	}
+
+	public int getNumPlayers(){
+		return num_players;
+	}
+
+	public Player[] getPlayers(){
+		return playerList;
 	}
 
 	public void setPlayers(Player[] _playerList) {
 		playerList = _playerList;
 		num_players = playerList.length;
+		active_players = num_players;
 	}
 
 	/**
@@ -44,7 +54,7 @@ public class Game {
 	 * buttons and roll the dice giant button
 	 */
 	public void startPhase() {
-		rollTaken = false;			
+		rollTaken = false;
 		window.disableEnd();
 		window.disableBuy();
 		window.enableRoll();
@@ -56,21 +66,26 @@ public class Game {
 	 * Runs the game phase during which players roll and move
 	 */
 	public void movePhase() {
-		int roll = roll(System.currentTimeMillis());		
+		int roll = roll(System.currentTimeMillis());
 		board.movePlayer(playerList[playerTurn], roll);
 		window.update();
 		window.disableRoll();
 		actionPhase();
 	}
-	
+
 	/**
 	 * Runs the game phase that ends each players turn
 	 */
 	public void endPhase() {
 		playerTurn = (playerTurn + 1) % num_players;	//Increment to the next player's turn
-		startPhase();
+		if(playerList[playerTurn].getLoser() == false){
+			startPhase();
+		}
+		else{
+			endPhase();
+		}
 	}
-	
+
 	/**
 	 *	A psuedo-random roll that simulates 2 six-sided dice
 	 *
@@ -105,6 +120,7 @@ public class Game {
 				window.enableBuy();
 			}
 		}
+		loserCheck();
 		window.enableEnd();
 		window.update();
 	}
@@ -113,12 +129,51 @@ public class Game {
 	 * Runs the game phase where the player can purchase a property
 	 */
 	public void buyPhase() {
-		Player player = playerList[playerTurn]; 
+		Player player = playerList[playerTurn];
 		Square square = board.getSquare(player.getPosition());
 		if(square.act(player))
 		{
 			window.disableBuy();
 		}
 		window.update();
+	}
+
+	/**
+	 * checks to see if a player has lost. If a loser is found, that player is marked as
+	 * a loser and the number of active_players is decremented. If the number of active_players
+	 * reaches 1, there is a winner. The winner is passed to window.endGame(). GG
+	 */
+	private void loserCheck(){
+		for(int i = 0; i < playerList.length; i++){
+			if(playerList[i].getMoney() < 0){
+				System.out.println("loser from, loserCheck: " + playerList[i].getName());
+				playerList[i].setLoser(true);
+				active_players --;
+				if(active_players > 1){
+					loserCleanUp(playerList[i]);
+				}
+				else{
+					//winner
+					for(int j = 0; j < playerList.length; j++){
+						if(playerList[j].getLoser() == false){
+							window.endGame(playerList[j]);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * cleans up the properties and board if there a loser was knocked out of the game
+	 * @param player player that has just lost the game
+	 */
+	private void loserCleanUp(Player player){
+		System.out.println("loser from, loserCleanUp.");
+		for(int i = 0; i < player.getProperties().size(); i++){
+			Property pReset = player.getProperties().get(i);
+			pReset.setOwner(null);
+			pReset.setMortgaged(false);
+		}
 	}
 }

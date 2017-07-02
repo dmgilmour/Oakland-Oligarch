@@ -2,7 +2,7 @@ package game;
 
 import java.util.Random;
 import java.awt.*;
-import java.awt.event.*; 
+import java.awt.event.*;
 import javax.swing.*;
 
 /**
@@ -10,17 +10,17 @@ import javax.swing.*;
  *
  */
 public class OaklandOligarchy {
-	
+
 	public enum GamePhase {MOVE, ACTION, END, START, BUY};
-	
+
 	public static final int NUMBER_OF_TILES = 36;
 	public static final int NUMBER_OF_PROPERTIES = 36;
 	public static final int MAX_NUMBER_OF_PLAYERS = 4;
-	
+
 	private static Player[] playerList;
 	private static Property[] propertyList;
 	private static Game game;
-	
+
 	private static int num_players;
 
 	public static void main(String[] args) {
@@ -42,7 +42,7 @@ public class OaklandOligarchy {
 		window.setPlayers(playerList);
 		game.startPhase();
 	}
-	
+
 	/**
 	 * Changes which phase the game is in currently. Is called by various ActionListeners
 	 *
@@ -66,7 +66,7 @@ public class OaklandOligarchy {
 				break;
 		}
 	}
-	
+
 	public static Property[] generateProperties() {
 		Property[] properties = new Property[OaklandOligarchy.NUMBER_OF_PROPERTIES];
 		for (int i = 0; i < OaklandOligarchy.NUMBER_OF_PROPERTIES; i++){
@@ -83,11 +83,11 @@ public class OaklandOligarchy {
 		while (!valid_input) {
 			String numPlayers = JOptionPane.showInputDialog("Number of Players");
 			if (numPlayers == null) System.exit(0);
-			
+
 			try {
 				num_players = Integer.parseInt(numPlayers);
 			} catch (NumberFormatException e) {
-				continue;	
+				continue;
 			}
 
 			if (num_players > 1 && num_players < 5) {
@@ -112,10 +112,10 @@ public class OaklandOligarchy {
 
 	private static String promptName(int playerID) {
 		String toReturn;
-		toReturn = JOptionPane.showInputDialog("Input Name for Player " + (playerID + 1));	
+		toReturn = JOptionPane.showInputDialog("Input Name for Player " + (playerID + 1));
 		if (toReturn == null) {
 			System.exit(0);
 		}
 		return toReturn;
-	}	
+	}
 }

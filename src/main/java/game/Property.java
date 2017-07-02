@@ -11,7 +11,7 @@ public class Property extends Square{
 	private int price;
 	private int rent;
 	private Player owner;
-  private boolean mortgaged;
+	private boolean mortgaged;
 
 	public Property(String n, int p, int r){
 		name = n;
@@ -36,11 +36,11 @@ public class Property extends Square{
 	public Player getOwner(){
 		return owner;
 	}
-	
+
 	public void setOwner(Player p){
 		owner=p;
 	}
-	
+
 	/**
 	 * Performs the action on a property square
 	 *

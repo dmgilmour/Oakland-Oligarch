@@ -13,7 +13,7 @@ public class Window extends JFrame {
 
 	private final int height = 980;
 	private final int width = 1820;
-	
+
 	private Game game;
 	private Player[] playerList;
 
@@ -23,7 +23,7 @@ public class Window extends JFrame {
 	private BoardPanel boardPanel;
 
 	/**
-	 * Initializes the UI window 
+	 * Initializes the UI window
 	 *
 	 * @param	playerList		The list of Players in the game
 	 * @param	properties		The list of Properties to be used for this match
@@ -42,7 +42,7 @@ public class Window extends JFrame {
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 
-		
+
 		topPanel = new TopPanel(random);
 		c.gridwidth = 2; // Span left panel and board
 		c.gridheight = 1;
@@ -89,10 +89,10 @@ public class Window extends JFrame {
 		statusPanel.setPlayers(playerList);
 		this.update();
 	}
-	
+
 	/**
 	 * Refreshes the UI
-	 */	
+	 */
 	public void update() {
 		statusPanel.update();
 		for(Player p: playerList) {
@@ -100,6 +100,15 @@ public class Window extends JFrame {
 		}
 		setVisible(true);
 	}
+
+	/**
+	 * Shows the winner of the game. Exits the game when "ok" is clicked.
+	 */
+	 public void endGame(Player player){
+		 String winner = player.getName();
+		 JOptionPane.showMessageDialog(null, winner + " has won the game.");
+		 System.exit(0);
+	 }
 
 	public void enableRoll() {
 		actionPanel.rollButton.setEnabled(true);
