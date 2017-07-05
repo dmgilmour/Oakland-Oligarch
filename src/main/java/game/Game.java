@@ -1,6 +1,8 @@
 package game;
 
 import java.util.Random;
+import java.util.ArrayList;
+import java.util.Arrays;
 import javax.swing.*;
 
 /**
@@ -33,7 +35,7 @@ public class Game {
 		rollTaken = false;
 	}
 
-	private Player getCurrentPlayer() {
+	public Player getCurrentPlayer() {
 		return playerList[playerTurn];
 	}
 
@@ -65,6 +67,12 @@ public class Game {
 	 * Runs the game phase that ends each players turn
 	 */
 	public void endPhase() {
+		Square curSquare = board.getSquare(getCurrentPlayer().getPosition());
+		if (curSquare instanceof Property) {
+			if (((Property) curSquare).getOwner() == null) {
+				auctionPhase();
+			}
+		}
 		playerTurn = (playerTurn + 1) % playerList.length;	//Increment to the next player's turn
 		startPhase();
 	}
@@ -119,4 +127,141 @@ public class Game {
 		}
 		window.update(player);
 	}
+
+	public boolean tradePhase(Player tradee) {
+		Player trader = this.getCurrentPlayer();
+		if (trader == tradee) {
+			return false;
+		}
+		Property[] traderProperties = tradePrompt(trader);
+		if (traderProperties == null) return false;
+		Property[] tradeeProperties = tradePrompt(tradee);
+		if (tradeeProperties == null) return false;
+		boolean validTrade = false;
+		int traderProfit = 0;
+		while (!validTrade) {
+			String traderProfitString = JOptionPane.showInputDialog("Amount requested");
+			if (traderProfitString == null) return false;
+
+			try {
+				traderProfit = Integer.parseInt(traderProfitString);
+			} catch (NumberFormatException e) {
+				continue;
+			}
+
+			if (traderProfit > 0) {
+				validTrade = (tradee.getMoney() > traderProfit);
+			} else {
+				validTrade = (trader.getMoney() > traderProfit * -1);
+			}
+		}
+
+//		if (JOptionPane.showMessageDialog(null, tradee.getName() + ": Do you want this trade?", "wat", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) return false;
+
+		trade(tradee, traderProperties, tradeeProperties, traderProfit);
+		window.update(trader);
+		return true;
+	}	
+
+	public void auctionPhase() {
+		ArrayList<Player> remainingPlayers = new ArrayList<Player>(Arrays.asList(playerList));
+		int i = 0;
+		boolean goneAround = false;
+		remainingPlayers.remove(getCurrentPlayer());
+		Property prop = (Property) board.getSquare(getCurrentPlayer().getPosition());
+		int topAmount = prop.getPrice();
+		while (remainingPlayers.size() > 1) {
+			if (i >= remainingPlayers.size()) {
+				goneAround = true;
+				i %= remainingPlayers.size();
+			}
+			boolean invalidInput = true;
+			while (invalidInput) {
+				String amountString = JOptionPane.showInputDialog(remainingPlayers.get(i).getName() + ": Input a bid above $" + topAmount + " or cancel");
+				if (amountString == null) {
+					remainingPlayers.remove(i);
+					invalidInput = false;
+				} else {
+					try {
+						int amount = Integer.parseInt(amountString);
+						if (amount < topAmount) {
+							invalidInput = true;
+						} else {
+							topAmount = amount;
+							i++;
+							invalidInput = false;
+						}
+					} catch (NumberFormatException e) {
+						invalidInput = true;
+					}
+				}
+			}
+		}
+		if (!goneAround) {
+			if (JOptionPane.showConfirmDialog(null, remainingPlayers.get(0).getName() + ": Would you like to buy this property for $" + topAmount + "?") != JOptionPane.YES_OPTION) {
+				return;
+			}
+		}
+
+		remainingPlayers.get(0).addProperty(prop);
+		remainingPlayers.get(0).charge(topAmount);
+	}
+
+
+	public Property[] tradePrompt(Player player) {
+		ArrayList<Property> playerProperties = player.getProperties();
+		String[] propList = new String[playerProperties.size()];
+		for (int i = 0; i < playerProperties.size(); i++) {
+			propList[i] = playerProperties.get(i).getName();
+		}
+		JList list = new JList(propList); 
+
+		JOptionPane.showMessageDialog(null, list, player.getName(), JOptionPane.PLAIN_MESSAGE);
+		int[] tradeProperties = list.getSelectedIndices();
+		Property[] toReturn = new Property[tradeProperties.length];
+		for (int i = 0; i < toReturn.length; i++) {
+			toReturn[i] = playerProperties.get(tradeProperties[i]); 
+		}
+		return toReturn;
+	}
+		
+
+	public void mortgage(Property property) {
+		if (!property.getMortgaged()) {
+			int mortgageValue = property.getPrice() / 2;
+			property.setMortgaged(true);
+			this.getCurrentPlayer().getPaid(mortgageValue);
+		}
+	}
+
+	public void unmortgage(Property property) {
+		if (property.getMortgaged()) {
+			Player player = this.getCurrentPlayer();
+			int price = property.getPrice();
+			if (player.getMoney() > price) {
+				property.setMortgaged(false);
+				player.charge(price);
+			}
+		}
+	}
+
+	public void trade(Player tradee, Property[] traderProps, Property[] tradeeProps, int traderProfit) {
+		Player trader = this.getCurrentPlayer();
+		for (Property prop : traderProps) {
+			tradee.addProperty(trader.removeProperty(prop));
+		}
+		for (Property prop : tradeeProps) {
+			trader.addProperty(tradee.removeProperty(prop));
+		}
+		if (traderProfit > 0) {
+			trader.getPaid(traderProfit);
+			tradee.charge(traderProfit);
+		} else {
+			tradee.getPaid(traderProfit);
+			trader.charge(traderProfit);
+		}
+	}
+				
+
+		
 }

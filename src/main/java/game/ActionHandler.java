@@ -170,7 +170,7 @@ public class ActionHandler {
 	private void uber(Player p) {
 		p.charge(UBER_COST);
 		JOptionPane.showMessageDialog(null, "Order an \"autonomous\" Uber\nYou pay $" + UBER_COST + "\nand take another turn!");
-		OaklandOligarchy.switchPhase(OaklandOligarchy.GamePhase.START);
+		OaklandOligarchy.switchPhase(OaklandOligarchy.GamePhase.START, null);
 	}
 	
 	private void frat(Player p) {
