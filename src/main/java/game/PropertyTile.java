@@ -27,8 +27,10 @@ public class PropertyTile extends Tile {
 	}
 	
 	public void update() {
+		owner.setVisible(false);
 		if(((Property)square).getOwner() != null) {
 			owner.add(((Property)square).getOwnerToken(),0);
+			owner.setVisible(true);
 		}
 	}
 }
