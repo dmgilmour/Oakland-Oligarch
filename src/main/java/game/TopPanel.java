@@ -42,7 +42,7 @@ public class TopPanel extends JPanel {
 		Thread clockThread = new Thread(() -> {
 			while(true){
 				int hours = time / 3600;
-				int minutes = time / 60;
+				int minutes = time / 60 % 60;
 				int seconds = time % 60;
 				clock.setText(String.format("Time Played: %02d:%02d:%02d", hours, minutes, seconds));
 				try{
