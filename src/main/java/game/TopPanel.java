@@ -40,18 +40,13 @@ public class TopPanel extends JPanel {
 		
 		constraints.gridx = 4;
 		Thread clockThread = new Thread(() -> {
+			int startTime = (int)(System.currentTimeMillis() / 1000);
 			while(true){
 				int hours = time / 3600;
 				int minutes = time / 60 % 60;
 				int seconds = time % 60;
 				clock.setText(String.format("Time Played: %02d:%02d:%02d", hours, minutes, seconds));
-				try{
-					Thread.sleep(1000);
-				}
-				catch(InterruptedException e){
-					System.out.println(e);
-				}
-				time++;
+				time = (int)(System.currentTimeMillis()/1000 - startTime);
 			}
 		});
 		clockThread.start();
