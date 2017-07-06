@@ -26,13 +26,13 @@ public class ActionHandler {
 	public void run(Player p) {
 		switch(random.nextInt(OaklandOligarchy.NUMBER_OF_ACTIONS)){
 			case 0:
-				sublet(p);
+				significantOther(p);
 				break;
 			case 1:
-				summer();
+				oweek(p);
 				break;
 			case 2:
-				oweek(p);
+				summer();
 				break;
 			case 3:
 				badWeek(p);
@@ -47,7 +47,7 @@ public class ActionHandler {
 				tapingo(p);
 				break;
 			case 7:
-				significantOther(p);
+				sublet(p);
 				break;
 			case 8:
 				qdoba(p);

@@ -37,11 +37,11 @@ public class Property extends Square{
 	public Player getOwner(){
 		return owner;
 	}
-	
+
 	public JLabel getOwnerToken() {
 		return ownerToken;
 	}
-	
+  
 	public void setOwner(Player p){
 		owner=p;
 		if(owner == null) {
@@ -51,7 +51,7 @@ public class Property extends Square{
 			ownerToken = new JLabel("P"+owner.getId());
 		}
 	}
-	
+
 	/**
 	 * Performs the action on a property square. If the property is owned, this makes the player pay rent 
 	 * on the property and is alerted. If the property is unowned, the player is prompted to purchase this property.

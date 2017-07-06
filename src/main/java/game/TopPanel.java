@@ -1,6 +1,6 @@
 package game;
 
-import java.util.Random;
+import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -10,6 +10,10 @@ import javax.swing.*;
  *
  */
 public class TopPanel extends JPanel {
+	
+
+	JLabel clock = new JLabel();
+	int time = 0; // this will eventually take a value during save/load
 	
 	public TopPanel(Random random) {
 		setBackground(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
@@ -33,6 +37,21 @@ public class TopPanel extends JPanel {
 		constraints.gridx = 3;
 		JButton instructionsButton = new JButton("Instructions");
 		add(instructionsButton, constraints);
+		
+		constraints.gridx = 4;
+		Thread clockThread = new Thread(() -> {
+			int startTime = (int)(System.currentTimeMillis() / 1000);
+			while(true){
+				int hours = time / 3600;
+				int minutes = time / 60 % 60;
+				int seconds = time % 60;
+				clock.setText(String.format("Time Played: %02d:%02d:%02d", hours, minutes, seconds));
+				time = (int)(System.currentTimeMillis()/1000 - startTime);
+			}
+		});
+		clockThread.start();
+		add(clock, constraints);
+		
 
 	}
 }
