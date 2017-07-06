@@ -20,7 +20,7 @@ public class Window extends JFrame {
 	private BoardPanel boardPanel;
 
 	/**
-	 * Initializes the UI window 
+	 * Initializes the UI window
 	 *
 	 * @param	squareList		The list of squares to be used in this game
 	 * @param	random			A seeded psuedo-random number generator used to stylize the UI
@@ -38,7 +38,7 @@ public class Window extends JFrame {
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
-		
+
 		topPanel = new TopPanel(random);
 		c.gridwidth = 2; // Span left panel and board
 		c.gridheight = 1;
@@ -86,14 +86,34 @@ public class Window extends JFrame {
 			this.update(p);
 		}
 	}
-	
+
 	/**
 	 * Refreshes the UI
-	 */	
+  */
 	public void update(Player p) {
+
 		statusPanel.update();
 		boardPanel.update(p);
 		setVisible(true);
+	}
+
+	/**
+	 * Shows the winner of the game. Exits the game when "ok" is clicked.
+	 * @param player the winning Player of the game to be printed out as the winner.
+	 */
+	 public void endGame(Player player){
+		 String winner = player.getName();
+		 JOptionPane.showMessageDialog(null, winner + " has won the game.");
+		 System.exit(0);
+	 }
+
+	 /**
+	  * Shows a pop up of a loser of the game, to let all players know someone lost.
+	  * @param player loser of the game to be announced.
+	  */
+	public void printLoser(Player player){
+		String loser = player.getName();
+		JOptionPane.showMessageDialog(null, loser + " has lost the game.");
 	}
 
 	public void enableRoll() {

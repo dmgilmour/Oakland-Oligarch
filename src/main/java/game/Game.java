@@ -11,6 +11,9 @@ public class Game {
 
 	private boolean rollTaken;
 	private int playerTurn;
+	private int num_players;
+	private int active_players;
+
 
 	private Board board;
 	private Window window;
@@ -31,6 +34,20 @@ public class Game {
 		actionHandler = new ActionHandler(board, playerList, random);
 		playerTurn = 0;
 		rollTaken = false;
+    num_players = playerList.length;
+		active_players = num_players;
+	}
+
+	public int getTurn() {
+		return playerTurn;
+	}
+
+	public int getNumPlayers(){
+		return num_players;
+	}
+
+	public Player[] getPlayers(){
+		return playerList;
 	}
 
 	private Player getCurrentPlayer() {
@@ -42,7 +59,7 @@ public class Game {
 	 * buttons and roll the dice giant button
 	 */
 	public void startPhase() {
-		rollTaken = false;			
+		rollTaken = false;
 		window.disableEnd();
 		window.disableBuy();
 		window.enableRoll();
@@ -60,15 +77,20 @@ public class Game {
 		window.disableRoll();
 		actionPhase();
 	}
-	
+
 	/**
 	 * Runs the game phase that ends each players turn
 	 */
 	public void endPhase() {
-		playerTurn = (playerTurn + 1) % playerList.length;	//Increment to the next player's turn
-		startPhase();
+		playerTurn = (playerTurn + 1) % num_players;	//Increment to the next player's turn
+		if(playerList[playerTurn].getLoser() == false){
+			startPhase();
+		}
+		else{
+			endPhase();
+    }
 	}
-	
+
 	/**
 	 *	A psuedo-random roll that simulates 2 six-sided dice
 	 *
@@ -100,6 +122,7 @@ public class Game {
 		if(!cannotBuy) {
 			window.enableBuy();
 		}
+		loserCheck();
 		window.enableEnd();
 		if(square instanceof ActionSquare) {
 			actionHandler.run(player);
@@ -118,5 +141,43 @@ public class Game {
 			window.disableBuy();
 		}
 		window.update(player);
+	}
+
+	/**
+	 * checks to see if a player has lost. If a loser is found, that player is marked as
+	 * a loser and the number of active_players is decremented. If the number of active_players
+	 * reaches 1, there is a winner. The winner is passed to window.endGame(). GG
+	 */
+	private void loserCheck(){
+		for(int i = 0; i < playerList.length; i++){
+			if(playerList[i].getMoney() < 0 && playerList[i].getLoser() == false){
+				playerList[i].setLoser(true);
+				window.printLoser(playerList[i]);
+				active_players --;
+				if(active_players > 1){
+					loserCleanUp(playerList[i]);
+				}
+				else{
+					//winner
+					for(int j = 0; j < playerList.length; j++){
+						if(playerList[j].getLoser() == false){
+							window.endGame(playerList[j]);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * cleans up the properties and board if there a loser was knocked out of the game
+	 * @param player player that has just lost the game
+	 */
+	private void loserCleanUp(Player player){
+		for(int i = 0; i < player.getProperties().size(); i++){
+			Property pReset = player.getProperties().get(i);
+			pReset.setOwner(null);
+			pReset.setMortgaged(false);
+		}
 	}
 }
