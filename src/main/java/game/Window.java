@@ -89,9 +89,8 @@ public class Window extends JFrame {
 
 	/**
 	 * Refreshes the UI
-  */
+	 */
 	public void update(Player p) {
-
 		statusPanel.update();
 		boardPanel.update(p);
 		setVisible(true);

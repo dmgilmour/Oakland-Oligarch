@@ -48,7 +48,10 @@ public class StatusPanel extends JPanel {
 			add(playerButtons[id], c);
 		}
 	}
-
+	
+	/**
+	 * An ActionListener which will display the player information as a JPane when it is triggered
+	 */
 	private class PlayerButtonListener implements ActionListener {
 
 		Player player;
