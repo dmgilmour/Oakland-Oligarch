@@ -32,7 +32,6 @@ public class StatusPanel extends JPanel {
 		playerList = _playerList;
 		num_players = playerList.length;
 
-
 		GridBagConstraints c = new GridBagConstraints();
 
 		c.gridx = 0;
@@ -48,8 +47,13 @@ public class StatusPanel extends JPanel {
 		}
 	}
 
+	/**
+	 * Updates the status panel to hold buttons for each mortgagable property that the current player owns
+	 *
+	 * @param	properties			A list of properties owned by the player whose turn it is
+	 * @param	mortgageListeners	An array of ActionListeners for each mortgagable property
+	 */
 	public void updateStatusProperties(ArrayList<Property> properties, ActionListener[] mortgageListeners) {
-
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridy = this.getComponents().length;
 		c.weighty = 0.05;
@@ -77,11 +81,7 @@ public class StatusPanel extends JPanel {
 		}
 	}
 
-		
-
-
-
-	/*
+	/**
 	 * Updates the panel with the new money values of the players
 	 */
 	public void update() {

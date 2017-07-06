@@ -87,6 +87,12 @@ public class Player {
 		return properties;
 	}
 
+	/**
+	 * Adds a given property to this player's propertyList
+	 *
+	 * @param	property		the property to be added
+	 * @returns					the success of adding this property
+	 */
 	public boolean addProperty(Property property) {
 		if(properties.contains(property))
 			return false;
@@ -96,6 +102,12 @@ public class Player {
 		return true;
 	}
 	
+	/**
+	 * Removes a property from the Player's propertyList at a given index. Also sets the owner of property to this player.
+	 *
+	 * @param	index		The index to remove the property from
+	 * @return				The property which has been removed, returns null if index was invalid
+	 */
 	public Property removeProperty(int index) {
 		if(index >= properties.size()) {
 			return null;
@@ -105,6 +117,12 @@ public class Player {
 		return prop;
 	}
 	
+	/**
+	 * Removes a given property from the Player's propertyList. Also sets the owner of property to this player.
+	 *
+	 * @param	prop		The property that should be removed
+	 * @return				The property which has been removed, returns null if index was invalid
+	 */
 	public Property removeProperty(Property prop) {
 		if(!properties.contains(prop)) {
 			return null;
