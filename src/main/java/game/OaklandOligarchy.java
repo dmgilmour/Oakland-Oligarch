@@ -64,11 +64,6 @@ public class OaklandOligarchy {
 				break;
 		}
 	}
-
-	public static Property[] generateProperties() {
-		Property[] properties = new Property[OaklandOligarchy.NUMBER_OF_PROPERTIES];
-		for (int i = 0; i < OaklandOligarchy.NUMBER_OF_PROPERTIES; i++){
-			properties[i] = new Property("Property "+i, i, i);
 	
 	private static Square[] generateSquares() {
 		Square[] squareList = new Square[OaklandOligarchy.NUMBER_OF_TILES];

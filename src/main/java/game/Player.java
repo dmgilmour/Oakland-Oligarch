@@ -90,6 +90,7 @@ public class Player {
 	public boolean addProperty(Property property) {
 		if(properties.contains(property))
 			return false;
+		property.setOwner(this);
 		properties.add(property);
 		return true;
 	}
