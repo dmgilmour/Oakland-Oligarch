@@ -6,8 +6,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 /**
- * @author Dan
- *
+ * @author Dan Gilmour
  */
 public class TopPanel extends JPanel {
 	
@@ -15,6 +14,11 @@ public class TopPanel extends JPanel {
 	JLabel clock = new JLabel();
 	int time = 0; // this will eventually take a value during save/load
 	
+	/**
+	 * The constructor for the TopPanel UI element
+	 *
+	 * @param	random		A psuedo-random number generator used to select the background color
+	 */
 	public TopPanel(Random random) {
 		setBackground(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
 		setOpaque(true);
@@ -51,7 +55,5 @@ public class TopPanel extends JPanel {
 		});
 		clockThread.start();
 		add(clock, constraints);
-		
-
 	}
 }

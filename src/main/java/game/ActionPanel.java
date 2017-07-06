@@ -6,8 +6,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 /**
- * @author Dan
- *
+ * @author Dan Gilmour
  */
 public class ActionPanel extends JPanel {
 
@@ -16,7 +15,14 @@ public class ActionPanel extends JPanel {
 	public JButton endButton;
 	public JButton rollButton;
 
-	
+	/**
+	 * The constructor of the ActionPanel UI element
+	 *
+	 * @param	random	A psuedo-random number generator used to select the background color
+	 * @param	bl		An actionlistener for the buy button
+	 * @param	ml		An actionlistener for the move button
+	 * @param	el		An actionlistener for the end button
+	 */
 	public ActionPanel(Random random, ActionListener bl, ActionListener ml, ActionListener el) {
 		this.setBackground(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
 		this.setOpaque(true);
