@@ -1,6 +1,7 @@
 package game;
 
 import java.util.Random;
+import java.util.ArrayList;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -14,7 +15,8 @@ public class StatusPanel extends JPanel {
 	private JButton[] playerButtons;
 	private Player[] playerList;
 	private int num_players;
-	
+	private JButton[] propertyButtons;	
+
 	/**
 	 * Initializes the status panel showing players and their properties
 	 *
@@ -26,48 +28,60 @@ public class StatusPanel extends JPanel {
 		this.setLayout(new GridBagLayout());
 	}
 
-	public void setPlayers(Player[] _playerList) {
+	public void setPlayers(Player[] _playerList, ActionListener[] tradeListeners) {
 		playerList = _playerList;
 		num_players = playerList.length;
 
 
 		GridBagConstraints c = new GridBagConstraints();
 
-		c.weightx = 1;
-		c.weighty = (1 / num_players);
 		c.gridx = 0;
 
 		playerButtons = new JButton[num_players];
 
 		for (int id = 0; id < num_players; id++) {
 			playerButtons[id] = new JButton(playerList[id].getName() + ": $" + playerList[id].getMoney());	
-			ActionListener playerButtonListener = new PlayerButtonListener(playerList[id]);
-			playerButtons[id].addActionListener(playerButtonListener);
+			playerButtons[id].addActionListener(tradeListeners[id]);
 
 			c.gridy = id;
 			add(playerButtons[id], c);
 		}
 	}
 
-	private class PlayerButtonListener implements ActionListener {
+	public void updateStatusProperties(ArrayList<Property> properties, ActionListener[] mortgageListeners) {
 
-		Player player;
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridy = this.getComponents().length;
+		c.weighty = 0.05;
 
-		PlayerButtonListener(Player player) {
-			this.player = player;
+		if (propertyButtons != null) {
+			for (JButton button : propertyButtons) {
+				this.remove(button);
+			}
 		}
 
-		public void actionPerformed(ActionEvent e) {
-			JFrame playerInfo = new JFrame(player.getName());
-			playerInfo.setSize(400, 600);
-			String dialog = "Money: $" + player.getMoney() + "\nProperties: ";
-			for(Property property: player.getProperties())
-				dialog += "\n" + property.getName();
-			JOptionPane.showMessageDialog(playerInfo, dialog, player.getName(), JOptionPane.PLAIN_MESSAGE);	
+		propertyButtons = new JButton[properties.size()];
+
+		for (int i = 0; i < properties.size(); i++) {
+
+			Property prop = properties.get(i);
+			propertyButtons[i] = new JButton();
+			if (prop.getMortgaged()) {
+				propertyButtons[i].setText("Buy back " + prop.getName() + " for $" + prop.getPrice());
+			} else {
+				propertyButtons[i].setText("Sell " + prop.getName() + " for $" + (prop.getPrice() / 2));
+			}
+			propertyButtons[i].addActionListener(mortgageListeners[i]);
+			this.add(propertyButtons[i], c);
+			c.gridy++;
 		}
 	}
-	
-	/**
+
+		
+
+
+
+	/*
 	 * Updates the panel with the new money values of the players
 	 */
 	public void update() {

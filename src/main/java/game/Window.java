@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.Random;
+import java.util.ArrayList;
 
 /**
  * @author Dan
@@ -80,8 +81,8 @@ public class Window extends JFrame {
 		this.setVisible(true);
 	}
 
-	public void setPlayers(Player[] playerList) {
-		statusPanel.setPlayers(playerList);
+	public void setPlayers(Player[] playerList, ActionListener[] tradeListeners) {
+		statusPanel.setPlayers(playerList, tradeListeners);
 		for(Player p: playerList) {
 			this.update(p);
 		}
@@ -91,6 +92,7 @@ public class Window extends JFrame {
 	 * Refreshes the UI
   */
 	public void update(Player p) {
+		OaklandOligarchy.setStatusProperties(p);
 
 		statusPanel.update();
 		boardPanel.update(p);
@@ -138,6 +140,10 @@ public class Window extends JFrame {
 
 	public void disableBuy() {
 		actionPanel.buyButton.setEnabled(false);
+	}
+
+	public void updateStatusProperties(ArrayList<Property> properties, ActionListener[] mortgageListeners) {
+		statusPanel.updateStatusProperties(properties, mortgageListeners);
 	}
 
 }

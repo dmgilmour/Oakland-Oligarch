@@ -61,8 +61,12 @@ public class Property extends Square{
 	 */
 	public boolean act(Player player) {
 		if(owner != null) {
-			player.payRent(this);
-			JOptionPane.showMessageDialog(null, player.getName()+ " pays $" + getRent() + "  to " + owner.getName());
+			if (this.mortgaged) {
+				JOptionPane.showMessageDialog(null, "Mortgaged property");
+			} else {
+				player.payRent(this);
+				JOptionPane.showMessageDialog(null, player.getName()+ " pays $" + getRent() + "  to " + owner.getName());
+			}
 			return true;
 		}
 		else {

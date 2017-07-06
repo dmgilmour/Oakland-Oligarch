@@ -92,6 +92,7 @@ public class Player {
 			return false;
 		property.setOwner(this);
 		properties.add(property);
+		property.setOwner(this);
 		return true;
 	}
 	
