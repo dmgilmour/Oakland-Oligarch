@@ -103,12 +103,22 @@ public class Window extends JFrame {
 
 	/**
 	 * Shows the winner of the game. Exits the game when "ok" is clicked.
+	 * @param player the winning Player of the game to be printed out as the winner.
 	 */
 	 public void endGame(Player player){
 		 String winner = player.getName();
 		 JOptionPane.showMessageDialog(null, winner + " has won the game.");
 		 System.exit(0);
 	 }
+
+	 /**
+	  * Shows a pop up of a loser of the game, to let all players know someone lost.
+	  * @param player loser of the game to be announced.
+	  */
+	public void printLoser(Player player){
+		String loser = player.getName();
+		JOptionPane.showMessageDialog(null, loser + " has lost the game.");
+	}
 
 	public void enableRoll() {
 		actionPanel.rollButton.setEnabled(true);

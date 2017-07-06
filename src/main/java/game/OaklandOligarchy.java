@@ -16,6 +16,7 @@ public class OaklandOligarchy {
 	public static final int NUMBER_OF_TILES = 36;
 	public static final int NUMBER_OF_PROPERTIES = 36;
 	public static final int MAX_NUMBER_OF_PLAYERS = 4;
+	public static final int PLAYER_STARTING_MONEY = 200;
 
 	private static Player[] playerList;
 	private static Property[] propertyList;
@@ -104,7 +105,7 @@ public class OaklandOligarchy {
 		for (int i = 0; i < num_players; i++) {
 			System.err.println(i);
 			String playerName = promptName(i);
-			playerList[i] = new Player(i, 2000, playerName, null);
+			playerList[i] = new Player(i, PLAYER_STARTING_MONEY, playerName, null);
 		}
 
 		return playerList;

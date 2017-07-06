@@ -117,13 +117,15 @@ public class Player {
 	 * @returns				A boolean indicating the success of the transaction
 	 */
 	private boolean charge(int cost) {
-		if(money >= cost)
-		{
+		money -= cost;
+		return true;
+		/*if(money >= cost){
 			money -= cost;
 			return true;
 		}
-		else
+		else{
 			return false;
+		}*/
 	}
 
 	/**
