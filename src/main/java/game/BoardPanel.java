@@ -15,17 +15,21 @@ public class BoardPanel extends JPanel {
 	/**
 	 * Constructor to build the board object.
 	 * 
-	 * @param playerList	Array of players to be added to the game.
-	 * @param properties	Array of properties to add to the game.
+	 * @param squareList	Array of squares to add to the game.
 	 */
-	public BoardPanel(Property[] properties){
+	public BoardPanel(Square[] squareList){
 		//The buttons are just place holders for tiles right now. The layout itself is complicated 
 		//current button size is 60X60 just for easy math
 		this.setLayout(new GridBagLayout());
 		tiles = new Tile[OaklandOligarchy.NUMBER_OF_TILES];
 		
 		for(int i = 0; i < OaklandOligarchy.NUMBER_OF_TILES; i++){ //property numbers are currently hard coded
-			tiles[i] = new PropertyTile(i, properties[i]);
+			if(squareList[i] instanceof Property) {
+				tiles[i] = new PropertyTile(i, (Property)squareList[i]);
+			}
+			else {
+				tiles[i] = new Tile(i, squareList[i]);
+			}
 			//associate action listeners here
 			tiles[i].setPreferredSize(new Dimension(60, 60));
 		}
@@ -103,6 +107,11 @@ public class BoardPanel extends JPanel {
 			tiles[p.getOldPos()].remove(p);
 			tiles[p.getPosition()].add(p);
 			p.setMoved(false);
+		}
+		for(Tile t: tiles) {
+			if(t instanceof PropertyTile) {
+				((PropertyTile)t).update();
+			}
 		}
 	}
 }

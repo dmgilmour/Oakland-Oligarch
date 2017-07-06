@@ -87,6 +87,31 @@ public class Player {
 		return properties;
 	}
 
+	public boolean addProperty(Property property) {
+		if(properties.contains(property))
+			return false;
+		properties.add(property);
+		return true;
+	}
+	
+	public Property removeProperty(int index) {
+		if(index >= properties.size()) {
+			return null;
+		}
+		Property prop = properties.remove(index);
+		prop.setOwner(null);
+		return prop;
+	}
+	
+	public Property removeProperty(Property prop) {
+		if(!properties.contains(prop)) {
+			return null;
+		}
+		prop.setOwner(null);
+		properties.remove(prop);
+		return prop;
+	}
+
 	/**
 	 * Purchases a property for this player
 	 *
@@ -116,7 +141,7 @@ public class Player {
 	 * @param	cost		An integer value indicating the cost incurred
 	 * @returns				A boolean indicating the success of the transaction
 	 */
-	private boolean charge(int cost) {
+	public boolean charge(int cost) {
 		money -= cost;
 		return true;
 		/*if(money >= cost){
@@ -138,7 +163,7 @@ public class Player {
 		int cost = property.getRent();
 		Player owner = property.getOwner();
 		boolean success = charge(cost);			//Attempt to charge this player
-		if(success)								//If the charge is successful:
+		if(success && owner != null)			//If the charge is successful:
 			owner.getPaid(cost);				//then pay the owner of the property
 		return success;
 	}
@@ -148,7 +173,7 @@ public class Player {
 	 *
 	 * @param	payment		An integer value that the player should receive
 	 */
-	private void getPaid(int payment) {
+	public void getPaid(int payment) {
 		if(payment > 0)
 			money += payment;
 	}

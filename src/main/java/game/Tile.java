@@ -21,8 +21,9 @@ public class Tile extends JPanel{
 		/**
 		 * @param n	Tile number identifier so that the tile knows what number it is.
 		 */
-		public Tile(int n){
-			number=n;
+		public Tile(int n, Square s){
+			number = n;
+			square = s;
 			this.setLayout(new GridBagLayout());
 			
 			this.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -30,7 +31,7 @@ public class Tile extends JPanel{
 			players = new JPanel();
 			players.setLayout(new GridLayout(1, 4));
 			
-			JButton button = new JButton("Property " + n);
+			JButton button = new JButton(square.getName());
 			button.setPreferredSize(new Dimension(60, 30));
 			
 			GridBagConstraints constraint = new GridBagConstraints();

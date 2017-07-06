@@ -26,8 +26,6 @@ public class StatusPanel extends JPanel {
 		this.setLayout(new GridBagLayout());
 	}
 
-
-
 	public void setPlayers(Player[] _playerList) {
 		playerList = _playerList;
 		num_players = playerList.length;
