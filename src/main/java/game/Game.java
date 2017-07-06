@@ -130,6 +130,12 @@ public class Game {
 		window.update(player);
 	}
 
+	/**
+	 * Runs the game phase where the player can trade properties with other players
+	 *
+	 * @param	tradee		the player the current player is trading with
+	 * @returns			a boolean for whether the trade was successful
+	 */
 	public boolean tradePhase(Player tradee) {
 		Player trader = this.getCurrentPlayer();
 		if (trader == tradee) {
@@ -165,6 +171,9 @@ public class Game {
 		return true;
 	}	
 
+	/**
+	 * Runs the game phase where the property is auctioned to the other players 
+	 */
 	public void auctionPhase() {
 		ArrayList<Player> remainingPlayers = new ArrayList<Player>(Arrays.asList(playerList));
 		int i = 0;
@@ -211,6 +220,12 @@ public class Game {
 	}
 
 
+	/**
+	 * Prompts which properties want to be traded for a given player
+	 *
+	 * @param 	player 		the player whose properties are being selected for trade
+	 * @return 			the list of properties the players want to trade
+	 */
 	public Property[] tradePrompt(Player player) {
 		ArrayList<Property> playerProperties = player.getProperties();
 		String[] propList = new String[playerProperties.size()];
@@ -229,6 +244,11 @@ public class Game {
 	}
 		
 
+	/**
+	 * Will set the property to mortgaged and give the player have the price
+	 *
+	 * @param 	property	the property the player is attempting to mortgage
+	 */
 	public void mortgage(Property property) {
 		if (!property.getMortgaged()) {
 			int mortgageValue = property.getPrice() / 2;
@@ -237,6 +257,11 @@ public class Game {
 		}
 	}
 
+	/**
+	 * Will set the property to unmortgaged and take half the price
+	 *
+	 * @param 	property	the property the player is attempting to unmortgage
+	 */
 	public void unmortgage(Property property) {
 		if (property.getMortgaged()) {
 			Player player = this.getCurrentPlayer();
@@ -248,6 +273,14 @@ public class Game {
 		}
 	}
 
+	/**
+	 * Will complete a trade between players
+	 *
+	 * @param 	tradee			The player the current player is trading with
+	 * @param 	traderProps		The properties that the trader is giving in the trade
+	 * @param 	tradeeProps		The properties that the tradee is giving in the trade
+	 * @param 	traderProfit		The amount of money the player will be gaining in the trade
+	 */
 	public void trade(Player tradee, Property[] traderProps, Property[] tradeeProps, int traderProfit) {
 		Player trader = this.getCurrentPlayer();
 		for (Property prop : traderProps) {

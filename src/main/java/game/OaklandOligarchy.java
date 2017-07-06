@@ -133,16 +133,31 @@ public class OaklandOligarchy {
 		return toReturn;
 	}	
 
+	/**
+	 * Calls game to mortgage the property! 
+	 *
+	 * @param	property	The property the player is attempting to mortgage
+	 */
 	private static void mortgage(Property property) {
 		game.mortgage(property);
 		window.update(property.getOwner());
 	}
 
+	/**
+	 * Calls game to unmortgage the property! 
+	 *
+	 * @param	property	The property the player is attempting to unmortgage
+	 */
 	private static void unmortgage(Property property) {
 		game.unmortgage(property);
 		window.update(property.getOwner());
 	}
 
+	/**
+	 * Creates actionlisteners for the status panel 
+	 *
+	 * @param	player		the player for which we should display their properties
+	 */
 	public static void setStatusProperties(Player player) {
 		ArrayList<Property> properties = player.getProperties();
 		MortgageListener[] mortgageListeners = new MortgageListener[properties.size()];
@@ -168,6 +183,11 @@ public class OaklandOligarchy {
 		}
 	}
 
+	/**
+	 * Creates mortgagelisteners for each property 
+	 *
+	 * @param	prop		the property the actionlistener is trying to control
+	 */
 	private static class MortgageListener implements ActionListener {
 		Property property;
 		Boolean mortgaged;
@@ -189,18 +209,4 @@ public class OaklandOligarchy {
 			}
 		}
 	}
-
-	/*
-	private static class TradeListener implements ActionListener {
-		Property property;
-
-		TradeListener(Property prop) {
-			property = prop;
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			OaklandOligarchy.tradeAddProperty(property);
-		}
-	}
-	*/
 }
