@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.util.Random;
 import java.util.ArrayList;
 
+/**
+ * @author Woodrow Fulmer
+ */
 public class ActionHandler {
 	private Player[] playerList;
 	private Board board;
@@ -17,6 +20,13 @@ public class ActionHandler {
 	private final int STUDENT_ACTIVITY_FEE = 25;
 	private final int SMELL_COMPLAINT = 32;
 	
+	/**
+	 * The constructor for the ActionHandler
+	 *
+	 * @param	b		The board this game is played on
+	 * @param	pll		The list of players in this game
+	 * @param	r		A psuedo-random number generator used in this game
+	 */
 	public ActionHandler(Board b, Player[] pll, Random r) {
 		random = r;
 		board = b;

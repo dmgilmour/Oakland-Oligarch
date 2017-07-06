@@ -5,8 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 /**
- * @author Dan
- *
+ * @author Dan Gilmour
  */
 public class BoardPanel extends JPanel {
 
@@ -23,7 +22,7 @@ public class BoardPanel extends JPanel {
 		this.setLayout(new GridBagLayout());
 		tiles = new Tile[OaklandOligarchy.NUMBER_OF_TILES];
 		
-		for(int i = 0; i < OaklandOligarchy.NUMBER_OF_TILES; i++){ //property numbers are currently hard coded
+		for(int i = 0; i < OaklandOligarchy.NUMBER_OF_TILES; i++){
 			if(squareList[i] instanceof Property) {
 				tiles[i] = new PropertyTile(i, (Property)squareList[i]);
 			}
