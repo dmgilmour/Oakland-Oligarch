@@ -44,6 +44,7 @@ public class Game {
 	 * buttons and roll the dice giant button
 	 */
 	public void startPhase() {
+		window.update(this.getCurrentPlayer());
 		rollTaken = false;			
 		window.disableEnd();
 		window.disableBuy();
@@ -74,6 +75,7 @@ public class Game {
 			}
 		}
 		playerTurn = (playerTurn + 1) % playerList.length;	//Increment to the next player's turn
+		window.update(getCurrentPlayer());
 		startPhase();
 	}
 	
@@ -203,6 +205,7 @@ public class Game {
 			}
 		}
 
+		System.out.println("Last Player: " + remainingPlayers.get(0).getName());
 		remainingPlayers.get(0).addProperty(prop);
 		remainingPlayers.get(0).charge(topAmount);
 	}

@@ -92,6 +92,7 @@ public class Window extends JFrame {
 	 * Refreshes the UI
 	 */	
 	public void update(Player p) {
+		OaklandOligarchy.setStatusProperties(p);
 		statusPanel.update();
 		boardPanel.update(p);
 		setVisible(true);

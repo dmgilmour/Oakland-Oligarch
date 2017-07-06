@@ -143,7 +143,7 @@ public class OaklandOligarchy {
 		window.update(property.getOwner());
 	}
 
-	private static void setStatusProperties(Player player) {
+	public static void setStatusProperties(Player player) {
 		ArrayList<Property> properties = player.getProperties();
 		MortgageListener[] mortgageListeners = new MortgageListener[properties.size()];
 		for (int i = 0; i < properties.size(); i++) {

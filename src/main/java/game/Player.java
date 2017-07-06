@@ -81,6 +81,7 @@ public class Player {
 		if(properties.contains(property))
 			return false;
 		properties.add(property);
+		property.setOwner(this);
 		return true;
 	}
 	
