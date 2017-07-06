@@ -39,6 +39,8 @@ public class TopPanel extends JPanel {
 		add(instructionsButton, constraints);
 		
 		constraints.gridx = 4;
+		clock.setBackground(Color.WHITE);
+		clock.setOpaque(true);
 		Thread clockThread = new Thread(() -> {
 			int startTime = (int)(System.currentTimeMillis() / 1000);
 			while(true){
