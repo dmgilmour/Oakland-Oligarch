@@ -23,7 +23,7 @@ Dorms
 On-Campus apartments
 	Ruskin Hall		260	120
 	Bouquet Gardens		260	130
-	Skyview			280	130
+	Skyvue			280	130
 Sports Facilities
 	Trees Hall		300	140
 	Cost Field		320	150
