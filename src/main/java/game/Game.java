@@ -75,8 +75,17 @@ public class Game {
 	 * Runs the game phase during which players roll and move
 	 */
 	public void movePhase() {
-		int roll = roll(System.currentTimeMillis());		
-		board.movePlayer(this.getCurrentPlayer(), roll);
+		int roll[] = roll(System.currentTimeMillis());		
+
+		board.movePlayer(this.getCurrentPlayer(), roll[0] + roll[1]);
+
+		String squareName = board.getSquare(this.getCurrentPlayer().getPosition()).getName(); 
+		String message = "You rolled a " + roll[0] + " and a " + roll[1] + " and landed on " + squareName; 
+		if (roll[0] == roll[1]) {
+			message += "\nYou got doubles!";
+		}
+		JOptionPane.showMessageDialog(null, message);
+
 		window.update(this.getCurrentPlayer());
 		window.disableRoll();
 		actionPhase();
@@ -93,10 +102,10 @@ public class Game {
 			}
 		}
 		playerTurn = (playerTurn + 1) % num_players;	//Increment to the next player's turn
-		if(playerList[playerTurn].getLoser() == false){
+		JOptionPane.showMessageDialog(null, this.getCurrentPlayer().getName() + "'s turn");
+		if (playerList[playerTurn].getLoser() == false){
 			startPhase();
-		}
-		else{
+		} else{
 			endPhase();
     }
 	}
@@ -107,15 +116,17 @@ public class Game {
 	 * @param	timeMillis		A long integer used to the seed the random roll
 	 * @returns					An integer value between 2-12 that is the result of rolling 2 six-sided dice
 	 */
-	private int roll(Long timeMillis) {
+	private int[] roll(Long timeMillis) {
 		if(!rollTaken) {
 			Random rand = new Random(timeMillis);
 			rollTaken = true;
-			int roll = rand.nextInt(6) + rand.nextInt(6) + 2;	//Simulates two dice rolls by retriving integers from 0-5 and adding 2
+			int[] roll = new int[2];
+			roll[0] = rand.nextInt(6) + 1;	
+			roll[1] = rand.nextInt(6) + 1;	
 			return roll;
 		}
 		else {
-			return -1;
+			return new int[] {-1, -1};
 		}
 	}
 
@@ -203,9 +214,14 @@ public class Game {
 		remainingPlayers.remove(getCurrentPlayer());
 		Player highestBidder = null;
 		Property prop = (Property) board.getSquare(getCurrentPlayer().getPosition());
-		int topAmount = prop.getPrice();
+		int topAmount = prop.getPrice() - 1;
 		while ((remainingPlayers.size() > 1 || highestBidder == null) && remainingPlayers.size() > 0) {
 			i %= remainingPlayers.size();
+			if (remainingPlayers.get(i).getMoney() <= topAmount) {
+				JOptionPane.showMessageDialog(null, "Cannot match bid");
+				remainingPlayers.remove(i);
+				continue;
+			}
 			while (true) {
 				String amountString = JOptionPane.showInputDialog(remainingPlayers.get(i).getName() + ": Input a bid above $" + topAmount + " or cancel");
 				if (amountString == null) {
@@ -214,7 +230,7 @@ public class Game {
 				} else {
 					try {
 						int amount = Integer.parseInt(amountString);
-						if (amount <= topAmount) {
+						if (amount <= topAmount || amount > remainingPlayers.get(i).getMoney()) {
 							continue;
 						} else {
 							topAmount = amount;
@@ -230,6 +246,7 @@ public class Game {
 		}
 
 		if (highestBidder != null) {
+			JOptionPane.showMessageDialog(null, highestBidder.getName() + " wins the auction for " + prop.getName() + " for $" + topAmount);
 			highestBidder.addProperty(prop);
 			highestBidder.charge(topAmount);
 		}
