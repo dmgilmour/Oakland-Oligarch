@@ -3,8 +3,7 @@ package game;
 import javax.swing.*;
 
 /**
- * @author David
- *
+ * @author David Haskell
  */
 public class Property extends Square{
 	private int price;
@@ -13,6 +12,13 @@ public class Property extends Square{
 	private boolean mortgaged;
 	private JLabel ownerToken;
 
+	/**
+	 * The constuctor for a Property
+	 *
+	 * @param	n		the name of the property
+	 * @param	p		the price of this property
+	 * @param	r		the rent for this property
+	 */
 	public Property(String n, int p, int r){
 		name = n;
 		price = p;

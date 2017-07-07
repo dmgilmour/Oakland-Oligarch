@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.util.Random;
 import java.util.ArrayList;
 
+/**
+ * @author Woodrow Fulmer
+ */
 public class ActionHandler {
 	private Player[] playerList;
 	private Board board;
@@ -17,12 +20,24 @@ public class ActionHandler {
 	private final int STUDENT_ACTIVITY_FEE = 25;
 	private final int SMELL_COMPLAINT = 32;
 	
+	/**
+	 * The constructor for the ActionHandler
+	 *
+	 * @param	b		The board this game is played on
+	 * @param	pll		The list of players in this game
+	 * @param	r		A psuedo-random number generator used in this game
+	 */
 	public ActionHandler(Board b, Player[] pll, Random r) {
 		random = r;
 		board = b;
 		playerList = pll;
 	}
 	
+	/**
+	 * Performs a random action from the list upon the give player
+	 *
+	 * @param	p		The player this action should effect
+	 */
 	public void run(Player p) {
 		switch(random.nextInt(OaklandOligarchy.NUMBER_OF_ACTIONS)){
 			case 0:
@@ -73,6 +88,11 @@ public class ActionHandler {
 		}
 	}
 	
+	/**
+	 * Gives a random property (owned or unowned) to the given player
+	 *
+	 * @param	p		The player this action should effect
+	 */
 	private void oweek(Player p) {
 		Square randSquare = board.getSquare(random.nextInt(OaklandOligarchy.NUMBER_OF_TILES));
 		while(!(randSquare instanceof Property) || !p.addProperty((Property)randSquare)) {
@@ -81,6 +101,9 @@ public class ActionHandler {
 		JOptionPane.showMessageDialog(null, "Orientation Week!\nFreshmen move in and " + p.getName() + "\ngains the property: " + ((Property)randSquare).getName());
 	}
 	
+	/**
+	 * Removes a random property from all players
+	 */
 	private void summer() {
 		String message = "Summer Break!!! (woo)\nStudent tenants move out and:\n";
 		for(Player player: playerList) {
@@ -95,11 +118,21 @@ public class ActionHandler {
 		JOptionPane.showMessageDialog(null, message);
 	}
 	
+	/**
+	 * Removes all money from a given player
+	 *
+	 * @param	p		The player this action should effect
+	 */
 	private void badWeek(Player p) {
 		p.charge(p.getMoney());
 		JOptionPane.showMessageDialog(null, "Have a bad week:\n" + p.getName() + " had Facebook hacked, got a bad haircut, lost Panther ID, laptop broke, and stress-ate\n" + "You are BROKE");
 	}
 	
+	/**
+	 * Selects a random property. If it is owned, all players pay the owner. If it is unowned, allows the given player to buy it for twice the cost.
+	 *
+	 * @param	p		The player this action should effect
+	 */
 	private void bacteria(Player p) {
 		Square randSquare = board.getSquare(random.nextInt(OaklandOligarchy.NUMBER_OF_TILES));
 		while(!(randSquare instanceof Property)) {
@@ -127,6 +160,11 @@ public class ActionHandler {
 		}
 	}
 	
+	/**
+	 * Gives the given player a sum of money equal to the rent of all properties owned
+	 *
+	 * @param	p		The given player this action should effect
+	 */
 	private void firstOfMonth(Player p) {
 		int total = 0;
 		for(Property property: p.getProperties()) {
@@ -136,6 +174,11 @@ public class ActionHandler {
 		JOptionPane.showMessageDialog(null, "First of the month!\nYou have been paid rent by all tenants\n" + p.getName() + " recieved $" + total);
 	}
 	
+	/**
+	 * All players pay the given player
+	 *
+	 * @param	p		The given player this action should effect
+	 */
 	private void tapingo(Player p) {
 		for(Player player: playerList) {
 			if(player != p) {
@@ -147,6 +190,11 @@ public class ActionHandler {
 		JOptionPane.showMessageDialog(null, "Work for Tapingo delivery:\nAll players pay " + p.getName() + " $" + TAPINGO_FEE);
 	}
 	
+	/**
+	 * The given player gets a random property and loses all money
+	 *
+	 * @param	p		The player this action should effect
+	 */
 	private void significantOther(Player p) {
 		Square randSquare = board.getSquare(random.nextInt(OaklandOligarchy.NUMBER_OF_TILES));
 		while(!(randSquare instanceof Property) || !p.addProperty((Property)randSquare)) {
@@ -156,6 +204,11 @@ public class ActionHandler {
 		JOptionPane.showMessageDialog(null, "You found a significant other!\n" + p.getName() + " gained " + ((Property)randSquare).getName() + ",\nbut lost all money");
 	}
 	
+	/**
+	 * Given player pays an amount and all other players are paid a fraction of that amount
+	 *
+	 * @param	p		The player this action should effect
+	 */
 	private void qdoba(Player p) {
 		p.charge(QDOBA_DAMAGES);
 		for(Player player: playerList) {
@@ -167,12 +220,27 @@ public class ActionHandler {
 		JOptionPane.showMessageDialog(null, p.getName() + " pays $" + QDOBA_DAMAGES + "\nAll other plays recieve a $" + (QDOBA_DAMAGES / 10) + " gift card\nwhen it reopens");
 	}
 	
+	/**
+	 * Given player pays an amount and takes an additional turn
+	 *
+	 * @param	p		The player this action should effect
+	 */
 	private void uber(Player p) {
 		p.charge(UBER_COST);
 		JOptionPane.showMessageDialog(null, "Order an \"autonomous\" Uber\nYou pay $" + UBER_COST + "\nand take another turn!");
 		OaklandOligarchy.switchPhase(OaklandOligarchy.GamePhase.START, null);
 	}
 	
+	/**
+	 * Chooses a random action for a given player from:
+	 *  -Lose a random property
+	 *  -Gain a random property
+	 *  -Pay a set amount
+	 *  -All players pay you a set amount
+	 *  -Go to Jail
+	 *
+	 * @param	p		The player this action should effect
+	 */
 	private void frat(Player p) {
 		JOptionPane.showMessageDialog(null, "You rush a Fraternity...");
 		switch(random.nextInt(5)) {
@@ -217,6 +285,11 @@ public class ActionHandler {
 		}
 	}
 	
+	/**
+	 * Given player collects an amount for each property he/she owns
+	 *
+	 * @param	p		The player this action should effect
+	 */
 	private void studAct(Player p) {
 		int totalGain = 0;
 		for(Property prop: p.getProperties()) {
@@ -226,6 +299,9 @@ public class ActionHandler {
 		JOptionPane.showMessageDialog(null, "Student Activities Fee:\nCollect $" + STUDENT_ACTIVITY_FEE + " for each property you own\n" + p.getName() + " gains $" + totalGain);
 	}
 	
+	/**
+	 * All players pay twice the rent of the tile they currently occupy (regardles of owner) plus an amount
+	 */
 	private void rain() {
 		JOptionPane.showMessageDialog(null, "Major Rainstorm!\nThe drainage system overflows into the river and tenants complain about the smell...");
 		String message = "Pay twice the rent of your current tile plus $" + SMELL_COMPLAINT + "\n";
@@ -243,6 +319,9 @@ public class ActionHandler {
 		JOptionPane.showMessageDialog(null, message);
 	}
 	
+	/**
+	 * A random 3 consectutive tiles become unowned
+	 */
 	private void construction() {
 		int randInt = random.nextInt(OaklandOligarchy.NUMBER_OF_TILES);
 		Square randSquare = board.getSquare(randInt);
@@ -280,6 +359,11 @@ public class ActionHandler {
 		JOptionPane.showMessageDialog(null, "INDEFINITE Construction:\n" + prevProp.getName() + " becomes unowned\n" + midProp.getName() + " becomes unowned\n" + nextProp.getName() + " becomes unowned\n");
 	}
 	
+	/**
+	 * A given player moves to a random property that they do not own and pays rent on that property
+	 *
+	 * @param	p		The player this action should effect
+	 */
 	private void sublet(Player p) {
 		int moveTo = random.nextInt(OaklandOligarchy.NUMBER_OF_TILES);
 		Square randSquare = board.getSquare(moveTo);

@@ -7,8 +7,10 @@ import java.awt.event.*;
 import javax.swing.*;
 
 /**
- * @author Dan
- *
+ * @author Eddie Hartman
+ * @author Woodrow Fulmer
+ * @author David Haskell
+ * @author Dan Gilmour
  */
 public class OaklandOligarchy {
 	
@@ -78,6 +80,11 @@ public class OaklandOligarchy {
 		}
 	}
 	
+	/**
+	 * Generates an array of Squares (properties and actions) that will act as the game board
+	 *
+	 * @return					the array of squares to be used as a game board
+	 */
 	private static Square[] generateSquares() {
 		Square[] squareList = new Square[OaklandOligarchy.NUMBER_OF_TILES];
 		for (int i = 0; i < squareList.length; i++){
@@ -91,6 +98,11 @@ public class OaklandOligarchy {
 		return squareList;
 	}
 
+	/**
+	 * Prompts the user using a JPane to input the number of players > 1 and < 5
+	 *
+	 * @return			the integer number of players for this game 
+	 */
 	private static int promptNumPlayers() {
 
 		boolean valid_input = false;
@@ -113,6 +125,12 @@ public class OaklandOligarchy {
 		return num_players;
 	}
 
+	/**
+	 * Creates an array of players with their starting money and names
+	 *
+	 * @param	num_players		The number of players in this game
+	 * @return					The array of players in this game
+	 */
 	private static Player[] generatePlayers(int num_players) {
 
 		Player[] playerList = new Player[num_players];
@@ -124,7 +142,13 @@ public class OaklandOligarchy {
 
 		return playerList;
 	}
-
+	
+	/**
+	 * Prompts the user for their name via a JPane
+	 *
+	 * @param	playerID		the ID number of the player we are prompting for his/her name
+	 * @return					the String defining the player's name
+	 */
 	private static String promptName(int playerID) {
 		String toReturn;
 		toReturn = JOptionPane.showInputDialog("Input Name for Player " + (playerID + 1));
@@ -171,6 +195,9 @@ public class OaklandOligarchy {
 
 		
 	
+	/**
+	 *	An ActionListener which upon being triggered, will move the game into the assigned phase.
+	 */
 	private static class PhaseListener implements ActionListener {
 		GamePhase gamePhase;
 		Player player;
