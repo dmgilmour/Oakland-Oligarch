@@ -29,7 +29,7 @@ public class Window extends JFrame {
 	 * @param	ml				An ActionListener for the Move phase of a turn
 	 * @param	el				An ActionListener for the End phase of a turn
 	 */
-	public Window(Square[] squareList, Random random, ActionListener bl, ActionListener ml, ActionListener el) {
+	public Window(Square[] squareList, Random random, ActionListener bl, ActionListener ml, ActionListener el, ActionListener mortgageListener) {
 
 		boardPanel = new BoardPanel(squareList);
 
@@ -49,7 +49,7 @@ public class Window extends JFrame {
 		c.anchor = GridBagConstraints.PAGE_START;
 		this.add(topPanel, c);
 
-		statusPanel = new StatusPanel(random);
+		statusPanel = new StatusPanel(random, mortgageListener);
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.gridx = 0;
@@ -92,9 +92,7 @@ public class Window extends JFrame {
 	 * Refreshes the UI
   */
 	public void update(Player p) {
-		OaklandOligarchy.setStatusProperties(p);
-
-		statusPanel.update();
+		statusPanel.update(p);
 		boardPanel.update(p);
 		setVisible(true);
 	}
@@ -140,10 +138,6 @@ public class Window extends JFrame {
 
 	public void disableBuy() {
 		actionPanel.buyButton.setEnabled(false);
-	}
-
-	public void updateStatusProperties(ArrayList<Property> properties, ActionListener[] mortgageListeners) {
-		statusPanel.updateStatusProperties(properties, mortgageListeners);
 	}
 
 }

@@ -30,7 +30,8 @@ public class OaklandOligarchy {
 		PhaseListener buyListener = new PhaseListener(GamePhase.BUY, null);
 		PhaseListener moveListener = new PhaseListener(GamePhase.MOVE, null);
 		PhaseListener endListener = new PhaseListener(GamePhase.END, null);
-		window = new Window(squareList, random, buyListener, moveListener, endListener);
+		MortgageListener mortgageListener = new MortgageListener();
+		window = new Window(squareList, random, buyListener, moveListener, endListener, mortgageListener);
 		
 		int num_players = promptNumPlayers();
 		Player[] playerList = generatePlayers(num_players);
@@ -51,24 +52,20 @@ public class OaklandOligarchy {
 	 */
 	public static void switchPhase(GamePhase gamePhase, Player player) {
 		switch(gamePhase) {
+			case START:
+				game.startPhase();
+				break;
 			case MOVE:
 				game.movePhase();
-				setStatusProperties(game.getCurrentPlayer());
 				break;
 			case ACTION:
 				game.actionPhase();
 				break;
 			case END:
 				game.endPhase();
-				setStatusProperties(game.getCurrentPlayer());
 				break;
 			case BUY:
 				game.buyPhase();
-				setStatusProperties(game.getCurrentPlayer());
-				break;
-			case START:
-				// Make a bunch of mortgage listeners
-				game.startPhase();
 				break;
 			case TRADE:
 				game.tradePhase(player);
@@ -135,23 +132,20 @@ public class OaklandOligarchy {
 	}	
 
 	/**
-	 * Calls game to mortgage the property! 
+	 * Creates the method used by mortgage listeners that will toggle
+	 * whether a property is mortgaged or not
 	 *
-	 * @param	property	The property the player is attempting to mortgage
+	 * @param	propIndex	The index of the property to toggle
 	 */
-	private static void mortgage(Property property) {
-		game.mortgage(property);
-		window.update(property.getOwner());
-	}
-
-	/**
-	 * Calls game to unmortgage the property! 
-	 *
-	 * @param	property	The property the player is attempting to unmortgage
-	 */
-	private static void unmortgage(Property property) {
-		game.unmortgage(property);
-		window.update(property.getOwner());
+	private static void toggleMortgage(int propIndex) {
+		Player player = game.getCurrentPlayer();
+		Property prop = player.getProperty(propIndex);
+		if (prop.getMortgaged()) {
+			game.unmortgage(prop);
+		} else {
+			game.mortgage(prop);
+		}
+		window.update(player);
 	}
 
 	/**
@@ -159,17 +153,6 @@ public class OaklandOligarchy {
 	 *
 	 * @param	player		the player for which we should display their properties
 	 */
-	public static void setStatusProperties(Player player) {
-		ArrayList<Property> properties = player.getProperties();
-		MortgageListener[] mortgageListeners = new MortgageListener[properties.size()];
-		for (int i = 0; i < properties.size(); i++) {
-			mortgageListeners[i] = new MortgageListener(properties.get(i));
-		}
-
-		window.updateStatusProperties(properties, mortgageListeners);
-	}
-
-		
 	
 	private static class PhaseListener implements ActionListener {
 		GamePhase gamePhase;
@@ -190,24 +173,10 @@ public class OaklandOligarchy {
 	 * @param	prop		the property the actionlistener is trying to control
 	 */
 	private static class MortgageListener implements ActionListener {
-		Property property;
-		Boolean mortgaged;
-
-		MortgageListener(Property prop) {
-			property = prop;
-			mortgaged = property.getMortgaged();
-		}
 
 		public void actionPerformed(ActionEvent e) {
-			if (mortgaged) {
-				OaklandOligarchy.unmortgage(property);
-				mortgaged = false;
-				((JButton) e.getSource()).setText("Sell " + property.getName() + " for $" + (property.getPrice() / 2));
-			} else {
-				OaklandOligarchy.mortgage(property);
-				mortgaged = true;
-				((JButton) e.getSource()).setText("Buy back " + property.getName() + " for $" + property.getPrice());
-			}
+			int propertyIndex = Integer.parseInt(e.getActionCommand());
+			toggleMortgage(propertyIndex);
 		}
 	}
 }

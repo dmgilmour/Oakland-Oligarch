@@ -16,16 +16,18 @@ public class StatusPanel extends JPanel {
 	private Player[] playerList;
 	private int num_players;
 	private JButton[] propertyButtons;	
+	private ActionListener mortgageListener;
 
 	/**
 	 * Initializes the status panel showing players and their properties
 	 *
 	 * @param	playerList		the list of Players to be listed on this panel
 	 */
-	public StatusPanel(Random random) {
+	public StatusPanel(Random random, ActionListener ml) {
 		this.setBackground(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
 		this.setOpaque(true);
 		this.setLayout(new GridBagLayout());
+		mortgageListener = ml;
 	}
 
 	public void setPlayers(Player[] _playerList, ActionListener[] tradeListeners) {
@@ -84,10 +86,41 @@ public class StatusPanel extends JPanel {
 	/*
 	 * Updates the panel with the new money values of the players
 	 */
-	public void update() {
+	public void update(Player player) {
 
+		// Update the Player buttons text
 		for (int i = 0; i < num_players; i++) {	//Visit each status button and update the test to indicate player currency
 			playerButtons[i].setText(playerList[i].getName() + ": $" + playerList[i].getMoney());
+			if (player.getId() == i) {
+				// This turn make bold
+				playerButtons[i].setFont(playerButtons[i].getFont().deriveFont(Font.BOLD));
+			}
 		}
+
+		// Remove the previous buttons
+		Component[] buttonArr = this.getComponents();
+
+		for (int i = num_players; i < buttonArr.length; i++) {
+			this.remove(buttonArr[i]);
+		}
+
+		GridBagConstraints c = new GridBagConstraints();
+
+		// Make new Mortgage/Unmortgage buttons
+		int index = 0;
+		for (Property prop : player.getProperties()) {
+			JButton propButton = new JButton();
+			if (prop.getMortgaged()) {
+				propButton.setText(prop.getName() + ": buy back for $" + prop.getPrice());
+			} else {
+				propButton.setText(prop.getName() + ": mortgage for $" + prop.getPrice() / 2);
+			}
+			propButton.addActionListener(mortgageListener);
+			propButton.setActionCommand(Integer.toString(index));
+			c.gridy = index + num_players;
+			this.add(propButton, c);
+			index ++;
+		}
+			
 	}
 }

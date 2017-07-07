@@ -239,7 +239,6 @@ public class Game {
 			}
 		}
 
-		System.out.println("Last Player: " + remainingPlayers.get(0).getName());
 		remainingPlayers.get(0).addProperty(prop);
 		remainingPlayers.get(0).charge(topAmount);
 	}
