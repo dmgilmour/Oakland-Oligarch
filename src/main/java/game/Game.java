@@ -136,16 +136,16 @@ public class Game {
 	public void actionPhase() {
 		Player player = this.getCurrentPlayer();
 		Square square = board.getSquare(player.getPosition());
-		if(square == null) {									//Check to ensure that a tile was retrived properly from the board
+		if (square == null) {									//Check to ensure that a tile was retrived properly from the board
 			return;
 		}
 		boolean cannotBuy = square.act(player);
-		if(!cannotBuy) {
+		if (!cannotBuy) {
 			window.enableBuy();
 		}
 		loserCheck();
 		window.enableEnd();
-		if(square instanceof ActionSquare) {
+		if (square instanceof ActionSquare) {
 			actionHandler.run(player);
 		}
 		window.update(player);

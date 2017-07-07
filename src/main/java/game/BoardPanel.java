@@ -10,13 +10,14 @@ import javax.swing.*;
 public class BoardPanel extends JPanel {
 
 	private Tile[] tiles;
+	private ActionListener propertyListener;
 	
 	/**
 	 * Constructor to build the board object.
 	 * 
 	 * @param squareList	Array of squares to add to the game.
 	 */
-	public BoardPanel(Square[] squareList){
+	public BoardPanel(Square[] squareList, ActionListener pl){
 		//The buttons are just place holders for tiles right now. The layout itself is complicated 
 		//current button size is 60X60 just for easy math
 		this.setLayout(new GridBagLayout());
@@ -25,6 +26,8 @@ public class BoardPanel extends JPanel {
 		for(int i = 0; i < OaklandOligarchy.NUMBER_OF_TILES; i++){
 			if(squareList[i] instanceof Property) {
 				tiles[i] = new PropertyTile(i, (Property)squareList[i]);
+				tiles[i].getButton().setActionCommand(Integer.toString(i));
+				tiles[i].getButton().addActionListener(pl);
 			}
 			else {
 				tiles[i] = new Tile(i, squareList[i]);

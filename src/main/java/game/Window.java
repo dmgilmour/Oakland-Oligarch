@@ -28,9 +28,9 @@ public class Window extends JFrame {
 	 * @param	ml				An ActionListener for the Move phase of a turn
 	 * @param	el				An ActionListener for the End phase of a turn
 	 */
-	public Window(Square[] squareList, Random random, ActionListener bl, ActionListener ml, ActionListener el, ActionListener mortgageListener) {
+	public Window(Square[] squareList, Random random, ActionListener bl, ActionListener ml, ActionListener el, ActionListener mortgageListener, ActionListener pl) {
 
-		boardPanel = new BoardPanel(squareList);
+		boardPanel = new BoardPanel(squareList, pl);
 
 		this.setSize(width, height);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

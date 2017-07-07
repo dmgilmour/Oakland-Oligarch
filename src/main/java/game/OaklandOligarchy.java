@@ -24,16 +24,16 @@ public class OaklandOligarchy {
 	
 	private static Game game;
 	private static Window window;
+	private static Square[] squareList;
 
 	public static void main(String[] args) {
 		Random random = new Random(System.currentTimeMillis());
-		Square[] squareList = generateSquares();
+		squareList = generateSquares();
 		
 		PhaseListener buyListener = new PhaseListener(GamePhase.BUY, null);
 		PhaseListener moveListener = new PhaseListener(GamePhase.MOVE, null);
 		PhaseListener endListener = new PhaseListener(GamePhase.END, null);
-		MortgageListener mortgageListener = new MortgageListener();
-		window = new Window(squareList, random, buyListener, moveListener, endListener, mortgageListener);
+		window = new Window(squareList, random, buyListener, moveListener, endListener, new MortgageListener(), new PropertyListener());
 		
 		int num_players = promptNumPlayers();
 		Player[] playerList = generatePlayers(num_players);
@@ -172,6 +172,20 @@ public class OaklandOligarchy {
 		window.update(player);
 	}
 
+	private static void displayProperty(int propIndex) {
+		Property prop = (Property) squareList[propIndex];
+		String message = prop.getName();
+		if (prop.getOwner() == null) {
+			message += "\nUnowned";
+		} else {
+			message += "\nOwned by: " + prop.getOwner().getName();
+		}
+		message += "\nPrice to buy: $" + prop.getPrice();
+		message += "\nRent: $" + prop.getRent();
+		JOptionPane.showMessageDialog(null, message);
+	}
+
+
 	/**
 	 * Creates actionlisteners for the status panel 
 	 *
@@ -191,6 +205,15 @@ public class OaklandOligarchy {
 		}
 		public void actionPerformed(ActionEvent e) {
 			OaklandOligarchy.switchPhase(gamePhase, player);
+		}
+	}
+
+
+	private static class PropertyListener implements ActionListener {
+		
+		public void actionPerformed(ActionEvent e) {
+			int propertyIndex = Integer.parseInt(e.getActionCommand());
+			displayProperty(propertyIndex);
 		}
 	}
 
