@@ -36,7 +36,6 @@ public class StatusPanel extends JPanel {
 
 
 		GridBagConstraints c = new GridBagConstraints();
-
 		c.gridx = 0;
 
 		playerButtons = new JButton[num_players];
@@ -49,39 +48,6 @@ public class StatusPanel extends JPanel {
 			add(playerButtons[id], c);
 		}
 	}
-
-	public void updateStatusProperties(ArrayList<Property> properties, ActionListener[] mortgageListeners) {
-
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridy = this.getComponents().length;
-		c.weighty = 0.05;
-
-		if (propertyButtons != null) {
-			for (JButton button : propertyButtons) {
-				this.remove(button);
-			}
-		}
-
-		propertyButtons = new JButton[properties.size()];
-
-		for (int i = 0; i < properties.size(); i++) {
-
-			Property prop = properties.get(i);
-			propertyButtons[i] = new JButton();
-			if (prop.getMortgaged()) {
-				propertyButtons[i].setText("Buy back " + prop.getName() + " for $" + prop.getPrice());
-			} else {
-				propertyButtons[i].setText("Sell " + prop.getName() + " for $" + (prop.getPrice() / 2));
-			}
-			propertyButtons[i].addActionListener(mortgageListeners[i]);
-			this.add(propertyButtons[i], c);
-			c.gridy++;
-		}
-	}
-
-		
-
-
 
 	/*
 	 * Updates the panel with the new money values of the players
@@ -121,7 +87,7 @@ public class StatusPanel extends JPanel {
 			}
 			propButton.addActionListener(mortgageListener);
 			propButton.setActionCommand(Integer.toString(index));
-			c.gridy = index + num_players;
+			c.gridy = index + num_players + 1;
 			this.add(propButton, c);
 			index ++;
 		}
