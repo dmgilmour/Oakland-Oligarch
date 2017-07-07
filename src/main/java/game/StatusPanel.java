@@ -87,13 +87,17 @@ public class StatusPanel extends JPanel {
 	 * Updates the panel with the new money values of the players
 	 */
 	public void update(Player player) {
+		
 
 		// Update the Player buttons text
 		for (int i = 0; i < num_players; i++) {	//Visit each status button and update the test to indicate player currency
 			playerButtons[i].setText(playerList[i].getName() + ": $" + playerList[i].getMoney());
 			if (player.getId() == i) {
-				// This turn make bold
-				playerButtons[i].setFont(playerButtons[i].getFont().deriveFont(Font.BOLD));
+				playerButtons[i].setBackground(Color.BLACK);
+				playerButtons[i].setForeground(Color.GRAY);
+			} else {
+				playerButtons[i].setBackground(Color.WHITE);
+				playerButtons[i].setForeground(Color.BLACK);
 			}
 		}
 
