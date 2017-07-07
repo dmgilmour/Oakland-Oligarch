@@ -26,6 +26,9 @@ public class PropertyTile extends Tile {
 		this.add(owner);
 	}
 	
+	/**
+	 * Updates the owner label on a property tile. If the property is unowned, hides the label entirely.
+	 */
 	public void update() {
 		owner.setVisible(false);
 		if(((Property)square).getOwner() != null) {

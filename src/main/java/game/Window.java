@@ -7,8 +7,7 @@ import java.util.Random;
 import java.util.ArrayList;
 
 /**
- * @author Dan
- *
+ * @author Dan Gilmour
  */
 public class Window extends JFrame {
 
@@ -21,7 +20,7 @@ public class Window extends JFrame {
 	private BoardPanel boardPanel;
 
 	/**
-	 * Initializes the UI window
+	 * Constructor of the UI window
 	 *
 	 * @param	squareList		The list of squares to be used in this game
 	 * @param	random			A seeded psuedo-random number generator used to stylize the UI
@@ -41,7 +40,7 @@ public class Window extends JFrame {
 		c.fill = GridBagConstraints.BOTH;
 
 		topPanel = new TopPanel(random);
-		c.gridwidth = 2; // Span left panel and board
+		c.gridwidth = 2;
 		c.gridheight = 1;
 		c.gridx = 0;
 		c.gridy = 0;
@@ -90,9 +89,10 @@ public class Window extends JFrame {
 
 	/**
 	 * Refreshes the UI
-  */
+	 */
 	public void update(Player p) {
 		statusPanel.update(p);
+
 		boardPanel.update(p);
 		setVisible(true);
 	}

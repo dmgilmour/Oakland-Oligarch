@@ -5,21 +5,23 @@ import java.awt.event.*;
 import javax.swing.*;
 
 /**
- * Class that is the base class for every Tile Object on the board.
+ * Class that is the base class for every Tile Object on the BoardPanel.
  * 
- * @author Eddie
- *
+ * @author Eddie Hartman
  */
 public class Tile extends JPanel{
 
-		protected int number; // what number this tile is, identifier for the board
+		protected int number;
 		protected Square square;
 		protected JPanel players;
 		
 		public Tile() {	}
 		
 		/**
-		 * @param n	Tile number identifier so that the tile knows what number it is.
+		 * The constructor for tiles that make up the UI board
+		 *
+		 * @param	n		Tile number identifier so that the tile knows what number it is.
+		 * @param	s		The square associated with this tile
 		 */
 		public Tile(int n, Square s){
 			number = n;
@@ -36,7 +38,7 @@ public class Tile extends JPanel{
 			
 			GridBagConstraints constraint = new GridBagConstraints();
 			
-			constraint.weightx = 0.1; //This can be adjusted accordingly.
+			constraint.weightx = 0.1;
 			constraint.weighty = 0.05;
 			constraint.fill = GridBagConstraints.BOTH;
 			

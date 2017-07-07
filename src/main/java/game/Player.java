@@ -4,8 +4,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 /**
- * @author Woody
- *
+ * @author Woodrow Fulmer
  */
 public class Player {
 
@@ -13,12 +12,20 @@ public class Player {
 	private int money;
 	private String name;
 	private ArrayList<Property> properties;
-	private JLabel token; //this can be changed to whatever we decide player tokens should be
-	private int position; //current space the player is on
+	private JLabel token;
+	private int position;
 	private int oldPos;
 	private boolean hasMoved;
 	private boolean loser;
 
+	/**
+	 * The constructor for Players
+	 *
+	 * @param	id			the unique identifying number for this player
+	 * @param	money		the starting money for this player
+	 * @param	name		the name of this player
+	 * @param	properties	the starting properties that this player owns
+	 */
 	public Player (int id, int money, String name, Property[] properties) {
 		this.id = id;
 		this.money = money;
@@ -91,6 +98,12 @@ public class Player {
 		return properties;
 	}
 
+	/**
+	 * Adds a given property to this player's propertyList
+	 *
+	 * @param	property	the property to be added
+	 * @return				the success of adding this property
+	 */
 	public boolean addProperty(Property property) {
 		if(properties.contains(property))
 			return false;
@@ -100,6 +113,12 @@ public class Player {
 		return true;
 	}
 	
+	/**
+	 * Removes a property from the Player's propertyList at a given index. Also sets the owner of property to this player.
+	 *
+	 * @param	index		The index to remove the property from
+	 * @return				The property which has been removed, returns null if index was invalid
+	 */
 	public Property removeProperty(int index) {
 		if(index >= properties.size()) {
 			return null;
@@ -109,6 +128,12 @@ public class Player {
 		return prop;
 	}
 	
+	/**
+	 * Removes a given property from the Player's propertyList. Also sets the owner of property to this player.
+	 *
+	 * @param	prop		The property that should be removed
+	 * @return				The property which has been removed, returns null if index was invalid
+	 */
 	public Property removeProperty(Property prop) {
 		if(!properties.contains(prop)) {
 			return null;
@@ -125,13 +150,13 @@ public class Player {
 	 * @return 				A boolean indicating success of the purchase
 	 */
 	public boolean buy(Property property) {
-		if(property.getOwner() == null)			//check that the property is owned
+		if(property.getOwner() == null)	
 		{
 			int cost = property.getPrice();
-			if(charge(cost))					//If the charge to this player is successful:
+			if(charge(cost))
 			{
-				property.setOwner(this);		//Change the ownership of the property
-				properties.add(property);		//Add the property to the list of those owned by this players
+				property.setOwner(this);
+				properties.add(property);
 				return true;
 			}
 			else
@@ -168,9 +193,9 @@ public class Player {
 	public boolean payRent(Property property) {
 		int cost = property.getRent();
 		Player owner = property.getOwner();
-		boolean success = charge(cost);			//Attempt to charge this player
-		if(success && owner != null)			//If the charge is successful:
-			owner.getPaid(cost);				//then pay the owner of the property
+		boolean success = charge(cost);	
+		if(success && owner != null)
+			owner.getPaid(cost);
 		return success;
 	}
 
