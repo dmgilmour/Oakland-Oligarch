@@ -200,47 +200,39 @@ public class Game {
 	public void auctionPhase() {
 		ArrayList<Player> remainingPlayers = new ArrayList<Player>(Arrays.asList(playerList));
 		int i = 0;
-		boolean goneAround = false;
 		remainingPlayers.remove(getCurrentPlayer());
+		Player highestBidder = null;
 		Property prop = (Property) board.getSquare(getCurrentPlayer().getPosition());
 		int topAmount = prop.getPrice();
-		while (remainingPlayers.size() > 1) {
-			if (i >= remainingPlayers.size()) {
-				goneAround = true;
-				i %= remainingPlayers.size();
-			}
-			boolean invalidInput = true;
-			while (invalidInput) {
+		while ((remainingPlayers.size() > 1 || highestBidder == null) && remainingPlayers.size() > 0) {
+			i %= remainingPlayers.size();
+			while (true) {
 				String amountString = JOptionPane.showInputDialog(remainingPlayers.get(i).getName() + ": Input a bid above $" + topAmount + " or cancel");
 				if (amountString == null) {
 					remainingPlayers.remove(i);
-					invalidInput = false;
+					break;
 				} else {
 					try {
 						int amount = Integer.parseInt(amountString);
-						if (amount < topAmount) {
-							invalidInput = true;
+						if (amount <= topAmount) {
+							continue;
 						} else {
 							topAmount = amount;
+							highestBidder = remainingPlayers.get(i);
 							i++;
-							invalidInput = false;
+							break;
 						}
 					} catch (NumberFormatException e) {
-						invalidInput = true;
-
+						continue;
 					}
 				}
 			}
 		}
 
-    if (!goneAround) {
-			if (JOptionPane.showConfirmDialog(null, remainingPlayers.get(0).getName() + ": Would you like to buy this property for $" + topAmount + "?") != JOptionPane.YES_OPTION) {
-				return;
-			}
+		if (highestBidder != null) {
+			highestBidder.addProperty(prop);
+			highestBidder.charge(topAmount);
 		}
-
-		remainingPlayers.get(0).addProperty(prop);
-		remainingPlayers.get(0).charge(topAmount);
 	}
 
 
