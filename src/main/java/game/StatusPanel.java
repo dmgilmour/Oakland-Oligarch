@@ -79,6 +79,9 @@ public class StatusPanel extends JPanel {
 			JButton propButton = new JButton();
 			if (prop.getMortgaged()) {
 				propButton.setText(prop.getName() + ": buy back for $" + prop.getPrice());
+				if (player.getMoney() <= prop.getPrice()) {
+					propButton.setEnabled(false);
+				}
 			} else {
 				propButton.setText(prop.getName() + ": mortgage for $" + prop.getPrice() / 2);
 			}

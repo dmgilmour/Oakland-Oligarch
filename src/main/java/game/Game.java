@@ -143,6 +143,8 @@ public class Game {
 		if (square == null) {									//Check to ensure that a tile was retrived properly from the board
 			return;
 		}
+		// Either charges or prompts player to purchase depending on whether
+		// it is owned or not
 		boolean cannotBuy = square.act(player);
 		if (!cannotBuy) {
 			window.enableBuy();

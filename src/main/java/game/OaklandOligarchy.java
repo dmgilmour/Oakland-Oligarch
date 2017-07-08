@@ -21,9 +21,9 @@ public class OaklandOligarchy {
 	public static final int NUMBER_OF_TILES = 36;
 	public static final int NUMBER_OF_PROPERTIES = 28;
 	public static final int MAX_NUMBER_OF_PLAYERS = 4;
-	public static int PLAYER_STARTING_MONEY;
 	public static final int NUMBER_OF_ACTIONS = 14;
-	public static final int GO_PAYOUT = 20;
+	public static int PLAYER_STARTING_MONEY;
+	public static int GO_PAYOUT;
 	
 	private static final String FILENAME = "PropertyList.txt";
 	private static Scanner reader;
@@ -43,6 +43,7 @@ public class OaklandOligarchy {
 		}
 
 		PLAYER_STARTING_MONEY = reader.nextInt();
+		GO_PAYOUT = PLAYER_STARTING_MONEY / 10;
 
 		squareList = generateSquares();
 		
