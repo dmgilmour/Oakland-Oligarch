@@ -375,7 +375,7 @@ public class ActionHandler {
 		if(moveAmount < 0) {
 			moveAmount += OaklandOligarchy.NUMBER_OF_TILES;
 		}
-		board.movePlayer(p, moveAmount);
+		p.moveDistance(moveAmount);
 		Property randProp = (Property)randSquare;
 		p.payRent(randProp);
 		JOptionPane.showMessageDialog(null, "Become a subletter:\n" + p.getName() + " moves to " + randProp.getName() + "\nand pays $" + randProp.getRent());

@@ -87,6 +87,18 @@ public class Player {
 		hasMoved = true;
 	}
 
+	public boolean moveDistance(int dist) {
+		if (position + dist >= OaklandOligarchy.NUMBER_OF_TILES) {
+			this.getPaid(OaklandOligarchy.GO_PAYOUT);
+			this.setPosition((position + dist) % OaklandOligarchy.NUMBER_OF_TILES);
+			return true;
+		} else {
+			this.setPosition(position + dist);
+			return false;
+		}
+	}
+		
+
 	public int getMoney() {
 		return money;
 	}

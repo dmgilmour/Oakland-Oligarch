@@ -21,6 +21,7 @@ public class OaklandOligarchy {
 	public static final int MAX_NUMBER_OF_PLAYERS = 4;
 	public static final int PLAYER_STARTING_MONEY = 200;
 	public static final int NUMBER_OF_ACTIONS = 14;
+	public static final int GO_PAYOUT = 20;
 	
 	private static Game game;
 	private static Window window;

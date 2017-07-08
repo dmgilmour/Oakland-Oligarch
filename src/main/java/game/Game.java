@@ -77,12 +77,16 @@ public class Game {
 	public void movePhase() {
 		int roll[] = roll(System.currentTimeMillis());		
 
-		board.movePlayer(this.getCurrentPlayer(), roll[0] + roll[1]);
+		boolean collectGoMoney;
+		collectGoMoney = this.getCurrentPlayer().moveDistance(roll[0] + roll[1]);
 
 		String squareName = board.getSquare(this.getCurrentPlayer().getPosition()).getName(); 
 		String message = "You rolled a " + roll[0] + " and a " + roll[1] + " and landed on " + squareName; 
 		if (roll[0] == roll[1]) {
 			message += "\nYou got doubles!";
+		}
+		if (collectGoMoney) {
+			message += "\nYou passed go and collected " + OaklandOligarchy.GO_PAYOUT;
 		}
 		JOptionPane.showMessageDialog(null, message);
 
