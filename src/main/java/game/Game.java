@@ -11,7 +11,6 @@ import javax.swing.*;
  */
 public class Game {
 
-	private boolean rollTaken;
 	private int playerTurn;
 	private int num_players;
 	private int active_players;
@@ -35,7 +34,6 @@ public class Game {
 		window = w;
 		actionHandler = new ActionHandler(board, playerList, random);
 		playerTurn = 0;
-		rollTaken = false;
     num_players = playerList.length;
 		active_players = num_players;
 	}
@@ -62,7 +60,6 @@ public class Game {
 	 */
 	public void startPhase() {
 		window.update(this.getCurrentPlayer());
-		rollTaken = false;			
 
 		window.disableEnd();
 		window.disableBuy();
@@ -91,7 +88,13 @@ public class Game {
 		JOptionPane.showMessageDialog(null, message);
 
 		window.update(this.getCurrentPlayer());
-		window.disableRoll();
+		if (roll[0] != roll[1]) {
+			window.disableRoll();
+			window.enableEnd();
+		} else {
+			window.enableRoll();
+			window.disableEnd();
+		}
 		actionPhase();
 	}
 
@@ -121,17 +124,11 @@ public class Game {
 	 * @returns					An integer value between 2-12 that is the result of rolling 2 six-sided dice
 	 */
 	private int[] roll(Long timeMillis) {
-		if(!rollTaken) {
-			Random rand = new Random(timeMillis);
-			rollTaken = true;
-			int[] roll = new int[2];
-			roll[0] = rand.nextInt(6) + 1;	
-			roll[1] = rand.nextInt(6) + 1;	
-			return roll;
-		}
-		else {
-			return new int[] {-1, -1};
-		}
+		Random rand = new Random(timeMillis);
+		int[] roll = new int[2];
+		roll[0] = rand.nextInt(6) + 1;	
+		roll[1] = rand.nextInt(6) + 1;	
+		return roll;
 	}
 
 	/**
@@ -150,7 +147,6 @@ public class Game {
 			window.enableBuy();
 		}
 		loserCheck();
-		window.enableEnd();
 		if (square instanceof ActionSquare) {
 			actionHandler.run(player);
 		}
