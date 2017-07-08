@@ -3,8 +3,7 @@ package game;
 import javax.swing.*;
 
 /**
- * @author David
- *
+ * @author David Haskell
  */
 public class Property extends Square{
 	private int price;
@@ -18,9 +17,9 @@ public class Property extends Square{
 	 * mortgaged, and ownerToken.
 	 * name, price, and rent are parameters passed when the constructor is called.
 	 * owner, mortgaged, and ownerToken are Initialized to null, false, and null.
-	 * @param n name of property
-	 * @param p price of property
-	 * @param r rent of property
+	 * @param n the name of property
+	 * @param p the price of property
+	 * @param r the rent of property
 	 */
 	public Property(String n, int p, int r){
 		name = n;

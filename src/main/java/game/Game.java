@@ -338,7 +338,7 @@ public class Game {
 			trader.charge(traderProfit);
 		}
 	}
-
+  
 	/**
 	 * checks to see if a player has lost. If a loser is found, that player is marked as
 	 * a loser and the number of active_players is decremented. If the number of active_players

@@ -7,8 +7,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 /**
- * @author Dan
- *
+ * @author Dan Gilmour
  */
 public class StatusPanel extends JPanel {
 	
@@ -20,7 +19,7 @@ public class StatusPanel extends JPanel {
 	/**
 	 * Initializes the status panel showing players and their properties
 	 *
-	 * @param	playerList		the list of Players to be listed on this panel
+	 * @param	random		A psuedo-random number generator used to select the background color
 	 */
 	public StatusPanel(Random random) {
 		this.setBackground(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
@@ -31,7 +30,6 @@ public class StatusPanel extends JPanel {
 	public void setPlayers(Player[] _playerList, ActionListener[] tradeListeners) {
 		playerList = _playerList;
 		num_players = playerList.length;
-
 
 		GridBagConstraints c = new GridBagConstraints();
 
@@ -48,8 +46,13 @@ public class StatusPanel extends JPanel {
 		}
 	}
 
+	/**
+	 * Updates the status panel to hold buttons for each mortgagable property that the current player owns
+	 *
+	 * @param	properties			A list of properties owned by the player whose turn it is
+	 * @param	mortgageListeners	An array of ActionListeners for each mortgagable property
+	 */
 	public void updateStatusProperties(ArrayList<Property> properties, ActionListener[] mortgageListeners) {
-
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridy = this.getComponents().length;
 		c.weighty = 0.05;
@@ -77,16 +80,12 @@ public class StatusPanel extends JPanel {
 		}
 	}
 
-		
-
-
-
-	/*
+	/**
 	 * Updates the panel with the new money values of the players
 	 */
 	public void update() {
 
-		for (int i = 0; i < num_players; i++) {	//Visit each status button and update the test to indicate player currency
+		for (int i = 0; i < num_players; i++) {
 			playerButtons[i].setText(playerList[i].getName() + ": $" + playerList[i].getMoney());
 		}
 	}
