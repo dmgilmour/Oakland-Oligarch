@@ -1,34 +1,38 @@
 1500
 
-South O - After Boulevard
-	Griffiths		60	20
-	Parkview Ave		60	30
-	Juliet			80	30
-West O
-	Robinson		100	40		
-	Allequippa		100	50
-	Oak Hill		120	50
-South O - Before Boulevard
-	Ward Street		140	60
-	Bates			140	70
-	Atwood			160	70
-North O
-	Melwood			180	80
-	Dithridge		180	90
-	Craig			200	90
-Dorms
-	Towers			220	100
-	Sutherland		220	110
-	Nordenberg		240	110
-On-Campus apartments
-	Ruskin Hall		260	120
-	Bouquet Gardens		260	130
-	Skyvue			280	130
-Sports Facilities
-	Trees Hall		300	140
-	Cost Field		320	150
-	Peterson Events Center	340	160
-Academic Buildings
-	Lawrence Hall / WPU	360	180
-	Benedum Hall		400	210
-	Cathedral of Learning	460	250
+	South O - After Boulevard
+0		Griffiths		60	20
+1		Parkview Ave		60	30
+	West O
+4		Robinson		100	40		
+5		Allequippa		100	50
+6		Oak Hill		120	50
+	South O - Before Boulevard
+9		Ward Street		140	60
+10		Bates			140	70
+11		Atwood			160	70
+	North O
+14		Melwood			180	80
+15		Dithridge		180	90
+16		Craig			200	90
+	Dorms
+19		Towers			220	100
+20		Sutherland		220	110
+21		Nordenberg		240	110
+	On-Campus apartments
+24		Ruskin Hall		260	120
+25		Bouquet Gardens		260	130
+26		Skyvue			280	130
+	Sports Facilities
+29		Trees Hall		300	140
+30		Cost Field		320	150
+31		Peterson Events Center	340	160
+	Academic Buildings
+34		Benedum Hall		400	210
+35		Cathedral of Learning	460	250
+
+
+
+
+
+

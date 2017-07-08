@@ -1,7 +1,9 @@
 package game;
 
 import java.util.Random;
+import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.File;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -19,16 +21,29 @@ public class OaklandOligarchy {
 	public static final int NUMBER_OF_TILES = 36;
 	public static final int NUMBER_OF_PROPERTIES = 28;
 	public static final int MAX_NUMBER_OF_PLAYERS = 4;
-	public static final int PLAYER_STARTING_MONEY = 200;
+	public static int PLAYER_STARTING_MONEY;
 	public static final int NUMBER_OF_ACTIONS = 14;
 	public static final int GO_PAYOUT = 20;
 	
+	private static final String FILENAME = "PropertyList.txt";
+	private static Scanner reader;
+
 	private static Game game;
 	private static Window window;
 	private static Square[] squareList;
+	
 
 	public static void main(String[] args) {
 		Random random = new Random(System.currentTimeMillis());
+
+		try {
+			reader = new Scanner(new File(FILENAME));
+		} catch (Exception e) {
+			System.exit(1);
+		}
+
+		PLAYER_STARTING_MONEY = reader.nextInt();
+
 		squareList = generateSquares();
 		
 		PhaseListener buyListener = new PhaseListener(GamePhase.BUY, null);
@@ -77,7 +92,7 @@ public class OaklandOligarchy {
 				break;
 		}
 	}
-	
+
 	/**
 	 * Generates an array of Squares (properties and actions) that will act as the game board
 	 *
@@ -85,6 +100,27 @@ public class OaklandOligarchy {
 	 */
 	private static Square[] generateSquares() {
 		Square[] squareList = new Square[OaklandOligarchy.NUMBER_OF_TILES];
+		
+		while (reader.hasNextLine()) {
+			String[] input = reader.nextLine().split("\t+");	
+			if (input.length != 4) continue;
+			try {
+				squareList[Integer.parseInt(input[0])] = new Property(input[1], Integer.parseInt(input[2]), Integer.parseInt(input[3]));
+			} catch (NumberFormatException e) {
+				continue;
+			}
+		}
+
+		for (int i = 0; i < squareList.length; i++) {
+			if (squareList[i] == null) {
+				squareList[i] = new ActionSquare("Action");
+			}
+		}
+		reader.close();
+		return squareList;
+
+
+		/*
 		for (int i = 0; i < squareList.length; i++){
 			if(i == 4 || i == 5 || i == 13 || i == 14 || i == 22 || i == 23 || i == 31 || i == 32) {
 				squareList[i] = new ActionSquare("Action "+i);
@@ -94,6 +130,7 @@ public class OaklandOligarchy {
 			}
 		}
 		return squareList;
+		*/
 	}
 
 	/**

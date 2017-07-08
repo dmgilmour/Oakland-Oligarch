@@ -5,6 +5,13 @@ import game.Player;
 import game.Property;
 
 public class playerTest {	
+
+	@Before
+	public void setup() throws Exception {
+		Player p1 = new Player(0, 2000, "P1", null);
+	}
+
+
 	@Test
 	public void testBuy()
 	{
