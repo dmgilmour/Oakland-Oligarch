@@ -13,11 +13,13 @@ public class Property extends Square{
 	private JLabel ownerToken;
 
 	/**
-	 * The constuctor for a Property
-	 *
-	 * @param	n		the name of the property
-	 * @param	p		the price of this property
-	 * @param	r		the rent for this property
+	 * Constructor for property object. Initializes name, pice, rent, owner,
+	 * mortgaged, and ownerToken.
+	 * name, price, and rent are parameters passed when the constructor is called.
+	 * owner, mortgaged, and ownerToken are Initialized to null, false, and null.
+	 * @param n the name of property
+	 * @param p the price of property
+	 * @param r the rent of property
 	 */
 	public Property(String n, int p, int r){
 		name = n;
@@ -28,26 +30,50 @@ public class Property extends Square{
 		ownerToken = null;
 	}
 
+	/**
+	 * Returns the name of a property as a String.
+	 * @return 		name of property.
+	 */
 	public String getName(){
 		return name;
 	}
 
+	/**
+	 * Returns the price of a property as an integer.
+	 * @return 		price of property.
+	 */
 	public int getPrice(){
 		return price;
 	}
 
+	/**
+	 * Returns the rent of a property as an integer.
+	 * @return 		rent of property.
+	 */
 	public int getRent(){
 		return rent;
 	}
 
+	/**
+	 * Returns the owner of a property as a Player object.
+	 * @return 		owner of property.
+	 */
 	public Player getOwner(){
 		return owner;
 	}
 
+	/**
+	 * Returns the ownerToken of the property as a JLabel.
+	 * @return 		ownerToken of property.
+	 */
 	public JLabel getOwnerToken() {
 		return ownerToken;
 	}
-  
+
+	/**
+	 * Sets the owner and ownerToken of a property.
+	 * @param p Player to be set as owner of property.
+	 */
 	public void setOwner(Player p){
 		owner=p;
 		if(owner == null) {
@@ -59,7 +85,7 @@ public class Property extends Square{
 	}
 
 	/**
-	 * Performs the action on a property square. If the property is owned, this makes the player pay rent 
+	 * Performs the action on a property square. If the property is owned, this makes the player pay rent
 	 * on the property and is alerted. If the property is unowned, the player is prompted to purchase this property.
 	 *
 	 * @param	player		The player that this property is interacting with
@@ -89,10 +115,18 @@ public class Property extends Square{
 		}
 	}
 
+	/**
+	 * Sets mortgaged boolean of a property indicating if the property is mortgaged(true) or not(false).
+	 * @param _mortgaged boolean to be set as mortgaged.
+	 */
 	public void setMortgaged(boolean _mortgaged) {
 		mortgaged = _mortgaged;
 	}
 
+	/**
+	 * Returns mortgaged boolean of property.
+	 * @return 		returns if the property is mortgaged(true) or not(false).
+	 */
 	public boolean getMortgaged() {
 		return mortgaged;
 	}
