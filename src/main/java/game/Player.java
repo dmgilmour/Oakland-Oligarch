@@ -17,6 +17,7 @@ public class Player {
 	private int oldPos;
 	private boolean hasMoved;
 	private boolean loser;
+	private int color;
 
 	/**
 	 * The constructor for Players
@@ -207,5 +208,13 @@ public class Player {
 	public void getPaid(int payment) {
 		if(payment > 0)
 			money += payment;
+	}
+
+	public void setColor(int c) {
+		color = c;
+	}
+
+	public int getColor() {
+		return color;
 	}
 }

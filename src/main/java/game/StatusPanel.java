@@ -56,11 +56,11 @@ public class StatusPanel extends JPanel {
 		for (int i = 0; i < num_players; i++) {	//Visit each status button and update the test to indicate player currency
 			playerButtons[i].setText(playerList[i].getName() + ": $" + playerList[i].getMoney());
 			if (player.getId() == i) {
-				playerButtons[i].setBackground(Color.BLACK);
-				playerButtons[i].setForeground(Color.GRAY);
-			} else {
-				playerButtons[i].setBackground(Color.WHITE);
+				playerButtons[i].setBackground(new Color(playerList[i].getColor()));
 				playerButtons[i].setForeground(Color.BLACK);
+			} else {
+				playerButtons[i].setBackground(Color.BLACK);
+				playerButtons[i].setForeground(new Color(playerList[i].getColor()));
 			}
 		}
 

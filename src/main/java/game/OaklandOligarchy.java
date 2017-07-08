@@ -135,6 +135,21 @@ public class OaklandOligarchy {
 		for (int i = 0; i < num_players; i++) {
 			String playerName = promptName(i);
 			playerList[i] = new Player(i, PLAYER_STARTING_MONEY, playerName, null);
+			switch(i) {
+				case 0:
+					playerList[i].setColor(0xFFA9A9);
+					;
+					break;
+				case 1:
+					playerList[i].setColor(0xA9BDFF);
+					break;
+				case 2:
+					playerList[i].setColor(0xFAFFA9);
+					break;
+				case 3:
+					playerList[i].setColor(0xA9FFB5);
+					break;
+			}
 		}
 
 		return playerList;
