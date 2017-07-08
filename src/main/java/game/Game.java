@@ -21,7 +21,7 @@ public class Game {
 	private Window window;
 	private Player[] playerList;
 	private ActionHandler actionHandler;
-	
+
 	/**
 	 * Initializes the Game object
 	 *
@@ -40,18 +40,34 @@ public class Game {
 		active_players = num_players;
 	}
 
+	/**
+	 * Rerturns the value of playerTurn.
+	 * @return 		playerTurn as an integer.
+	 */
 	public int getTurn() {
 		return playerTurn;
 	}
 
+	/**
+	 * Returns the number of players in the game.
+	 * @return 		num_players as an integer.
+	 */
 	public int getNumPlayers(){
 		return num_players;
 	}
 
+	/**
+	 * Returns the list of Players.
+	 * @return 		playerList as an array of Player objects.
+	 */
 	public Player[] getPlayers(){
 		return playerList;
 	}
 
+	/**
+	 * Resturns the Player whose current turn it is.
+	 * @return 		playerList[playerTurn] as a Player object.
+	 */
 	public Player getCurrentPlayer() {
 		return playerList[playerTurn];
 	}
@@ -62,7 +78,7 @@ public class Game {
 	 */
 	public void startPhase() {
 		window.update(this.getCurrentPlayer());
-		rollTaken = false;			
+		rollTaken = false;
 
 		window.disableEnd();
 		window.disableBuy();
@@ -75,7 +91,7 @@ public class Game {
 	 * Runs the game phase during which players roll and move
 	 */
 	public void movePhase() {
-		int roll = roll(System.currentTimeMillis());		
+		int roll = roll(System.currentTimeMillis());
 		board.movePlayer(this.getCurrentPlayer(), roll);
 		window.update(this.getCurrentPlayer());
 		window.disableRoll();
@@ -192,10 +208,10 @@ public class Game {
 		trade(tradee, traderProperties, tradeeProperties, traderProfit);
 		window.update(trader);
 		return true;
-	}	
+	}
 
 	/**
-	 * Runs the game phase where the property is auctioned to the other players 
+	 * Runs the game phase where the property is auctioned to the other players
 	 */
 	public void auctionPhase() {
 		ArrayList<Player> remainingPlayers = new ArrayList<Player>(Arrays.asList(playerList));
@@ -257,17 +273,17 @@ public class Game {
 		for (int i = 0; i < playerProperties.size(); i++) {
 			propList[i] = playerProperties.get(i).getName();
 		}
-		JList list = new JList(propList); 
+		JList list = new JList(propList);
 
 		JOptionPane.showMessageDialog(null, list, player.getName(), JOptionPane.PLAIN_MESSAGE);
 		int[] tradeProperties = list.getSelectedIndices();
 		Property[] toReturn = new Property[tradeProperties.length];
 		for (int i = 0; i < toReturn.length; i++) {
-			toReturn[i] = playerProperties.get(tradeProperties[i]); 
+			toReturn[i] = playerProperties.get(tradeProperties[i]);
 		}
 		return toReturn;
 	}
-		
+
 
 	/**
 	 * Will set the property to mortgaged and give the player have the price
@@ -322,7 +338,7 @@ public class Game {
 			trader.charge(traderProfit);
 		}
 	}
-				
+  
 	/**
 	 * checks to see if a player has lost. If a loser is found, that player is marked as
 	 * a loser and the number of active_players is decremented. If the number of active_players
