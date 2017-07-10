@@ -103,7 +103,8 @@ public class Player {
 	public boolean addProperty(Property property) {
 		if(properties.contains(property))
 			return false;
-		property.setOwner(this);
+		Player owner = property.getOwner();
+		owner.removeProperty(property);
 		properties.add(property);
 		property.setOwner(this);
 		return true;
