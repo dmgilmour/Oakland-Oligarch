@@ -87,6 +87,27 @@ public class OaklandOligarchy {
 	 */
 	private static Square[] generateSquares() {
 		Square[] squareList = new Square[OaklandOligarchy.NUMBER_OF_TILES];
+		
+		while (reader.hasNextLine()) {
+			String[] input = reader.nextLine().split("\t+");	
+			if (input.length != 4) continue;
+			try {
+				squareList[Integer.parseInt(input[0])] = new Property(input[1], Integer.parseInt(input[2]), Integer.parseInt(input[3]));
+			} catch (NumberFormatException e) {
+				continue;
+			}
+		}
+
+		for (int i = 0; i < squareList.length; i++) {
+			if (squareList[i] == null) {
+				squareList[i] = new ActionSquare("Action");
+			}
+		}
+		reader.close();
+		return squareList;
+
+
+		/*
 		for (int i = 0; i < squareList.length; i++){
 			if(i == 4 || i == 5 || i == 13 || i == 14 || i == 22 || i == 23 || i == 31 || i == 32) {
 				squareList[i] = new ActionSquare("Action "+i);
@@ -96,6 +117,7 @@ public class OaklandOligarchy {
 			}
 		}
 		return squareList;
+		*/
 	}
 
 	/**
