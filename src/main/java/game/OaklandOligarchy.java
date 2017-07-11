@@ -30,17 +30,53 @@ public class OaklandOligarchy {
 	private static Game game;
 	private static Window window;
 	private static Square[] squareList;
+	private static Random random;
 	
 
 	public static void main(String[] args) {
-		startGame(FILENAME);
+		random = new Random(System.currentTimeMillis());
+		File file = new File(FILENAME);
+		int[] ownersList = initializeBoard(file);
+		
+		//Reset the scanner before initializeGame
+		try {
+			reader = new Scanner(file);
+		} catch (Exception e) {
+			System.exit(1);
+		}
+		int num_players = 0;
+		int wantToLoad = JOptionPane.showConfirmDialog(null, "Would you like to load a game?", "Load Game", JOptionPane.YES_NO_OPTION);
+		if(wantToLoad == JOptionPane.YES_OPTION) {
+			JFileChooser chooser = new JFileChooser();
+			int choice = chooser.showOpenDialog(null);
+			if(choice == JFileChooser.APPROVE_OPTION) {
+				file = chooser.getSelectedFile();
+				window.dispose();
+				ownersList = initializeBoard(file);
+				try {
+					reader = new Scanner(file);
+				} catch (Exception e) {
+					System.exit(1);
+				}
+				reader.nextInt();
+				num_players = reader.nextInt();
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Error retrieving file\nStarting new game...");
+				num_players = promptNumPlayers();
+			}
+		}
+		else {
+			num_players = promptNumPlayers();
+		}
+		
+		
+		initializeGame(num_players, ownersList);
 	}
 	
-	public static void startGame(String fileName) {
-		Random random = new Random(System.currentTimeMillis());
-
+	public static int[] initializeBoard(File file) {
 		try {
-			reader = new Scanner(new File(fileName));
+			reader = new Scanner(file);
 		} catch (Exception e) {
 			System.exit(1);
 		}
@@ -54,12 +90,10 @@ public class OaklandOligarchy {
 		PhaseListener endListener = new PhaseListener(GamePhase.END, null);
 		window = new Window(squareList, random, buyListener, moveListener, endListener);
 		
-		int num_players = promptNumPlayers();
-		try {
-			reader = new Scanner(new File(fileName));
-		} catch (Exception e) {
-			System.exit(1);
-		}
+		return ownersList;
+	}
+	
+	public static void initializeGame(int num_players, int[] ownersList) {
 		Player[] playerList = generatePlayers(num_players, ownersList);
 	
 		game = new Game(playerList, squareList, window, random);
@@ -193,7 +227,6 @@ public class OaklandOligarchy {
 			if(playerName.equals("null")) {
 				playerName = promptName(playersAdded);
 			}
-			System.out.println(playerName);
 			try {
 				playerList[playersAdded] = new Player(playersAdded, Integer.parseInt(input[2]), playerName);
 			} catch (NumberFormatException e) {
