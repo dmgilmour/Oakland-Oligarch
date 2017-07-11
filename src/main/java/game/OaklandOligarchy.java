@@ -217,7 +217,8 @@ public class OaklandOligarchy {
 	 */
 	private static void toggleMortgage(int propIndex) {
 		Player player = game.getCurrentPlayer();
-		Property prop = player.getProperty(propIndex);
+		
+		Property prop = player.getProperties().get(propIndex);
 		if (prop.getMortgaged()) {
 			game.unmortgage(prop);
 		} else {

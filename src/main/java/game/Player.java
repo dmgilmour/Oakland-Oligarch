@@ -103,10 +103,6 @@ public class Player {
 		return money;
 	}
 
-	public Property getProperty(int index) {
-		return properties.get(index);
-	}
-
 	public ArrayList<Property> getProperties() {
 		return properties;
 	}
