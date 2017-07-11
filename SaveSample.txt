@@ -1,0 +1,34 @@
+200
+null		0xFFA9A9	1500	null
+null		0xA9BDFF	1500	null
+null		0xFAFFA9	1500	null
+null		0xA9FFB5	1500	null
+
+0	Griffiths		60	20	-1
+1	Parkview Ave		60	30	-1
+4	Robinson		100	40	-1	
+5	Allequippa		100	50	-1
+6	Oak Hill		120	50	-1
+9	Ward Street		140	60	-1
+10	Bates			140	70	-1
+11	Atwood			160	70	-1
+14	Melwood			180	80	-1
+15	Dithridge		180	90	-1
+16	Craig			200	90	-1
+19	Towers			220	100	-1
+20	Sutherland		220	110	-1
+21	Nordenberg		240	110	-1
+24	Ruskin Hall		260	120	-1
+25	Bouquet Gardens		260	130	-1
+26	Skyvue			280	130	-1
+29	Trees Hall		300	140	-1
+30	Cost Field		320	150	-1
+31	Peterson Events Center	340	160	-1
+34	Benedum Hall		400	210	-1
+35	Cathedral of Learning	460	250	-1
+
+
+
+
+
+

@@ -19,13 +19,12 @@ public class OaklandOligarchy {
 	public enum GamePhase {MOVE, ACTION, END, START, BUY, TRADE};
 	
 	public static final int NUMBER_OF_TILES = 36;
-	public static final int NUMBER_OF_PROPERTIES = 28;
 	public static final int MAX_NUMBER_OF_PLAYERS = 4;
 	public static final int NUMBER_OF_ACTIONS = 14;
 	public static int PLAYER_STARTING_MONEY;
 	public static int GO_PAYOUT;
 	
-	private static final String FILENAME = "PropertyList.txt";
+	private static final String FILENAME = "SaveSample.txt";
 	private static Scanner reader;
 
 	private static Game game;
@@ -34,18 +33,21 @@ public class OaklandOligarchy {
 	
 
 	public static void main(String[] args) {
+		startGame(FILENAME);
+	}
+	
+	public static void startGame(String fileName) {
 		Random random = new Random(System.currentTimeMillis());
 
 		try {
-			reader = new Scanner(new File(FILENAME));
+			reader = new Scanner(new File(fileName));
 		} catch (Exception e) {
 			System.exit(1);
 		}
 
-		PLAYER_STARTING_MONEY = reader.nextInt();
-		GO_PAYOUT = PLAYER_STARTING_MONEY / 10;
+		GO_PAYOUT = reader.nextInt();
 
-		squareList = generateSquares();
+		int[] ownersList = generateSquares();
 		
 		PhaseListener buyListener = new PhaseListener(GamePhase.BUY, null);
 		PhaseListener moveListener = new PhaseListener(GamePhase.MOVE, null);
@@ -53,7 +55,12 @@ public class OaklandOligarchy {
 		window = new Window(squareList, random, buyListener, moveListener, endListener);
 		
 		int num_players = promptNumPlayers();
-		Player[] playerList = generatePlayers(num_players);
+		try {
+			reader = new Scanner(new File(fileName));
+		} catch (Exception e) {
+			System.exit(1);
+		}
+		Player[] playerList = generatePlayers(num_players, ownersList);
 	
 		game = new Game(playerList, squareList, window, random);
 		PhaseListener[] tradeListeners = new PhaseListener[num_players];
@@ -61,6 +68,7 @@ public class OaklandOligarchy {
 			tradeListeners[i] = new PhaseListener(GamePhase.TRADE, playerList[i]);
 		}
 		window.setPlayers(playerList, tradeListeners);
+		reader.close();
 		game.startPhase();
 	}
 
@@ -103,14 +111,17 @@ public class OaklandOligarchy {
 	 *
 	 * @return					the array of squares to be used as a game board
 	 */
-	private static Square[] generateSquares() {
-		Square[] squareList = new Square[OaklandOligarchy.NUMBER_OF_TILES];
+	private static int[] generateSquares() {
+		squareList = new Square[OaklandOligarchy.NUMBER_OF_TILES];
+		int[] resultList = new int[NUMBER_OF_TILES];
 		
 		while (reader.hasNextLine()) {
 			String[] input = reader.nextLine().split("\t+");	
-			if (input.length != 4) continue;
+			if (input.length != 5) continue;
 			try {
-				squareList[Integer.parseInt(input[0])] = new Property(input[1], Integer.parseInt(input[2]), Integer.parseInt(input[3]));
+				int current = Integer.parseInt(input[0]);
+				squareList[current] = new Property(input[1], Integer.parseInt(input[2]), Integer.parseInt(input[3]));
+				resultList[current] = Integer.parseInt(input[4]);
 			} catch (NumberFormatException e) {
 				continue;
 			}
@@ -119,10 +130,10 @@ public class OaklandOligarchy {
 		for (int i = 0; i < squareList.length; i++) {
 			if (squareList[i] == null) {
 				squareList[i] = new ActionSquare("Action");
+				resultList[i] = -1;
 			}
 		}
-		reader.close();
-		return squareList;
+		return resultList;
 
 
 		/*
@@ -171,13 +182,31 @@ public class OaklandOligarchy {
 	 * @param	num_players		The number of players in this game
 	 * @return					The array of players in this game
 	 */
-	private static Player[] generatePlayers(int num_players) {
+	private static Player[] generatePlayers(int num_players, int[] ownersList) {
 
 		Player[] playerList = new Player[num_players];
-
-		for (int i = 0; i < num_players; i++) {
-			String playerName = promptName(i);
-			playerList[i] = new Player(i, PLAYER_STARTING_MONEY, playerName, null);
+		int playersAdded = 0;
+		while (reader.hasNextLine() && playersAdded < num_players) {
+			String[] input = reader.nextLine().split("\t+");	
+			if (input.length != 4) continue;
+			String playerName = input[0];
+			if(playerName.equals("null")) {
+				playerName = promptName(playersAdded);
+			}
+			System.out.println(playerName);
+			try {
+				playerList[playersAdded] = new Player(playersAdded, Integer.parseInt(input[2]), playerName);
+			} catch (NumberFormatException e) {
+				continue;
+			}
+			playersAdded++;
+		}
+		
+		for(int i = 0; i < ownersList.length; i++) {
+			int owner_id = ownersList[i];
+			if(owner_id > -1 && owner_id < num_players) {
+				playerList[owner_id].addProperty((Property)squareList[i]);
+			}
 		}
 
 		return playerList;
