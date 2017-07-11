@@ -10,13 +10,14 @@ import javax.swing.*;
 public class BoardPanel extends JPanel {
 
 	private Tile[] tiles;
+	private ActionListener propertyListener;
 	
 	/**
 	 * Constructor to build the board object.
 	 * 
 	 * @param squareList	Array of squares to add to the game.
 	 */
-	public BoardPanel(Square[] squareList){
+	public BoardPanel(Square[] squareList, ActionListener pl){
 		//The buttons are just place holders for tiles right now. The layout itself is complicated 
 		//current button size is 60X60 just for easy math
 		this.setLayout(new GridBagLayout());
@@ -25,9 +26,14 @@ public class BoardPanel extends JPanel {
 		for(int i = 0; i < OaklandOligarchy.NUMBER_OF_TILES; i++){
 			if(squareList[i] instanceof Property) {
 				tiles[i] = new PropertyTile(i, (Property)squareList[i]);
-			}
-			else {
+				tiles[i].getButton().setActionCommand(Integer.toString(i));
+				tiles[i].getButton().addActionListener(pl);
+				tiles[i].getButton().setBackground(Color.WHITE);
+				tiles[i].getButton().setForeground(Color.BLACK);
+			} else {
 				tiles[i] = new Tile(i, squareList[i]);
+				tiles[i].getButton().setBackground(Color.DARK_GRAY);
+				tiles[i].getButton().setForeground(Color.WHITE);
 			}
 			//associate action listeners here
 			tiles[i].setPreferredSize(new Dimension(60, 60));
@@ -101,15 +107,13 @@ public class BoardPanel extends JPanel {
 	 * @param	p		The player that the board should be updated based on
 	 */
 	public void update(Player p) {
-		if(p.hasMoved())
-		{
+		if (p.hasMoved()) {
 			tiles[p.getOldPos()].remove(p);
 			tiles[p.getPosition()].add(p);
 			p.setMoved(false);
-		}
-		for(Tile t: tiles) {
-			if(t instanceof PropertyTile) {
-				((PropertyTile)t).update();
+		} for (Tile t : tiles) {
+			if (t instanceof PropertyTile) {
+				((PropertyTile) t).update();
 			}
 		}
 	}
