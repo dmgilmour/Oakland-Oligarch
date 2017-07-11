@@ -47,7 +47,7 @@ public class ActionHandler {
 		}
 		switch(randInt){
 			case 0:
-				significantOther(p);
+				construction();
 				break;
 			case 1:
 				oweek(p);
@@ -80,7 +80,7 @@ public class ActionHandler {
 				frat(p);
 				break;
 			case 11:
-				construction();
+				significantOther(p);
 				break;
 			//Properties involving the loss of p's property should be at end of switch-case
 			//This solves the issue of these actions doing nothing when the player does not own anything
@@ -354,7 +354,7 @@ public class ActionHandler {
 		randInt = (randInt + 1) % OaklandOligarchy.NUMBER_OF_TILES;
 		s = board.getSquare(randInt);
 		while(!(s instanceof Property)) {
-			randInt = (randInt2 + 1) % OaklandOligarchy.NUMBER_OF_TILES;
+			randInt = (randInt + 1) % OaklandOligarchy.NUMBER_OF_TILES;
 			s = board.getSquare(randInt);
 		}
 		Property nextProp = (Property)s;

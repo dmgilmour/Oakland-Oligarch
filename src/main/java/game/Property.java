@@ -97,7 +97,7 @@ public class Property extends Square{
 				JOptionPane.showMessageDialog(null, "Mortgaged property");
 			} else {
 				player.payRent(this);
-				JOptionPane.showMessageDialog(null, player.getName()+ " pays $" + getRent() + "  to " + owner.getName());
+				JOptionPane.showMessageDialog(null, player.getName()+ " pays $" + getRent() + " to " + owner.getName());
 			}
 			return true;
 		}
