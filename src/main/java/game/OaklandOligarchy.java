@@ -172,10 +172,6 @@ public class OaklandOligarchy {
 			if (input.length != 6) continue;
 			try {
 				int current = Integer.parseInt(input[0]);
-				if(current == 14 || current == 15) {
-					for(String s: input)
-						System.err.println(s);
-				}
 				squareList[current] = new Property(input[1], Integer.parseInt(input[2]), Integer.parseInt(input[3]));
 				resultList[current] = Integer.parseInt(input[4]);
 				if(input[5].equals("m")) {
@@ -264,10 +260,10 @@ public class OaklandOligarchy {
 					activePlayers--;
 					playerList[playersAdded].setLoser(true);
 				}
+				playerList[playersAdded].setColor(Integer.decode(input[1]));
 			} catch (NumberFormatException e) {
 				continue;
 			}
-      playerList[i].setColor(input[1]);
 			playersAdded++;
 		}
 		

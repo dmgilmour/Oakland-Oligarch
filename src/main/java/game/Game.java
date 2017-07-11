@@ -392,7 +392,7 @@ public class Game {
 		for(int i = 0; i < playerList.length; i++) {
 			Player p = playerList[i];
 			bw.write(p.getName());
-			bw.write("\t\t\t0xFFA9A9\t");
+			bw.write("\t\t\t"+p.getColor()+"\t");
 			bw.write(p.getMoney() + "\t");
 			bw.write(p.getPosition() + "\t");
 			if(i == playerTurn) {
