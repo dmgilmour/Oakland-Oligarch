@@ -9,15 +9,15 @@ null		0xA9FFB5	1500	0	-
 
 0	Griffiths Street		60	20	-1	u
 1	Parkview Avenue			60	30	-1	u
-4	Robinson				100	40	-1	u
-5	Allequippa				100	50	-1	u
-6	Oak Hill				120	50	-1	u
+4	Robinson Street			100	40	-1	u
+5	Allequippa Street		100	50	-1	u
+6	Oak Hill Drive			120	50	-1	u
 9	Ward Street				140	60	-1	u
-10	Bates					140	70	-1	u
-11	Atwood					160	70	-1	u
-14	Melwood					180	80	-1	u
-15	Dithridge				180	90	-1	u
-16	Craig Street			200	90	-1	u
+10	Bates Street			140	70	-1	u
+11	Atwood Street			160	70	-1	u
+14	Melwood Avenue			180	80	-1	u
+15	N Dithridge Street		180	90	-1	u
+16	N Craig Street			200	90	-1	u
 19	Litchfield Towers		220	100	-1	u
 20	Sutherland Hall			220	110	-1	u
 21	Nordenberg Hall			240	110	-1	u
@@ -29,9 +29,3 @@ null		0xA9FFB5	1500	0	-
 31	Peterson Events Center	340	160	-1	u
 34	Benedum Hall			400	210	-1	u
 35	Cathedral of Learning	460	250	-1	u
-
-
-
-
-
-

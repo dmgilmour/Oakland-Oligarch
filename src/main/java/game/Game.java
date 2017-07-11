@@ -4,6 +4,8 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
 
 /**
  * @author Dan
@@ -375,5 +377,27 @@ public class Game {
 			pReset.setOwner(null);
 			pReset.setMortgaged(false);
 		}
+	}
+	
+	public void save(BufferedWriter bw) throws IOException{
+		bw.write(num_players + "\n\n");
+		for(int i = 0; i < playerList.length; i++) {
+			Player p = playerList[i];
+			bw.write(p.getName());
+			bw.write("\t\t\t0xFFA9A9\t");
+			bw.write(p.getMoney() + "\t");
+			bw.write(p.getPosition() + "\t");
+			if(i == playerTurn && !rollTaken) {
+				bw.write("*");
+			}
+			else if(rollTaken && i == playerTurn) {
+				bw.write("*");
+			}
+			else {
+				bw.write("-");
+			}
+			bw.newLine();
+		}
+		board.save(bw);
 	}
 }

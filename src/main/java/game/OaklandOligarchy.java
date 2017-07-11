@@ -7,6 +7,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.Scanner;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.IOException;
 
 /**
  * @author Eddie Hartman
@@ -24,7 +27,7 @@ public class OaklandOligarchy {
 	public static int PLAYER_STARTING_MONEY;
 	public static int GO_PAYOUT;
 	
-	private static final String FILENAME = "SaveSample.txt";
+	private static final String FILENAME = "defaultFile.txt";
 	private static Scanner reader;
 
 	private static Game game;
@@ -32,6 +35,7 @@ public class OaklandOligarchy {
 	private static Square[] squareList;
 	private static Random random;
 	private static Player[] playerList;
+	private static Time time;
 	
 
 	public static void main(String[] args) {
@@ -71,8 +75,11 @@ public class OaklandOligarchy {
 		} catch (Exception e) {
 			System.exit(1);
 		}
-		int startTime = reader.nextInt();
-		GO_PAYOUT = reader.nextInt();
+		
+		//need to increment to correct line
+		reader.nextInt();
+		reader.nextInt();
+		
 		num_players = reader.nextInt();
 		initializeGame(num_players, ownersList);
 		return true;
@@ -84,7 +91,7 @@ public class OaklandOligarchy {
 		} catch (Exception e) {
 			System.exit(1);
 		}
-		int startTime = reader.nextInt();
+		time = new Time(reader.nextInt());
 		GO_PAYOUT = reader.nextInt();
 		int[] ownersList = generateSquares();
 		
@@ -92,7 +99,8 @@ public class OaklandOligarchy {
 		PhaseListener moveListener = new PhaseListener(GamePhase.MOVE, null);
 		PhaseListener endListener = new PhaseListener(GamePhase.END, null);
 		LoadListener loadListener = new LoadListener();
-		window = new Window(squareList, random, buyListener, moveListener, endListener, startTime, loadListener);
+		SaveListener saveListener = new SaveListener();
+		window = new Window(squareList, random, buyListener, moveListener, endListener, time, loadListener, saveListener);
 		
 		//Reset the reader to the beginning of the file
 		try {
@@ -165,6 +173,10 @@ public class OaklandOligarchy {
 			if (input.length != 6) continue;
 			try {
 				int current = Integer.parseInt(input[0]);
+				if(current == 14 || current == 15) {
+					for(String s: input)
+						System.err.println(s);
+				}
 				squareList[current] = new Property(input[1], Integer.parseInt(input[2]), Integer.parseInt(input[3]));
 				resultList[current] = Integer.parseInt(input[4]);
 				if(input[5].equals("m")) {
@@ -372,6 +384,22 @@ public class OaklandOligarchy {
 	private static class LoadListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			OaklandOligarchy.load();
+		}
+	}
+	
+	private static class SaveListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			JFileChooser chooser = new JFileChooser();
+			if(chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+				File file = chooser.getSelectedFile();
+				try {
+					BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+					bw.write(time.getTime() + "\n");
+					bw.write(GO_PAYOUT + "\n");
+					game.save(bw);
+					bw.close();
+				} catch (IOException except) {}
+			}
 		}
 	}
 }
