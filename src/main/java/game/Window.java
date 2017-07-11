@@ -28,7 +28,7 @@ public class Window extends JFrame {
 	 * @param	ml				An ActionListener for the Move phase of a turn
 	 * @param	el				An ActionListener for the End phase of a turn
 	 */
-	public Window(Square[] squareList, Random random, ActionListener bl, ActionListener ml, ActionListener el, int startTime) {
+	public Window(Square[] squareList, Random random, ActionListener bl, ActionListener ml, ActionListener el, int startTime, ActionListener loadListener) {
 
 		boardPanel = new BoardPanel(squareList);
 
@@ -39,7 +39,7 @@ public class Window extends JFrame {
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 
-		topPanel = new TopPanel(random, startTime);
+		topPanel = new TopPanel(random, startTime, loadListener);
 		c.gridwidth = 2;
 		c.gridheight = 1;
 		c.gridx = 0;

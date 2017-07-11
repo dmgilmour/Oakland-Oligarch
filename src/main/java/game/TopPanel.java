@@ -20,7 +20,7 @@ public class TopPanel extends JPanel {
 	 *
 	 * @param	random		A psuedo-random number generator used to select the background color
 	 */
-	public TopPanel(Random random, int t) {
+	public TopPanel(Random random, int t, ActionListener loadListener) {
 		loadTime = t/1000;
 		setBackground(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
 		setOpaque(true);
@@ -34,6 +34,7 @@ public class TopPanel extends JPanel {
 
 		constraints.gridx = 1;
 		JButton loadButton = new JButton("Load Game");
+		loadButton.addActionListener(loadListener);
 		add(loadButton, constraints);
 
 		constraints.gridx = 2;

@@ -31,6 +31,7 @@ public class OaklandOligarchy {
 	private static Window window;
 	private static Square[] squareList;
 	private static Random random;
+	private static Player[] playerList;
 	
 
 	public static void main(String[] args) {
@@ -39,7 +40,7 @@ public class OaklandOligarchy {
 		int[] ownersList = initializeBoard(file);
 		
 		int num_players = 0;
-		int wantToLoad = JOptionPane.showConfirmDialog(null, "Would you like to load a game?", "Load Game", JOptionPane.YES_NO_OPTION);
+		int wantToLoad = JOptionPane.showConfirmDialog(null, "Would you like to LOAD a game?", "Load Game", JOptionPane.YES_NO_OPTION);
 		if(wantToLoad == JOptionPane.YES_OPTION) {
 			boolean success = load();
 			if(!success) {
@@ -77,7 +78,7 @@ public class OaklandOligarchy {
 		return true;
 	}
 	
-	public static int[] initializeBoard(File file) {
+	private static int[] initializeBoard(File file) {
 		try {
 			reader = new Scanner(file);
 		} catch (Exception e) {
@@ -90,7 +91,8 @@ public class OaklandOligarchy {
 		PhaseListener buyListener = new PhaseListener(GamePhase.BUY, null);
 		PhaseListener moveListener = new PhaseListener(GamePhase.MOVE, null);
 		PhaseListener endListener = new PhaseListener(GamePhase.END, null);
-		window = new Window(squareList, random, buyListener, moveListener, endListener, startTime);
+		LoadListener loadListener = new LoadListener();
+		window = new Window(squareList, random, buyListener, moveListener, endListener, startTime, loadListener);
 		
 		//Reset the reader to the beginning of the file
 		try {
@@ -102,10 +104,10 @@ public class OaklandOligarchy {
 		return ownersList;
 	}
 	
-	public static void initializeGame(int num_players, int[] ownersList) {
-		Player[] playerList = generatePlayers(num_players, ownersList);
+	private static void initializeGame(int num_players, int[] ownersList) {
+		int[] playerInfo = generatePlayers(num_players, ownersList);
 	
-		game = new Game(playerList, squareList, window, random);
+		game = new Game(playerList, squareList, window, random, playerInfo[0], playerInfo[1]);
 		PhaseListener[] tradeListeners = new PhaseListener[num_players];
 		for (int i = 0; i < num_players; i++) {
 			tradeListeners[i] = new PhaseListener(GamePhase.TRADE, playerList[i]);
@@ -160,14 +162,18 @@ public class OaklandOligarchy {
 		
 		while (reader.hasNextLine()) {
 			String[] input = reader.nextLine().split("\t+");	
-			if (input.length != 5) continue;
+			if (input.length != 6) continue;
 			try {
 				int current = Integer.parseInt(input[0]);
 				squareList[current] = new Property(input[1], Integer.parseInt(input[2]), Integer.parseInt(input[3]));
 				resultList[current] = Integer.parseInt(input[4]);
+				if(input[5].equals("m")) {
+					((Property)squareList[current]).setMortgaged(true);
+				}
 			} catch (NumberFormatException e) {
 				continue;
 			}
+			
 		}
 
 		for (int i = 0; i < squareList.length; i++) {
@@ -225,20 +231,30 @@ public class OaklandOligarchy {
 	 * @param	num_players		The number of players in this game
 	 * @return					The array of players in this game
 	 */
-	private static Player[] generatePlayers(int num_players, int[] ownersList) {
+	private static int[] generatePlayers(int num_players, int[] ownersList) {
 
-		Player[] playerList = new Player[num_players];
+		playerList = new Player[num_players];
 		int playersAdded = 0;
+		int playerTurn = -1;
+		int activePlayers = num_players;
 		while (reader.hasNextLine() && playersAdded < num_players) {
 			String[] input = reader.nextLine().split("\t+");	
-			if (input.length != 6) continue;
+			if (input.length != 5) continue;
 			String playerName = input[0];
 			if(playerName.equals("null")) {
 				playerName = promptName(playersAdded);
 			}
+			if(input[4].equals("*")) {
+				playerTurn = playersAdded;
+			}
 			try {
-				playerList[playersAdded] = new Player(playersAdded, Integer.parseInt(input[2]), playerName);
-				playerList[playersAdded].setPosition(Integer.parseInt(input[4]));
+				int currentMoney = Integer.parseInt(input[2]);
+				playerList[playersAdded] = new Player(playersAdded, currentMoney, playerName);
+				playerList[playersAdded].setPosition(Integer.parseInt(input[3]));
+				if(currentMoney < 0) {
+					activePlayers--;
+					playerList[playersAdded].setLoser(true);
+				}
 			} catch (NumberFormatException e) {
 				continue;
 			}
@@ -247,12 +263,15 @@ public class OaklandOligarchy {
 		
 		for(int i = 0; i < ownersList.length; i++) {
 			int owner_id = ownersList[i];
-			if(owner_id > -1 && owner_id < num_players) {
+			if(owner_id > -1 && owner_id < num_players && !playerList[owner_id].getLoser()) {
 				playerList[owner_id].addProperty((Property)squareList[i]);
 			}
 		}
-
-		return playerList;
+		if(playerTurn < 0) {
+			playerTurn = 0;
+		}
+		int[] res = {playerTurn, activePlayers};
+		return res;
 	}
 	
 	/**
@@ -347,6 +366,12 @@ public class OaklandOligarchy {
 				mortgaged = true;
 				((JButton) e.getSource()).setText("Buy back " + property.getName() + " for $" + property.getPrice());
 			}
+		}
+	}
+	
+	private static class LoadListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			OaklandOligarchy.load();
 		}
 	}
 }
