@@ -1,7 +1,9 @@
 package game;
 
 import java.util.Random;
+import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.File;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -27,6 +29,7 @@ public class OaklandOligarchy {
 	public static int PLAYER_STARTING_MONEY;
 	public static int GO_PAYOUT;
 	
+
 	private static final String FILENAME = "defaultFile.txt";
 	private static Scanner reader;
 
@@ -100,7 +103,7 @@ public class OaklandOligarchy {
 		PhaseListener endListener = new PhaseListener(GamePhase.END, null);
 		LoadListener loadListener = new LoadListener();
 		SaveListener saveListener = new SaveListener();
-		window = new Window(squareList, random, buyListener, moveListener, endListener, time, loadListener, saveListener);
+		window = new Window(squareList, random, buyListener, moveListener, endListener, time, loadListener, saveListener, new MortgageListener(), new PropertyListener());
 		
 		//Reset the reader to the beginning of the file
 		try {
@@ -132,24 +135,20 @@ public class OaklandOligarchy {
 	 */
 	public static void switchPhase(GamePhase gamePhase, Player player) {
 		switch(gamePhase) {
+			case START:
+				game.startPhase();
+				break;
 			case MOVE:
 				game.movePhase();
-				setStatusProperties(game.getCurrentPlayer());
 				break;
 			case ACTION:
 				game.actionPhase();
 				break;
 			case END:
 				game.endPhase();
-				setStatusProperties(game.getCurrentPlayer());
 				break;
 			case BUY:
 				game.buyPhase();
-				setStatusProperties(game.getCurrentPlayer());
-				break;
-			case START:
-				// Make a bunch of mortgage listeners
-				game.startPhase();
 				break;
 			case TRADE:
 				game.tradePhase(player);
@@ -158,7 +157,7 @@ public class OaklandOligarchy {
 				break;
 		}
 	}
-	
+
 	/**
 	 * Generates an array of Squares (properties and actions) that will act as the game board
 	 *
@@ -185,7 +184,6 @@ public class OaklandOligarchy {
 			} catch (NumberFormatException e) {
 				continue;
 			}
-			
 		}
 
 		for (int i = 0; i < squareList.length; i++) {
@@ -244,7 +242,6 @@ public class OaklandOligarchy {
 	 * @return					The array of players in this game
 	 */
 	private static int[] generatePlayers(int num_players, int[] ownersList) {
-
 		playerList = new Player[num_players];
 		int playersAdded = 0;
 		int playerTurn = -1;
@@ -270,6 +267,7 @@ public class OaklandOligarchy {
 			} catch (NumberFormatException e) {
 				continue;
 			}
+      playerList[i].setColor(input[1]);
 			playersAdded++;
 		}
 		
@@ -302,41 +300,42 @@ public class OaklandOligarchy {
 	}	
 
 	/**
-	 * Calls game to mortgage the property! 
+	 * Creates the method used by mortgage listeners that will toggle
+	 * whether a property is mortgaged or not
 	 *
-	 * @param	property	The property the player is attempting to mortgage
+	 * @param	propIndex	The index of the property to toggle
 	 */
-	private static void mortgage(Property property) {
-		game.mortgage(property);
-		window.update(property.getOwner());
+	private static void toggleMortgage(int propIndex) {
+		Player player = game.getCurrentPlayer();
+		
+		Property prop = player.getProperties().get(propIndex);
+		if (prop.getMortgaged()) {
+			game.unmortgage(prop);
+		} else {
+			game.mortgage(prop);
+		}
+		window.update(player);
 	}
 
-	/**
-	 * Calls game to unmortgage the property! 
-	 *
-	 * @param	property	The property the player is attempting to unmortgage
-	 */
-	private static void unmortgage(Property property) {
-		game.unmortgage(property);
-		window.update(property.getOwner());
+	private static void displayProperty(int propIndex) {
+		Property prop = (Property) squareList[propIndex];
+		String message = prop.getName();
+		if (prop.getOwner() == null) {
+			message += "\nUnowned";
+		} else {
+			message += "\nOwned by: " + prop.getOwner().getName();
+		}
+		message += "\nPrice to buy: $" + prop.getPrice();
+		message += "\nRent: $" + prop.getRent();
+		JOptionPane.showMessageDialog(null, message);
 	}
+
 
 	/**
 	 * Creates actionlisteners for the status panel 
 	 *
 	 * @param	player		the player for which we should display their properties
 	 */
-	public static void setStatusProperties(Player player) {
-		ArrayList<Property> properties = player.getProperties();
-		MortgageListener[] mortgageListeners = new MortgageListener[properties.size()];
-		for (int i = 0; i < properties.size(); i++) {
-			mortgageListeners[i] = new MortgageListener(properties.get(i));
-		}
-
-		window.updateStatusProperties(properties, mortgageListeners);
-	}
-
-		
 	
 	/**
 	 *	An ActionListener which upon being triggered, will move the game into the assigned phase.
@@ -354,30 +353,25 @@ public class OaklandOligarchy {
 		}
 	}
 
+
+	private static class PropertyListener implements ActionListener {
+		
+		public void actionPerformed(ActionEvent e) {
+			int propertyIndex = Integer.parseInt(e.getActionCommand());
+			displayProperty(propertyIndex);
+		}
+	}
+
 	/**
 	 * Creates mortgagelisteners for each property 
 	 *
 	 * @param	prop		the property the actionlistener is trying to control
 	 */
 	private static class MortgageListener implements ActionListener {
-		Property property;
-		Boolean mortgaged;
-
-		MortgageListener(Property prop) {
-			property = prop;
-			mortgaged = property.getMortgaged();
-		}
 
 		public void actionPerformed(ActionEvent e) {
-			if (mortgaged) {
-				OaklandOligarchy.unmortgage(property);
-				mortgaged = false;
-				((JButton) e.getSource()).setText("Sell " + property.getName() + " for $" + (property.getPrice() / 2));
-			} else {
-				OaklandOligarchy.mortgage(property);
-				mortgaged = true;
-				((JButton) e.getSource()).setText("Buy back " + property.getName() + " for $" + property.getPrice());
-			}
+			int propertyIndex = Integer.parseInt(e.getActionCommand());
+			toggleMortgage(propertyIndex);
 		}
 	}
 	

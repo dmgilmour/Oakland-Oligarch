@@ -13,7 +13,6 @@ import java.io.IOException;
  */
 public class Game {
 
-	private boolean rollTaken;
 	private int playerTurn;
 	private int num_players;
 	private int active_players;
@@ -37,7 +36,6 @@ public class Game {
 		window = w;
 		actionHandler = new ActionHandler(board, playerList, random);
 		playerTurn = pt;
-		rollTaken = false;
 		num_players = playerList.length;
 		active_players = ap;
 	}
@@ -80,8 +78,6 @@ public class Game {
 	 */
 	public void startPhase() {
 		window.update(this.getCurrentPlayer());
-		rollTaken = false;
-
 		window.disableEnd();
 		window.disableBuy();
 		window.enableRoll();
@@ -93,10 +89,28 @@ public class Game {
 	 * Runs the game phase during which players roll and move
 	 */
 	public void movePhase() {
-		int roll = roll(System.currentTimeMillis());
-		board.movePlayer(this.getCurrentPlayer(), roll);
+		int roll[] = roll(System.currentTimeMillis());		
+
+		boolean collectGoMoney;
+		collectGoMoney = this.getCurrentPlayer().moveDistance(roll[0] + roll[1]);
+
+		String squareName = board.getSquare(this.getCurrentPlayer().getPosition()).getName(); 
+		String message = "You rolled a " + roll[0] + " and a " + roll[1] + " and landed on " + squareName; 
+		if (roll[0] == roll[1]) {
+			message += "\nYou got doubles!";
+		}
+		if (collectGoMoney) {
+			message += "\nYou passed go and collected " + OaklandOligarchy.GO_PAYOUT;
+		}
+		JOptionPane.showMessageDialog(null, message);
 		window.update(this.getCurrentPlayer());
-		window.disableRoll();
+		if (roll[0] != roll[1]) {
+			window.disableRoll();
+			window.enableEnd();
+		} else {
+			window.enableRoll();
+			window.disableEnd();
+		}
 		actionPhase();
 	}
 
@@ -111,10 +125,10 @@ public class Game {
 			}
 		}
 		playerTurn = (playerTurn + 1) % num_players;	//Increment to the next player's turn
-		if(playerList[playerTurn].getLoser() == false){
+		JOptionPane.showMessageDialog(null, this.getCurrentPlayer().getName() + "'s turn");
+		if (playerList[playerTurn].getLoser() == false){
 			startPhase();
-		}
-		else{
+		} else{
 			endPhase();
     }
 	}
@@ -125,16 +139,12 @@ public class Game {
 	 * @param	timeMillis		A long integer used to the seed the random roll
 	 * @returns					An integer value between 2-12 that is the result of rolling 2 six-sided dice
 	 */
-	private int roll(Long timeMillis) {
-		if(!rollTaken) {
-			Random rand = new Random(timeMillis);
-			rollTaken = true;
-			int roll = rand.nextInt(6) + rand.nextInt(6) + 2;	//Simulates two dice rolls by retriving integers from 0-5 and adding 2
-			return roll;
-		}
-		else {
-			return -1;
-		}
+	private int[] roll(Long timeMillis) {
+		Random rand = new Random(timeMillis);
+		int[] roll = new int[2];
+		roll[0] = rand.nextInt(6) + 1;	
+		roll[1] = rand.nextInt(6) + 1;	
+		return roll;
 	}
 
 	/**
@@ -143,16 +153,17 @@ public class Game {
 	public void actionPhase() {
 		Player player = this.getCurrentPlayer();
 		Square square = board.getSquare(player.getPosition());
-		if(square == null) {									//Check to ensure that a tile was retrived properly from the board
+		if (square == null) {									//Check to ensure that a tile was retrived properly from the board
 			return;
 		}
+		// Either charges or prompts player to purchase depending on whether
+		// it is owned or not
 		boolean cannotBuy = square.act(player);
-		if(!cannotBuy) {
+		if (!cannotBuy) {
 			window.enableBuy();
 		}
 		loserCheck();
-		window.enableEnd();
-		if(square instanceof ActionSquare) {
+		if (square instanceof ActionSquare) {
 			actionHandler.run(player);
 		}
 		window.update(player);
@@ -218,48 +229,45 @@ public class Game {
 	public void auctionPhase() {
 		ArrayList<Player> remainingPlayers = new ArrayList<Player>(Arrays.asList(playerList));
 		int i = 0;
-		boolean goneAround = false;
 		remainingPlayers.remove(getCurrentPlayer());
+		Player highestBidder = null;
 		Property prop = (Property) board.getSquare(getCurrentPlayer().getPosition());
-		int topAmount = prop.getPrice();
-		while (remainingPlayers.size() > 1) {
-			if (i >= remainingPlayers.size()) {
-				goneAround = true;
-				i %= remainingPlayers.size();
+		int topAmount = prop.getPrice() - 1;
+		while ((remainingPlayers.size() > 1 || highestBidder == null) && remainingPlayers.size() > 0) {
+			i %= remainingPlayers.size();
+			if (remainingPlayers.get(i).getMoney() <= topAmount) {
+				JOptionPane.showMessageDialog(null, "Cannot match bid");
+				remainingPlayers.remove(i);
+				continue;
 			}
-			boolean invalidInput = true;
-			while (invalidInput) {
+			while (true) {
 				String amountString = JOptionPane.showInputDialog(remainingPlayers.get(i).getName() + ": Input a bid above $" + topAmount + " or cancel");
 				if (amountString == null) {
 					remainingPlayers.remove(i);
-					invalidInput = false;
+					break;
 				} else {
 					try {
 						int amount = Integer.parseInt(amountString);
-						if (amount < topAmount) {
-							invalidInput = true;
+						if (amount <= topAmount || amount > remainingPlayers.get(i).getMoney()) {
+							continue;
 						} else {
 							topAmount = amount;
+							highestBidder = remainingPlayers.get(i);
 							i++;
-							invalidInput = false;
+							break;
 						}
 					} catch (NumberFormatException e) {
-						invalidInput = true;
-
+						continue;
 					}
 				}
 			}
 		}
 
-    if (!goneAround) {
-			if (JOptionPane.showConfirmDialog(null, remainingPlayers.get(0).getName() + ": Would you like to buy this property for $" + topAmount + "?") != JOptionPane.YES_OPTION) {
-				return;
-			}
+		if (highestBidder != null) {
+			JOptionPane.showMessageDialog(null, highestBidder.getName() + " wins the auction for " + prop.getName() + " for $" + topAmount);
+			highestBidder.addProperty(prop);
+			highestBidder.charge(topAmount);
 		}
-
-		System.out.println("Last Player: " + remainingPlayers.get(0).getName());
-		remainingPlayers.get(0).addProperty(prop);
-		remainingPlayers.get(0).charge(topAmount);
 	}
 
 
@@ -387,10 +395,7 @@ public class Game {
 			bw.write("\t\t\t0xFFA9A9\t");
 			bw.write(p.getMoney() + "\t");
 			bw.write(p.getPosition() + "\t");
-			if(i == playerTurn && !rollTaken) {
-				bw.write("*");
-			}
-			else if(rollTaken && i == playerTurn) {
+			if(i == playerTurn) {
 				bw.write("*");
 			}
 			else {

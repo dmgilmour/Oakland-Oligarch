@@ -17,6 +17,7 @@ public class Player {
 	private int oldPos;
 	private boolean hasMoved;
 	private boolean loser;
+	private int color;
 
 	/**
 	 * The constructor for Players
@@ -78,6 +79,18 @@ public class Player {
 		position = p;
 		hasMoved = true;
 	}
+
+	public boolean moveDistance(int dist) {
+		if (position + dist >= OaklandOligarchy.NUMBER_OF_TILES) {
+			this.getPaid(OaklandOligarchy.GO_PAYOUT);
+			this.setPosition((position + dist) % OaklandOligarchy.NUMBER_OF_TILES);
+			return true;
+		} else {
+			this.setPosition(position + dist);
+			return false;
+		}
+	}
+		
 
 	public int getMoney() {
 		return money;
@@ -195,5 +208,13 @@ public class Player {
 	public void getPaid(int payment) {
 		if(payment > 0)
 			money += payment;
+	}
+
+	public void setColor(int c) {
+		color = c;
+	}
+
+	public int getColor() {
+		return color;
 	}
 }
