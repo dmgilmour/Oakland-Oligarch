@@ -12,14 +12,16 @@ public class TopPanel extends JPanel {
 	
 
 	JLabel clock = new JLabel();
-	int time = 0; // this will eventually take a value during save/load
+	int loadTime = 0;
+	int time = 0;
 	
 	/**
 	 * The constructor for the TopPanel UI element
 	 *
 	 * @param	random		A psuedo-random number generator used to select the background color
 	 */
-	public TopPanel(Random random) {
+	public TopPanel(Random random, int t) {
+		loadTime = t/1000;
 		setBackground(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
 		setOpaque(true);
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -47,12 +49,13 @@ public class TopPanel extends JPanel {
 		clock.setOpaque(true);
 		Thread clockThread = new Thread(() -> {
 			int startTime = (int)(System.currentTimeMillis() / 1000);
+			time = loadTime;
 			while(true){
 				int hours = time / 3600;
 				int minutes = time / 60 % 60;
 				int seconds = time % 60;
 				clock.setText(String.format("Time Played: %02d:%02d:%02d", hours, minutes, seconds));
-				time = (int)(System.currentTimeMillis()/1000 - startTime);
+				time = (int)(System.currentTimeMillis()/1000 - startTime) + loadTime;
 			}
 		});
 		clockThread.start();

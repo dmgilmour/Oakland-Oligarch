@@ -1,10 +1,11 @@
+614000
 200
 3
 
-Woody		0xFFA9A9	1500	null
-Dan			0xA9BDFF	1200	null
-Eddie		0xFAFFA9	300		null
-David		0xA9FFB5	900		null
+Woody		0xFFA9A9	1500	null	24		-
+Dan			0xA9BDFF	1200	null	0		-
+Eddie		0xFAFFA9	300		null	13		*
+David		0xA9FFB5	900		null	5		-
 
 0	Griffiths		60	20	-1
 1	Parkview Ave		60	30	0

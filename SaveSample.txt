@@ -1,10 +1,11 @@
+0
 200
 4
 
-null		0xFFA9A9	1500	null
-null		0xA9BDFF	1500	null
-null		0xFAFFA9	1500	null
-null		0xA9FFB5	1500	null
+null		0xFFA9A9	1500	null	0	*
+null		0xA9BDFF	1500	null	0	-
+null		0xFAFFA9	1500	null	0	-
+null		0xA9FFB5	1500	null	0	-
 
 0	Griffiths		60	20	-1
 1	Parkview Ave		60	30	-1

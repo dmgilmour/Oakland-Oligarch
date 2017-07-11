@@ -38,40 +38,43 @@ public class OaklandOligarchy {
 		File file = new File(FILENAME);
 		int[] ownersList = initializeBoard(file);
 		
-		//Reset the scanner before initializeGame
+		int num_players = 0;
+		int wantToLoad = JOptionPane.showConfirmDialog(null, "Would you like to load a game?", "Load Game", JOptionPane.YES_NO_OPTION);
+		if(wantToLoad == JOptionPane.YES_OPTION) {
+			boolean success = load();
+			if(!success) {
+				JOptionPane.showMessageDialog(null, "Error retrieving file\nStarting new game...");
+				num_players = promptNumPlayers();
+				initializeGame(num_players, ownersList);
+			}
+		}
+		else {
+			num_players = promptNumPlayers();
+			initializeGame(num_players, ownersList);
+		}
+	}
+	
+	public static boolean load() {
+		JFileChooser chooser = new JFileChooser();
+		int choice = chooser.showOpenDialog(null);
+		int[] ownersList;
+		int num_players;
+		if(choice != JFileChooser.APPROVE_OPTION) {
+			return false;
+		}
+		File file = chooser.getSelectedFile();
+		window.dispose();
+		ownersList = initializeBoard(file);
 		try {
 			reader = new Scanner(file);
 		} catch (Exception e) {
 			System.exit(1);
 		}
-		int num_players = 0;
-		int wantToLoad = JOptionPane.showConfirmDialog(null, "Would you like to load a game?", "Load Game", JOptionPane.YES_NO_OPTION);
-		if(wantToLoad == JOptionPane.YES_OPTION) {
-			JFileChooser chooser = new JFileChooser();
-			int choice = chooser.showOpenDialog(null);
-			if(choice == JFileChooser.APPROVE_OPTION) {
-				file = chooser.getSelectedFile();
-				window.dispose();
-				ownersList = initializeBoard(file);
-				try {
-					reader = new Scanner(file);
-				} catch (Exception e) {
-					System.exit(1);
-				}
-				reader.nextInt();
-				num_players = reader.nextInt();
-			}
-			else {
-				JOptionPane.showMessageDialog(null, "Error retrieving file\nStarting new game...");
-				num_players = promptNumPlayers();
-			}
-		}
-		else {
-			num_players = promptNumPlayers();
-		}
-		
-		
+		int startTime = reader.nextInt();
+		GO_PAYOUT = reader.nextInt();
+		num_players = reader.nextInt();
 		initializeGame(num_players, ownersList);
+		return true;
 	}
 	
 	public static int[] initializeBoard(File file) {
@@ -80,15 +83,21 @@ public class OaklandOligarchy {
 		} catch (Exception e) {
 			System.exit(1);
 		}
-
+		int startTime = reader.nextInt();
 		GO_PAYOUT = reader.nextInt();
-
 		int[] ownersList = generateSquares();
 		
 		PhaseListener buyListener = new PhaseListener(GamePhase.BUY, null);
 		PhaseListener moveListener = new PhaseListener(GamePhase.MOVE, null);
 		PhaseListener endListener = new PhaseListener(GamePhase.END, null);
-		window = new Window(squareList, random, buyListener, moveListener, endListener);
+		window = new Window(squareList, random, buyListener, moveListener, endListener, startTime);
+		
+		//Reset the reader to the beginning of the file
+		try {
+			reader = new Scanner(file);
+		} catch (Exception e) {
+			System.exit(1);
+		}
 		
 		return ownersList;
 	}
@@ -222,13 +231,14 @@ public class OaklandOligarchy {
 		int playersAdded = 0;
 		while (reader.hasNextLine() && playersAdded < num_players) {
 			String[] input = reader.nextLine().split("\t+");	
-			if (input.length != 4) continue;
+			if (input.length != 6) continue;
 			String playerName = input[0];
 			if(playerName.equals("null")) {
 				playerName = promptName(playersAdded);
 			}
 			try {
 				playerList[playersAdded] = new Player(playersAdded, Integer.parseInt(input[2]), playerName);
+				playerList[playersAdded].setPosition(Integer.parseInt(input[4]));
 			} catch (NumberFormatException e) {
 				continue;
 			}
