@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.Scanner;
+import java.io.File;
 
 /**
  * @author Eddie Hartman
@@ -19,15 +21,31 @@ public class OaklandOligarchy {
 	public static final int NUMBER_OF_TILES = 36;
 	public static final int NUMBER_OF_PROPERTIES = 28;
 	public static final int MAX_NUMBER_OF_PLAYERS = 4;
-	public static final int PLAYER_STARTING_MONEY = 200;
 	public static final int NUMBER_OF_ACTIONS = 14;
+	public static int PLAYER_STARTING_MONEY;
+	public static int GO_PAYOUT;
 	
+	private static final String FILENAME = "PropertyList.txt";
+	private static Scanner reader;
+
 	private static Game game;
 	private static Window window;
+	private static Square[] squareList;
+	
 
 	public static void main(String[] args) {
 		Random random = new Random(System.currentTimeMillis());
-		Square[] squareList = generateSquares();
+
+		try {
+			reader = new Scanner(new File(FILENAME));
+		} catch (Exception e) {
+			System.exit(1);
+		}
+
+		PLAYER_STARTING_MONEY = reader.nextInt();
+		GO_PAYOUT = PLAYER_STARTING_MONEY / 10;
+
+		squareList = generateSquares();
 		
 		PhaseListener buyListener = new PhaseListener(GamePhase.BUY, null);
 		PhaseListener moveListener = new PhaseListener(GamePhase.MOVE, null);
