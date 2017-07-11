@@ -30,10 +30,12 @@ public class BoardPanel extends JPanel {
 				tiles[i].getButton().addActionListener(pl);
 				tiles[i].getButton().setBackground(Color.WHITE);
 				tiles[i].getButton().setForeground(Color.BLACK);
+				tiles[i].setToolTipText("Click to view this property's details.");
 			} else {
 				tiles[i] = new Tile(i, squareList[i]);
 				tiles[i].getButton().setBackground(Color.DARK_GRAY);
 				tiles[i].getButton().setForeground(Color.WHITE);
+				tiles[i].setToolTipText("Click to view a list of possible actions");
 			}
 			//associate action listeners here
 			tiles[i].setPreferredSize(new Dimension(60, 60));
@@ -107,13 +109,15 @@ public class BoardPanel extends JPanel {
 	 * @param	p		The player that the board should be updated based on
 	 */
 	public void update(Player p) {
-		if (p.hasMoved()) {
+		if(p.hasMoved())
+		{
 			tiles[p.getOldPos()].remove(p);
 			tiles[p.getPosition()].add(p);
 			p.setMoved(false);
-		} for (Tile t : tiles) {
-			if (t instanceof PropertyTile) {
-				((PropertyTile) t).update();
+		}
+		for(Tile t: tiles) {
+			if(t instanceof PropertyTile) {
+				((PropertyTile)t).update();
 			}
 		}
 	}
