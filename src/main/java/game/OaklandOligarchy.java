@@ -7,6 +7,11 @@ import java.io.File;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.IOException;
 
 /**
  * @author Eddie Hartman
@@ -19,48 +24,107 @@ public class OaklandOligarchy {
 	public enum GamePhase {MOVE, ACTION, END, START, BUY, TRADE};
 	
 	public static final int NUMBER_OF_TILES = 36;
-	public static final int NUMBER_OF_PROPERTIES = 28;
 	public static final int MAX_NUMBER_OF_PLAYERS = 4;
 	public static final int NUMBER_OF_ACTIONS = 14;
 	public static int PLAYER_STARTING_MONEY;
 	public static int GO_PAYOUT;
 	
-	private static final String FILENAME = "PropertyList.txt";
+
+	private static final String FILENAME = "defaultFile.txt";
 	private static Scanner reader;
 
 	private static Game game;
 	private static Window window;
 	private static Square[] squareList;
+	private static Random random;
+	private static Player[] playerList;
+	private static Time time;
 	
 
 	public static void main(String[] args) {
-		Random random = new Random(System.currentTimeMillis());
-
+		random = new Random(System.currentTimeMillis());
+		File file = new File(FILENAME);
+		int[] ownersList = initializeBoard(file);
+		
+		int num_players = 0;
+		int wantToLoad = JOptionPane.showConfirmDialog(null, "Would you like to LOAD a game?", "Load Game", JOptionPane.YES_NO_OPTION);
+		if(wantToLoad == JOptionPane.YES_OPTION) {
+			boolean success = load();
+			if(!success) {
+				JOptionPane.showMessageDialog(null, "Error retrieving file\nStarting new game...");
+				num_players = promptNumPlayers();
+				initializeGame(num_players, ownersList);
+			}
+		}
+		else {
+			num_players = promptNumPlayers();
+			initializeGame(num_players, ownersList);
+		}
+	}
+	
+	public static boolean load() {
+		JFileChooser chooser = new JFileChooser();
+		int choice = chooser.showOpenDialog(null);
+		int[] ownersList;
+		int num_players;
+		if(choice != JFileChooser.APPROVE_OPTION) {
+			return false;
+		}
+		File file = chooser.getSelectedFile();
+		window.dispose();
+		ownersList = initializeBoard(file);
 		try {
-			reader = new Scanner(new File(FILENAME));
+			reader = new Scanner(file);
 		} catch (Exception e) {
 			System.exit(1);
 		}
-
-		PLAYER_STARTING_MONEY = reader.nextInt();
-		GO_PAYOUT = PLAYER_STARTING_MONEY / 10;
-
-		squareList = generateSquares();
+		
+		//need to increment to correct line
+		reader.nextInt();
+		reader.nextInt();
+		
+		num_players = reader.nextInt();
+		initializeGame(num_players, ownersList);
+		return true;
+	}
+	
+	private static int[] initializeBoard(File file) {
+		try {
+			reader = new Scanner(file);
+		} catch (Exception e) {
+			System.exit(1);
+		}
+		time = new Time(reader.nextInt());
+		GO_PAYOUT = reader.nextInt();
+		int[] ownersList = generateSquares();
 		
 		PhaseListener buyListener = new PhaseListener(GamePhase.BUY, null);
 		PhaseListener moveListener = new PhaseListener(GamePhase.MOVE, null);
 		PhaseListener endListener = new PhaseListener(GamePhase.END, null);
-		window = new Window(squareList, random, buyListener, moveListener, endListener, new MortgageListener(), new PropertyListener());
+		LoadListener loadListener = new LoadListener();
+		SaveListener saveListener = new SaveListener();
+		window = new Window(squareList, random, buyListener, moveListener, endListener, time, loadListener, saveListener, new MortgageListener(), new PropertyListener());
 		
-		int num_players = promptNumPlayers();
-		Player[] playerList = generatePlayers(num_players);
+		//Reset the reader to the beginning of the file
+		try {
+			reader = new Scanner(file);
+		} catch (Exception e) {
+			System.exit(1);
+		}
+		
+		return ownersList;
+	}
 	
-		game = new Game(playerList, squareList, window, random);
+	private static void initializeGame(int num_players, int[] ownersList) {
+		int[] playerInfo = generatePlayers(num_players, ownersList);
+	
+		game = new Game(playerList, squareList, window, random, playerInfo[0], playerInfo[1]);
 		PhaseListener[] tradeListeners = new PhaseListener[num_players];
 		for (int i = 0; i < num_players; i++) {
 			tradeListeners[i] = new PhaseListener(GamePhase.TRADE, playerList[i]);
 		}
 		window.setPlayers(playerList, tradeListeners);
+		reader.close();
 		game.startPhase();
 	}
 
@@ -99,14 +163,20 @@ public class OaklandOligarchy {
 	 *
 	 * @return					the array of squares to be used as a game board
 	 */
-	private static Square[] generateSquares() {
-		Square[] squareList = new Square[OaklandOligarchy.NUMBER_OF_TILES];
+	private static int[] generateSquares() {
+		squareList = new Square[OaklandOligarchy.NUMBER_OF_TILES];
+		int[] resultList = new int[NUMBER_OF_TILES];
 		
 		while (reader.hasNextLine()) {
 			String[] input = reader.nextLine().split("\t+");	
-			if (input.length != 4) continue;
+			if (input.length != 6) continue;
 			try {
-				squareList[Integer.parseInt(input[0])] = new Property(input[1], Integer.parseInt(input[2]), Integer.parseInt(input[3]));
+				int current = Integer.parseInt(input[0]);
+				squareList[current] = new Property(input[1], Integer.parseInt(input[2]), Integer.parseInt(input[3]));
+				resultList[current] = Integer.parseInt(input[4]);
+				if(input[5].equals("m")) {
+					((Property)squareList[current]).setMortgaged(true);
+				}
 			} catch (NumberFormatException e) {
 				continue;
 			}
@@ -115,10 +185,10 @@ public class OaklandOligarchy {
 		for (int i = 0; i < squareList.length; i++) {
 			if (squareList[i] == null) {
 				squareList[i] = new ActionSquare("Action");
+				resultList[i] = -1;
 			}
 		}
-		reader.close();
-		return squareList;
+		return resultList;
 
 
 		/*
@@ -167,31 +237,47 @@ public class OaklandOligarchy {
 	 * @param	num_players		The number of players in this game
 	 * @return					The array of players in this game
 	 */
-	private static Player[] generatePlayers(int num_players) {
-
-		Player[] playerList = new Player[num_players];
-
-		for (int i = 0; i < num_players; i++) {
-			String playerName = promptName(i);
-			playerList[i] = new Player(i, PLAYER_STARTING_MONEY, playerName, null);
-			switch(i) {
-				case 0:
-					playerList[i].setColor(0xFFA9A9);
-					;
-					break;
-				case 1:
-					playerList[i].setColor(0xA9BDFF);
-					break;
-				case 2:
-					playerList[i].setColor(0xFAFFA9);
-					break;
-				case 3:
-					playerList[i].setColor(0xA9FFB5);
-					break;
+	private static int[] generatePlayers(int num_players, int[] ownersList) {
+		playerList = new Player[num_players];
+		int playersAdded = 0;
+		int playerTurn = -1;
+		int activePlayers = num_players;
+		while (reader.hasNextLine() && playersAdded < num_players) {
+			String[] input = reader.nextLine().split("\t+");	
+			if (input.length != 5) continue;
+			String playerName = input[0];
+			if(playerName.equals("null")) {
+				playerName = promptName(playersAdded);
+			}
+			if(input[4].equals("*")) {
+				playerTurn = playersAdded;
+			}
+			try {
+				int currentMoney = Integer.parseInt(input[2]);
+				playerList[playersAdded] = new Player(playersAdded, currentMoney, playerName);
+				playerList[playersAdded].setPosition(Integer.parseInt(input[3]));
+				if(currentMoney < 0) {
+					activePlayers--;
+					playerList[playersAdded].setLoser(true);
+				}
+				playerList[playersAdded].setColor(Integer.decode(input[1]));
+			} catch (NumberFormatException e) {
+				continue;
+			}
+			playersAdded++;
+		}
+		
+		for(int i = 0; i < ownersList.length; i++) {
+			int owner_id = ownersList[i];
+			if(owner_id > -1 && owner_id < num_players && !playerList[owner_id].getLoser()) {
+				playerList[owner_id].addProperty((Property)squareList[i]);
 			}
 		}
-
-		return playerList;
+		if(playerTurn < 0) {
+			playerTurn = 0;
+		}
+		int[] res = {playerTurn, activePlayers};
+		return res;
 	}
 	
 	/**
@@ -282,6 +368,28 @@ public class OaklandOligarchy {
 		public void actionPerformed(ActionEvent e) {
 			int propertyIndex = Integer.parseInt(e.getActionCommand());
 			toggleMortgage(propertyIndex);
+		}
+	}
+	
+	private static class LoadListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			OaklandOligarchy.load();
+		}
+	}
+	
+	private static class SaveListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			JFileChooser chooser = new JFileChooser();
+			if(chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+				File file = chooser.getSelectedFile();
+				try {
+					BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+					bw.write(time.getTime() + "\n");
+					bw.write(GO_PAYOUT + "\n");
+					game.save(bw);
+					bw.close();
+				} catch (IOException except) {}
+			}
 		}
 	}
 }

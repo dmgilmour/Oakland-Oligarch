@@ -19,6 +19,7 @@ public class ActionHandler {
 	private final int FRAT_DUES = 40;
 	private final int STUDENT_ACTIVITY_FEE = 25;
 	private final int SMELL_COMPLAINT = 32;
+	private final int OWNS_PROPERTY_ACTIONS = 2;
 	
 	/**
 	 * The constructor for the ActionHandler
@@ -39,9 +40,14 @@ public class ActionHandler {
 	 * @param	p		The player this action should effect
 	 */
 	public void run(Player p) {
-		switch(random.nextInt(OaklandOligarchy.NUMBER_OF_ACTIONS)){
+		boolean ownsProperty = p.getProperties().size() > 0;
+		int randInt = random.nextInt(OaklandOligarchy.NUMBER_OF_ACTIONS);
+		if(!ownsProperty && randInt >= OaklandOligarchy.NUMBER_OF_ACTIONS - OWNS_PROPERTY_ACTIONS) {
+			randInt = random.nextInt(OaklandOligarchy.NUMBER_OF_ACTIONS - OWNS_PROPERTY_ACTIONS);
+		}
+		switch(randInt){
 			case 0:
-				significantOther(p);
+				construction();
 				break;
 			case 1:
 				oweek(p);
@@ -56,7 +62,7 @@ public class ActionHandler {
 				bacteria(p);
 				break;
 			case 5:
-				firstOfMonth(p);
+				rain();
 				break;
 			case 6:
 				tapingo(p);
@@ -74,13 +80,15 @@ public class ActionHandler {
 				frat(p);
 				break;
 			case 11:
-				studAct(p);
+				significantOther(p);
 				break;
+			//Properties involving the loss of p's property should be at end of switch-case
+			//This solves the issue of these actions doing nothing when the player does not own anything
 			case 12:
-				rain();
+				firstOfMonth(p);
 				break;
 			case 13:
-				construction();
+				studAct(p);
 				break;
 			default:
 				System.err.println("Action Handler: default case");
@@ -113,6 +121,9 @@ public class ActionHandler {
 				int randProp = random.nextInt(size);
 				Property prop = player.removeProperty(randProp);
 				message += player.getName() + " lost " + prop.getName() + "\n";
+			}
+			else {
+				message += player.getName() + " did not have a property to lose\n";
 			}
 		}
 		JOptionPane.showMessageDialog(null, message);
@@ -226,9 +237,11 @@ public class ActionHandler {
 	 * @param	p		The player this action should effect
 	 */
 	private void uber(Player p) {
-		p.charge(UBER_COST);
-		JOptionPane.showMessageDialog(null, "Order an \"autonomous\" Uber\nYou pay $" + UBER_COST + "\nand take another turn!");
-		OaklandOligarchy.switchPhase(OaklandOligarchy.GamePhase.START, null);
+		int choice = JOptionPane.showConfirmDialog(null, "Order an \"autonomous\" Uber:\nWould you like to pay " + UBER_COST + "\nand take another turn?");
+		if(choice == JOptionPane.YES_OPTION) {
+			p.charge(UBER_COST);
+			OaklandOligarchy.switchPhase(OaklandOligarchy.GamePhase.START, null);
+		}
 	}
 	
 	/**
@@ -243,16 +256,15 @@ public class ActionHandler {
 	 */
 	private void frat(Player p) {
 		JOptionPane.showMessageDialog(null, "You rush a Fraternity...");
+		ArrayList<Property> properties = p.getProperties();
+		int size = properties.size();
+		int rand = random.nextInt(5);
+		if(size <= 0 && rand >= 4)
+			rand = random.nextInt(4);
 		switch(random.nextInt(5)) {
 			case 0:
-				ArrayList<Property> properties = p.getProperties();
-				int size = properties.size();
-				if(size > 0) {
-					int randProp = random.nextInt(size);
-					Property prop = p.removeProperty(randProp);
-					JOptionPane.showMessageDialog(null, "...And the police come to your house party\n" + p.getName() + " loses the property: " + prop.getName());
-					break;
-				}
+				JOptionPane.showMessageDialog(null, "...And spend a night in Jail\n(choose your favorite misdemeanor)");
+				break;
 			case 1:
 				Square randSquare = board.getSquare(random.nextInt(OaklandOligarchy.NUMBER_OF_TILES));
 				while(!(randSquare instanceof Property) || !p.addProperty((Property)randSquare)) {
@@ -277,7 +289,9 @@ public class ActionHandler {
 				JOptionPane.showMessageDialog(null, message);
 				break;
 			case 4:
-				JOptionPane.showMessageDialog(null, "...And spend a night in Jail\n(choose your favorite misdemeanor)");
+				int randProp = random.nextInt(size);
+				Property prop = p.removeProperty(randProp);
+				JOptionPane.showMessageDialog(null, "...And the police come to your house party\n" + p.getName() + " loses the property: " + prop.getName());
 				break;
 			default:
 				System.err.println("Frat Method: default case");
@@ -340,7 +354,7 @@ public class ActionHandler {
 		randInt = (randInt + 1) % OaklandOligarchy.NUMBER_OF_TILES;
 		s = board.getSquare(randInt);
 		while(!(s instanceof Property)) {
-			randInt = (randInt2 + 1) % OaklandOligarchy.NUMBER_OF_TILES;
+			randInt = (randInt + 1) % OaklandOligarchy.NUMBER_OF_TILES;
 			s = board.getSquare(randInt);
 		}
 		Property nextProp = (Property)s;

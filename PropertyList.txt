@@ -30,9 +30,3 @@
 	Academic Buildings
 34		Benedum Hall		400	210
 35		Cathedral of Learning	460	250
-
-
-
-
-
-

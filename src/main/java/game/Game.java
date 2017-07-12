@@ -4,6 +4,8 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
 
 /**
  * @author Dan
@@ -28,14 +30,14 @@ public class Game {
 	 * @param	squareList		The array of squares to be used in this game
 	 * @param	w				The window this game is running in
 	 */
-	public Game(Player[] _playerList, Square[] squareList, Window w, Random random) {
+	public Game(Player[] _playerList, Square[] squareList, Window w, Random random, int pt, int ap) {
 		playerList = _playerList;
 		board = new Board(squareList);
 		window = w;
 		actionHandler = new ActionHandler(board, playerList, random);
-		playerTurn = 0;
-    num_players = playerList.length;
-		active_players = num_players;
+		playerTurn = pt;
+		num_players = playerList.length;
+		active_players = ap;
 	}
 
 	/**
@@ -383,5 +385,24 @@ public class Game {
 			pReset.setOwner(null);
 			pReset.setMortgaged(false);
 		}
+	}
+	
+	public void save(BufferedWriter bw) throws IOException{
+		bw.write(num_players + "\n\n");
+		for(int i = 0; i < playerList.length; i++) {
+			Player p = playerList[i];
+			bw.write(p.getName());
+			bw.write("\t\t\t"+p.getColor()+"\t");
+			bw.write(p.getMoney() + "\t");
+			bw.write(p.getPosition() + "\t");
+			if(i == playerTurn) {
+				bw.write("*");
+			}
+			else {
+				bw.write("-");
+			}
+			bw.newLine();
+		}
+		board.save(bw);
 	}
 }
