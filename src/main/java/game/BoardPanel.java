@@ -25,11 +25,9 @@ public class BoardPanel extends JPanel {
 		for(int i = 0; i < OaklandOligarchy.NUMBER_OF_TILES; i++){
 			if(squareList[i] instanceof Property) {
 				tiles[i] = new PropertyTile(i, (Property)squareList[i]);
-				tiles[i].setToolTipText("Click to view this property's details.");
 			}
 			else {
 				tiles[i] = new Tile(i, squareList[i]);
-				tiles[i].setToolTipText("Click to view a list of possible actions");
 			}
 			//associate action listeners here
 			tiles[i].setPreferredSize(new Dimension(60, 60));

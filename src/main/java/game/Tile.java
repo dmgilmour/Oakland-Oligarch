@@ -14,6 +14,7 @@ public class Tile extends JPanel{
 		protected int number;
 		protected Square square;
 		protected JPanel players;
+		protected JButton button;
 		
 		public Tile() {	}
 		
@@ -33,8 +34,9 @@ public class Tile extends JPanel{
 			players = new JPanel();
 			players.setLayout(new GridLayout(1, 4));
 			
-			JButton button = new JButton(square.getName());
+			button = new JButton(square.getName());
 			button.setPreferredSize(new Dimension(60, 30));
+			button.setToolTipText("Click to view a list of possible actions"); //This will have to be changed once an ActionTile is no longer just a Tile
 			
 			GridBagConstraints constraint = new GridBagConstraints();
 			
