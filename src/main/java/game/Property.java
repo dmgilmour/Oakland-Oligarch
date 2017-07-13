@@ -93,6 +93,9 @@ public class Property extends Square{
 	 */
 	public boolean act(Player player) {
 		if(owner != null) {
+			if(owner == player) {
+				return true;
+			}
 			if (this.mortgaged) {
 				JOptionPane.showMessageDialog(null, "Mortgaged property");
 			} else {
