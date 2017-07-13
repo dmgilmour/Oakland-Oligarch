@@ -30,13 +30,11 @@ public class BoardPanel extends JPanel {
 				tiles[i].getButton().addActionListener(pl);
 				tiles[i].getButton().setBackground(Color.WHITE);
 				tiles[i].getButton().setForeground(Color.BLACK);
-				tiles[i].setToolTipText("Click to view this property's details.");
 			}
 			else {
 				tiles[i] = new Tile(i, squareList[i]);
 				tiles[i].getButton().setBackground(Color.DARK_GRAY);
 				tiles[i].getButton().setForeground(Color.WHITE);
-				tiles[i].setToolTipText("Click to view a list of possible actions");
 			}
 			//associate action listeners here
 			tiles[i].setPreferredSize(new Dimension(60, 60));
