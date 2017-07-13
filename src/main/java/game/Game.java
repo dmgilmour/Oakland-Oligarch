@@ -36,7 +36,7 @@ public class Game {
 		actionHandler = new ActionHandler(board, playerList, random);
 		playerTurn = 0;
 		rollTaken = false;
-    num_players = playerList.length;
+		num_players = playerList.length;
 		active_players = num_players;
 	}
 
@@ -84,6 +84,8 @@ public class Game {
 		window.disableBuy();
 		window.enableRoll();
 		window.update(this.getCurrentPlayer());
+		//TODO Check if player is in jail
+		//TODO Set to Jail phase
 	}
 
 
@@ -141,7 +143,7 @@ public class Game {
 	public void actionPhase() {
 		Player player = this.getCurrentPlayer();
 		Square square = board.getSquare(player.getPosition());
-		if(square == null) {									//Check to ensure that a tile was retrived properly from the board
+		if(square == null) {									//Check to ensure that a tile was retrieved properly from the board
 			return;
 		}
 		boolean cannotBuy = square.act(player);

@@ -91,6 +91,9 @@ public class OaklandOligarchy {
 			if(i == 4 || i == 5 || i == 13 || i == 14 || i == 22 || i == 23 || i == 31 || i == 32) {
 				squareList[i] = new ActionSquare("Action "+i);
 			}
+			else if(i == 9){
+				squareList[i] = new JailSquare("Jail");
+			}
 			else {
 				squareList[i] = new Property("Property "+i, i, i);
 			}

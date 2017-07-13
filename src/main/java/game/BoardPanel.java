@@ -12,7 +12,7 @@ public class BoardPanel extends JPanel {
 	private Tile[] tiles;
 	
 	/**
-	 * Constructor to build the board object.
+	 * Constructor to build the board panel object.
 	 * 
 	 * @param squareList	Array of squares to add to the game.
 	 */
@@ -26,7 +26,10 @@ public class BoardPanel extends JPanel {
 			if(squareList[i] instanceof Property) {
 				tiles[i] = new PropertyTile(i, (Property)squareList[i]);
 			}
-			else {
+			else if(squareList[i] instanceof JailSquare){
+				tiles[i] = new JailTile(i, (JailSquare)squareList[i]);
+			}
+			else {	//this is going to be an action square. This should probably change somehow
 				tiles[i] = new Tile(i, squareList[i]);
 			}
 			//associate action listeners here
