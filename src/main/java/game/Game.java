@@ -81,6 +81,7 @@ public class Game {
 		window.disableEnd();
 		window.disableBuy();
 		window.enableRoll();
+		window.enableSave();
 		window.update(this.getCurrentPlayer());
 	}
 
@@ -89,7 +90,7 @@ public class Game {
 	 * Runs the game phase during which players roll and move
 	 */
 	public void movePhase() {
-
+		window.disableSave();
 		if(!this.getCurrentPlayer().isInJail()){	//if the player is not in jail take turn as normally
 			int roll[] = roll(System.currentTimeMillis());
 			boolean collectGoMoney;

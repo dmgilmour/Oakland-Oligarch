@@ -14,6 +14,7 @@ public class TopPanel extends JPanel {
 	JLabel clock = new JLabel();
 	int loadTime = 0;
 	Time time;
+	JButton saveButton;
 	
 	/**
 	 * The constructor for the TopPanel UI element
@@ -29,7 +30,7 @@ public class TopPanel extends JPanel {
 		constraints.weightx = 0.25;
 
 		constraints.gridx = 0;
-		JButton saveButton = new JButton("Save Game");
+		saveButton = new JButton("Save Game");
 		saveButton.addActionListener(saveListener);
 		add(saveButton, constraints);
 
@@ -58,5 +59,20 @@ public class TopPanel extends JPanel {
 		});
 		clockThread.start();
 		add(clock, constraints);
+		
+		constraints.gridx = 5;
+		JButton exitButton = new JButton("Exit");
+		exitButton.addActionListener(new ExitListener());
+		add(exitButton, constraints);
+	}
+	
+	private class ExitListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			int wantToLoad = JOptionPane.showConfirmDialog(null, "Would you like to save the game?", "Save on Exit?", JOptionPane.YES_NO_OPTION);
+			if(wantToLoad == JOptionPane.YES_OPTION) {
+				saveButton.doClick();
+			}
+			System.exit(0);
+		}
 	}
 }
