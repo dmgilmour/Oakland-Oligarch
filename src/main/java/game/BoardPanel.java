@@ -31,7 +31,8 @@ public class BoardPanel extends JPanel {
 				tiles[i].getButton().setBackground(Color.WHITE);
 				tiles[i].getButton().setForeground(Color.BLACK);
 				tiles[i].setToolTipText("Click to view this property's details.");
-			} else {
+			}
+			else {
 				tiles[i] = new Tile(i, squareList[i]);
 				tiles[i].getButton().setBackground(Color.DARK_GRAY);
 				tiles[i].getButton().setForeground(Color.WHITE);

@@ -36,6 +36,7 @@ public class Tile extends JPanel{
 			
 			button = new JButton(square.getName());
 			button.setPreferredSize(new Dimension(60, 30));
+			button.setToolTipText("Click to view a list of possible actions"); //This will have to be changed once an ActionTile is no longer just a Tile
 			
 			GridBagConstraints constraint = new GridBagConstraints();
 			
