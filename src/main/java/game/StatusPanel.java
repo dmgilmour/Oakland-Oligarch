@@ -15,16 +15,18 @@ public class StatusPanel extends JPanel {
 	private Player[] playerList;
 	private int num_players;
 	private JButton[] propertyButtons;	
+	private ActionListener mortgageListener;
 
 	/**
 	 * Initializes the status panel showing players and their properties
 	 *
 	 * @param	random		A psuedo-random number generator used to select the background color
 	 */
-	public StatusPanel(Random random) {
+	public StatusPanel(Random random, ActionListener ml) {
 		this.setBackground(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
 		this.setOpaque(true);
 		this.setLayout(new GridBagLayout());
+		mortgageListener = ml;
 	}
 
 	public void setPlayers(Player[] _playerList, ActionListener[] tradeListeners) {
@@ -32,7 +34,6 @@ public class StatusPanel extends JPanel {
 		num_players = playerList.length;
 
 		GridBagConstraints c = new GridBagConstraints();
-
 		c.gridx = 0;
 
 		playerButtons = new JButton[num_players];
@@ -46,47 +47,50 @@ public class StatusPanel extends JPanel {
 		}
 	}
 
-	/**
-	 * Updates the status panel to hold buttons for each mortgagable property that the current player owns
-	 *
-	 * @param	properties			A list of properties owned by the player whose turn it is
-	 * @param	mortgageListeners	An array of ActionListeners for each mortgagable property
-	 */
-	public void updateStatusProperties(ArrayList<Property> properties, ActionListener[] mortgageListeners) {
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridy = this.getComponents().length;
-		c.weighty = 0.05;
-
-		if (propertyButtons != null) {
-			for (JButton button : propertyButtons) {
-				this.remove(button);
-			}
-		}
-
-		propertyButtons = new JButton[properties.size()];
-
-		for (int i = 0; i < properties.size(); i++) {
-
-			Property prop = properties.get(i);
-			propertyButtons[i] = new JButton();
-			if (prop.getMortgaged()) {
-				propertyButtons[i].setText("Buy back " + prop.getName() + " for $" + prop.getPrice());
-			} else {
-				propertyButtons[i].setText("Sell " + prop.getName() + " for $" + (prop.getPrice() / 2));
-			}
-			propertyButtons[i].addActionListener(mortgageListeners[i]);
-			this.add(propertyButtons[i], c);
-			c.gridy++;
-		}
-	}
-
-	/**
+  /*
 	 * Updates the panel with the new money values of the players
 	 */
-	public void update() {
+	public void update(Player player) {
 
-		for (int i = 0; i < num_players; i++) {
+		// Update the Player buttons text
+		for (int i = 0; i < num_players; i++) {	//Visit each status button and update the test to indicate player currency
 			playerButtons[i].setText(playerList[i].getName() + ": $" + playerList[i].getMoney());
+			if (player.getId() == i) {
+				playerButtons[i].setBackground(new Color(playerList[i].getColor()));
+				playerButtons[i].setForeground(Color.BLACK);
+			} else {
+				playerButtons[i].setBackground(Color.BLACK);
+				playerButtons[i].setForeground(new Color(playerList[i].getColor()));
+			}
 		}
+
+		// Remove the previous buttons
+		Component[] buttonArr = this.getComponents();
+
+		for (int i = num_players; i < buttonArr.length; i++) {
+			this.remove(buttonArr[i]);
+		}
+
+		GridBagConstraints c = new GridBagConstraints();
+
+		// Make new Mortgage/Unmortgage buttons
+		int index = 0;
+		for (Property prop : player.getProperties()) {
+			JButton propButton = new JButton();
+			if (prop.getMortgaged()) {
+				propButton.setText(prop.getName() + ": buy back for $" + prop.getPrice());
+				if (player.getMoney() <= prop.getPrice()) {
+					propButton.setEnabled(false);
+				}
+			} else {
+				propButton.setText(prop.getName() + ": mortgage for $" + prop.getPrice() / 2);
+			}
+			propButton.addActionListener(mortgageListener);
+			propButton.setActionCommand(Integer.toString(index));
+			c.gridy = index + num_players + 1;
+			this.add(propButton, c);
+			index ++;
+		}
+			
 	}
 }

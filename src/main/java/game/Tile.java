@@ -14,6 +14,7 @@ public class Tile extends JPanel{
 		protected int number;
 		protected Square square;
 		protected JPanel players;
+		protected JButton button;
 		
 		public Tile() {	}
 		
@@ -33,7 +34,7 @@ public class Tile extends JPanel{
 			players = new JPanel();
 			players.setLayout(new GridLayout(1, 4));
 			
-			JButton button = new JButton(square.getName());
+			button = new JButton(square.getName());
 			button.setPreferredSize(new Dimension(60, 30));
 			
 			GridBagConstraints constraint = new GridBagConstraints();
@@ -59,5 +60,9 @@ public class Tile extends JPanel{
 		
 		public void remove(Player player) {
 			players.remove(player.getToken());
+		}
+
+		public JButton getButton() {
+			return button;
 		}
 }

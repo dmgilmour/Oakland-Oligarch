@@ -19,7 +19,7 @@ public class PropertyTile extends Tile {
 	 */
 	public PropertyTile(int n, Property prop){
 		super(n, prop);
-		
+
 		owner = new JPanel();
 		owner.setBackground(Color.white);
 		owner.setPreferredSize(new Dimension(20,30));
@@ -31,9 +31,12 @@ public class PropertyTile extends Tile {
 	 */
 	public void update() {
 		owner.setVisible(false);
-		if(((Property)square).getOwner() != null) {
+		if (((Property) square).getOwner() != null) {
+			this.getButton().setBackground(new Color(((Property) square).getOwner().getColor()));
 			owner.add(((Property)square).getOwnerToken(),0);
 			owner.setVisible(true);
+		} else {
+			this.getButton().setBackground(Color.WHITE);
 		}
 	}
 }

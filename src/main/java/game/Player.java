@@ -17,6 +17,7 @@ public class Player {
 	private int oldPos;
 	private boolean hasMoved;
 	private boolean loser;
+	private int color;
 	private boolean inJail;
 	private int jailCounter;		//how many turns a player has been in jail
 	private int doublesCounter;		//how many times a player has rolled doubles
@@ -30,26 +31,16 @@ public class Player {
 	 * @param	name		the name of this player
 	 * @param	properties	the starting properties that this player owns
 	 */
-	public Player (int id, int money, String name, Property[] properties) {
+	public Player (int id, int money, String name) {
 		this.id = id;
 		this.money = money;
 		this.name = name;
 		token = new JLabel(name);
-		if(properties == null)
-			this.properties = new ArrayList<Property>();
-		else
-		{
-			this.properties = new ArrayList<Property>(properties.length);
-			for(int i = 0; i < properties.length; i++)
-				this.properties.add(properties[i]);
-		}
+		properties = new ArrayList<Property>();
 		position = 0;
 		hasMoved = true;
 		oldPos = 0;
 		loser = false;
-		inJail = false;
-		jailCounter = 0;
-		doublesCounter = 0;
 	}
 
 	public boolean getLoser(){
@@ -93,6 +84,18 @@ public class Player {
 		hasMoved = true;
 	}
 
+	public boolean moveDistance(int dist) {
+		if (position + dist >= OaklandOligarchy.NUMBER_OF_TILES) {
+			this.getPaid(OaklandOligarchy.GO_PAYOUT);
+			this.setPosition((position + dist) % OaklandOligarchy.NUMBER_OF_TILES);
+			return true;
+		} else {
+			this.setPosition(position + dist);
+			return false;
+		}
+	}
+		
+
 	public int getMoney() {
 		return money;
 	}
@@ -108,9 +111,13 @@ public class Player {
 	 * @return				the success of adding this property
 	 */
 	public boolean addProperty(Property property) {
-		if(properties.contains(property))
+		if(properties.contains(property)) {
 			return false;
-		property.setOwner(this);
+		}
+		Player owner = property.getOwner();
+		if(owner != null) {
+			owner.removeProperty(property);
+		}
 		properties.add(property);
 		property.setOwner(this);
 		return true;
@@ -158,15 +165,10 @@ public class Player {
 			int cost = property.getPrice();
 			if(charge(cost))
 			{
-				property.setOwner(this);
-				properties.add(property);
-				return true;
+				return this.addProperty(property);
 			}
-			else
-				return false;
 		}
-		else
-			return false;
+		return false;
 	}
 
 	/**
@@ -210,6 +212,14 @@ public class Player {
 	public void getPaid(int payment) {
 		if(payment > 0)
 			money += payment;
+	}
+
+	public void setColor(int c) {
+		color = c;
+	}
+
+	public int getColor() {
+		return color;
 	}
 	
 	public void goToJail(){
