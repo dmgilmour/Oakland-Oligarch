@@ -20,7 +20,7 @@ public class PropertyTest {
 
 	// Test that mortgaging a property updates the "mortgaged" value
 	@Test
-	public void mortgageStandardValidate() {
+	public void Mortgage_Standard_Valid() {
 		setup();
 		prop.setOwner(p1);
 		prop.mortgage();
@@ -29,7 +29,7 @@ public class PropertyTest {
 
 	// Test that a valid mortgage will pay the owner the proper amount
 	@Test
-	public void mortgageStandardPay() {
+	public void Mortgage_Standard_IsPaid() {
 		setup();
 		prop.setOwner(p1);
 		prop.mortgage();
@@ -38,7 +38,7 @@ public class PropertyTest {
 
 	// Test that unmortgaging a property updates the "mortgaged" value
 	@Test
-	public void unmortgageStandardValidate() {
+	public void Unmortgage_Standard_Valid() {
 		setup();
 		prop.setOwner(p1);
 		prop.mortgage();
@@ -48,7 +48,7 @@ public class PropertyTest {
 
 	// Test that a valid unmortgage will charge the owner the proper amount
 	@Test
-	public void unmortgageStandardCharge() {
+	public void Unmortgage_Standard_IsCharged() {
 		setup();
 		prop.setOwner(p1);
 		prop.mortgage();
@@ -59,7 +59,7 @@ public class PropertyTest {
 	// Test that attempting to mortgage an already mortgaged property does 
 	// nothing
 	@Test
-	public void mortgageRedundantPay() {
+	public void Mortgage_AlreadyMortgaged_NotPaid() {
 		setup();
 		prop.setOwner(p1);
 		prop.setMortgaged(true);
@@ -70,7 +70,7 @@ public class PropertyTest {
 	// Test that attempting to unmortgage an already unmortgaged property does
 	// nothing
 	@Test
-	public void unmortgageRedundantCharge() {
+	public void Unmortgage_AlreadyUnmortgaged_NotCharged() {
 		setup();
 		prop.setOwner(p1);
 		prop.setMortgaged(false);
@@ -80,7 +80,7 @@ public class PropertyTest {
 
 	// Tests that one can unmortgage a property with exactly the price requested
 	@Test
-	public void unmortgageMoneyEqualsPriceValidate() {
+	public void Unmortgage_MoneyEqualsPrice_Valid() {
 		setup();
 		prop.setOwner(p2);
 		prop.setMortgaged(true);
@@ -91,7 +91,7 @@ public class PropertyTest {
 	// Tests that a player is properly charged for unmortgaging a property with
 	// price equal to their remaining money
 	@Test
-	public void unmortgageMoneyEqualsPriceCharge() {
+	public void Unmortgage_MoneyEqualsPrice_IsCharged() {
 		setup();
 		prop.setOwner(p2);
 		prop.setMortgaged(true);
@@ -102,7 +102,7 @@ public class PropertyTest {
 	// Tests that if a player cannot afford to unmortgage a property it will
 	// stay mortgaged
 	@Test
-	public void unmortgageTooExpensiveValidate() {
+	public void Unmortgage_TooExpensive_Invalid() {
 		setup();
 		prop.setOwner(p2);
 		prop.setMortgaged(true);
@@ -113,7 +113,7 @@ public class PropertyTest {
 	// Tests that if a player cannot afford to unmortgage a property they will
 	// not be charged
 	@Test
-	public void unmortgageTooExpensiveCharge() {
+	public void Unmortgage_TooExpensive_NotCharged() {
 		setup();
 		prop.setOwner(p2);
 		prop.setMortgaged(true);
