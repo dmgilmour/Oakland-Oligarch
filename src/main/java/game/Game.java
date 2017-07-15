@@ -294,35 +294,15 @@ public class Game {
 		return toReturn;
 	}
 
-
-	/**
-	 * Will set the property to mortgaged and give the player have the price
-	 *
-	 * @param 	property	the property the player is attempting to mortgage
-	 */
-	public void mortgage(Property property) {
-		if (!property.getMortgaged()) {
-			int mortgageValue = property.getPrice() / 2;
-			property.setMortgaged(true);
-			this.getCurrentPlayer().getPaid(mortgageValue);
+	public void toggleMortgage(int propIndex) {
+		Property prop = this.getCurrentPlayer().getProperties().get(propIndex);
+		if (prop.getMortgaged()) {
+			prop.unmortgage();	
+		} else {
+			prop.mortgage();
 		}
 	}
-
-	/**
-	 * Will set the property to unmortgaged and take half the price
-	 *
-	 * @param 	property	the property the player is attempting to unmortgage
-	 */
-	public void unmortgage(Property property) {
-		if (property.getMortgaged()) {
-			Player player = this.getCurrentPlayer();
-			int price = property.getPrice();
-			if (player.getMoney() > price) {
-				property.setMortgaged(false);
-				player.charge(price);
-			}
-		}
-	}
+	
 
 	/**
 	 * Will complete a trade between players

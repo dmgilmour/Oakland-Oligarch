@@ -296,21 +296,14 @@ public class OaklandOligarchy {
 	}	
 
 	/**
-	 * Creates the method used by mortgage listeners that will toggle
+	 * Method used by mortgage listeners that will toggle
 	 * whether a property is mortgaged or not
 	 *
 	 * @param	propIndex	The index of the property to toggle
 	 */
 	private static void toggleMortgage(int propIndex) {
-		Player player = game.getCurrentPlayer();
-		
-		Property prop = player.getProperties().get(propIndex);
-		if (prop.getMortgaged()) {
-			game.unmortgage(prop);
-		} else {
-			game.mortgage(prop);
-		}
-		window.update(player);
+		game.toggleMortgage(propIndex);
+		window.update(game.getCurrentPlayer());
 	}
 
 	private static void displayProperty(int propIndex) {
