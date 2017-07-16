@@ -23,6 +23,7 @@ public class PropertyTile extends Tile {
 		owner = new JPanel();
 		owner.setBackground(Color.white);
 		owner.setPreferredSize(new Dimension(20,30));
+		button.setToolTipText("View this property's details.");
 		this.add(owner);
 	}
 	

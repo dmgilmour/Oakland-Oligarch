@@ -41,6 +41,7 @@ public class StatusPanel extends JPanel {
 		for (int id = 0; id < num_players; id++) {
 			playerButtons[id] = new JButton(playerList[id].getName() + ": $" + playerList[id].getMoney());	
 			playerButtons[id].addActionListener(tradeListeners[id]);
+			playerButtons[id].setToolTipText("Trade with this player");
 
 			c.gridy = id;
 			add(playerButtons[id], c);
@@ -58,9 +59,11 @@ public class StatusPanel extends JPanel {
 			if (player.getId() == i) {
 				playerButtons[i].setBackground(new Color(playerList[i].getColor()));
 				playerButtons[i].setForeground(Color.BLACK);
+				playerButtons[i].setToolTipText("View your details");
 			} else {
 				playerButtons[i].setBackground(Color.BLACK);
 				playerButtons[i].setForeground(new Color(playerList[i].getColor()));
+				playerButtons[i].setToolTipText("Trade with this player");
 			}
 		}
 
