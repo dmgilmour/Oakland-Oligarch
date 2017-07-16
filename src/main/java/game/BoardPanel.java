@@ -94,7 +94,7 @@ public class BoardPanel extends JPanel {
 	}	
 	
 	/**
-	 * Retrival function to get a particular tile from the board
+	 * Retrieval function to get a particular tile from the board
 	 * 
 	 * @param 	num			The integer value identifying which tile to get
 	 * @return				The Tile in the board at location num
@@ -111,8 +111,7 @@ public class BoardPanel extends JPanel {
 	 * @param	p		The player that the board should be updated based on
 	 */
 	public void update(Player p) {
-		if(p.hasMoved())
-		{
+		if(p.hasMoved()){
 			tiles[p.getOldPos()].remove(p);
 			tiles[p.getPosition()].add(p);
 			p.setMoved(false);
