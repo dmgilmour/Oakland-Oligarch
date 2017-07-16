@@ -91,7 +91,7 @@ public class BoardPanel extends JPanel {
 	}	
 	
 	/**
-	 * Retrival function to get a particular tile from the board
+	 * Retrieval function to get a particular tile from the board
 	 * 
 	 * @param 	num			The integer value identifying which tile to get
 	 * @return				The Tile in the board at location num
