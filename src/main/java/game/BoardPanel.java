@@ -108,8 +108,7 @@ public class BoardPanel extends JPanel {
 	 * @param	p		The player that the board should be updated based on
 	 */
 	public void update(Player p) {
-		if(p.hasMoved())
-		{
+		if(p.hasMoved()){
 			tiles[p.getOldPos()].remove(p);
 			tiles[p.getPosition()].add(p);
 			p.setMoved(false);
