@@ -41,7 +41,7 @@ public class Game {
 	}
 
 	/**
-	 * Rerturns the value of playerTurn.
+	 * Returns the value of playerTurn.
 	 * @return 		playerTurn as an integer.
 	 */
 	public int getTurn() {
@@ -65,7 +65,7 @@ public class Game {
 	}
 
 	/**
-	 * Resturns the Player whose current turn it is.
+	 * Returns the Player whose current turn it is.
 	 * @return 		playerList[playerTurn] as a Player object.
 	 */
 	public Player getCurrentPlayer() {
@@ -89,29 +89,68 @@ public class Game {
 	 * Runs the game phase during which players roll and move
 	 */
 	public void movePhase() {
-		int roll[] = roll(System.currentTimeMillis());		
 
-		boolean collectGoMoney;
-		collectGoMoney = this.getCurrentPlayer().moveDistance(roll[0] + roll[1]);
-
-		String squareName = board.getSquare(this.getCurrentPlayer().getPosition()).getName(); 
-		String message = "You rolled a " + roll[0] + " and a " + roll[1] + " and landed on " + squareName; 
-		if (roll[0] == roll[1]) {
-			message += "\nYou got doubles!";
+		if(!this.getCurrentPlayer().isInJail()){	//if the player is not in jail take turn as normally
+			int roll[] = roll(System.currentTimeMillis());
+			boolean collectGoMoney;
+			collectGoMoney = this.getCurrentPlayer().moveDistance(roll[0] + roll[1]);
+	
+			String squareName = board.getSquare(this.getCurrentPlayer().getPosition()).getName(); 
+			String message = "You rolled a " + roll[0] + " and a " + roll[1] + " and landed on " + squareName; 
+			if (roll[0] == roll[1]) {
+				message += "\nYou got doubles!";
+				if(this.getCurrentPlayer().addToDoublesCounter()==3){
+					this.getCurrentPlayer().goToJail();
+					message += "\nYou got 3 doubles in a row so you go to jail.";
+					JOptionPane.showMessageDialog(null, message);
+					window.update(this.getCurrentPlayer());
+					endPhase();
+					return;
+				}
+			}
+			if (collectGoMoney) {
+				message += "\nYou passed go and collected " + OaklandOligarchy.GO_PAYOUT;
+			}
+			JOptionPane.showMessageDialog(null, message);
+			window.update(this.getCurrentPlayer());
+			if (roll[0] != roll[1]) {
+				window.disableRoll();
+				window.enableEnd();
+			} else {
+				window.enableRoll();
+				window.disableEnd();
+			}
+			actionPhase();
 		}
-		if (collectGoMoney) {
-			message += "\nYou passed go and collected " + OaklandOligarchy.GO_PAYOUT;
+		else{	//the player is currently in jail
+			int roll[] = roll(System.currentTimeMillis());
+			
+			String message = "You rolled a " + roll[0] + " and a " + roll[1];
+			if(roll[0] == roll[1]){
+				this.getCurrentPlayer().leaveJail();
+				boolean collectGoMoney;
+				collectGoMoney = this.getCurrentPlayer().moveDistance(roll[0] + roll[1]);
+				
+				String squareName = board.getSquare(this.getCurrentPlayer().getPosition()).getName();
+				message += "\nYou got doubles, left jail, and landed on" + squareName;
+				if (collectGoMoney) {
+					message += "\nYou passed go and collected " + OaklandOligarchy.GO_PAYOUT;
+				}
+				JOptionPane.showMessageDialog(null, message);
+				
+				window.disableRoll();
+				window.enableEnd();
+				window.update(this.getCurrentPlayer());
+				actionPhase();
+			}
+			else{
+				this.getCurrentPlayer().addToJailCounter();
+				message += "\nThis is your " + this.getCurrentPlayer().getJailCounter() + " turn lost in jail.";
+				JOptionPane.showMessageDialog(null, message);
+				endPhase();
+			}
+			
 		}
-		JOptionPane.showMessageDialog(null, message);
-		window.update(this.getCurrentPlayer());
-		if (roll[0] != roll[1]) {
-			window.disableRoll();
-			window.enableEnd();
-		} else {
-			window.enableRoll();
-			window.disableEnd();
-		}
-		actionPhase();
 	}
 
 	/**
@@ -124,13 +163,15 @@ public class Game {
 				auctionPhase();
 			}
 		}
+		this.getCurrentPlayer().resetDoublesCounter();
 		playerTurn = (playerTurn + 1) % num_players;	//Increment to the next player's turn
 		JOptionPane.showMessageDialog(null, this.getCurrentPlayer().getName() + "'s turn");
 		if (playerList[playerTurn].getLoser() == false){
 			startPhase();
-		} else{
+		}
+		else{
 			endPhase();
-    }
+		}
 	}
 
 	/**
@@ -153,13 +194,13 @@ public class Game {
 	public void actionPhase() {
 		Player player = this.getCurrentPlayer();
 		Square square = board.getSquare(player.getPosition());
-		if (square == null) {									//Check to ensure that a tile was retrived properly from the board
+		if(square == null) {									//Check to ensure that a tile was retrieved properly from the board
 			return;
 		}
 		// Either charges or prompts player to purchase depending on whether
 		// it is owned or not
 		boolean cannotBuy = square.act(player);
-		if (!cannotBuy) {
+		if(!cannotBuy) {
 			window.enableBuy();
 		}
 		loserCheck();

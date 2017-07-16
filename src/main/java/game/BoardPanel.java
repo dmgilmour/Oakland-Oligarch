@@ -13,7 +13,7 @@ public class BoardPanel extends JPanel {
 	private ActionListener propertyListener;
 	
 	/**
-	 * Constructor to build the board object.
+	 * Constructor to build the board panel object.
 	 * 
 	 * @param squareList	Array of squares to add to the game.
 	 */
@@ -31,7 +31,10 @@ public class BoardPanel extends JPanel {
 				tiles[i].getButton().setBackground(Color.WHITE);
 				tiles[i].getButton().setForeground(Color.BLACK);
 			}
-			else {
+			else if(squareList[i] instanceof JailSquare){
+				tiles[i] = new JailTile(i, (JailSquare)squareList[i]);
+			}
+			else {	//this is going to be an action square. This should probably change somehow
 				tiles[i] = new Tile(i, squareList[i]);
 				tiles[i].getButton().setBackground(Color.DARK_GRAY);
 				tiles[i].getButton().setForeground(Color.WHITE);
@@ -118,5 +121,6 @@ public class BoardPanel extends JPanel {
 				((PropertyTile)t).update();
 			}
 		}
+		((JailTile)tiles[OaklandOligarchy.JAIL_POS]).update();
 	}
 }

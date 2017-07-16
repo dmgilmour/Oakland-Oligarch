@@ -18,6 +18,10 @@ public class Player {
 	private boolean hasMoved;
 	private boolean loser;
 	private int color;
+	private boolean inJail;
+	private int jailCounter;		//how many turns a player has been in jail
+	private int doublesCounter;		//how many times a player has rolled doubles
+	
 
 	/**
 	 * The constructor for Players
@@ -37,6 +41,7 @@ public class Player {
 		hasMoved = true;
 		oldPos = 0;
 		loser = false;
+		jailCounter=0;
 	}
 
 	public boolean getLoser(){
@@ -189,7 +194,7 @@ public class Player {
 	 * This player pays the rent on a given property
 	 *
 	 * @param	property	A Property that this player should pay rent on
-	 * @return 				A boolean indicating the sucesss of the payment
+	 * @return 				A boolean indicating the success of the payment
 	 */
 	public boolean payRent(Property property) {
 		int cost = property.getRent();
@@ -216,5 +221,42 @@ public class Player {
 
 	public int getColor() {
 		return color;
+	}
+	
+	public void goToJail(){
+		inJail = true;
+		this.setPosition(OaklandOligarchy.JAIL_POS);
+	}
+	
+	public void leaveJail(){
+		inJail = false;
+		jailCounter = 0;
+	}
+	
+	public boolean isInJail(){
+		return inJail;
+	}
+	
+	public void addToJailCounter(){
+		jailCounter++;
+	}
+	
+	public int getJailCounter(){
+		return jailCounter;
+	}
+	
+	public void resetJailCounter(){
+		jailCounter=0;
+	}
+	
+	/**
+	 * @return	returns the doubles counter after adding 1
+	 */
+	public int addToDoublesCounter(){
+		return ++doublesCounter;
+	}
+	
+	public void resetDoublesCounter(){
+		doublesCounter = 0;
 	}
 }

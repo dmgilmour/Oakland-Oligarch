@@ -27,9 +27,11 @@ public class Window extends JFrame {
 	 * @param	bl				An ActionListener for the Buy phase of a turn
 	 * @param	ml				An ActionListener for the Move phase of a turn
 	 * @param	el				An ActionListener for the End phase of a turn
+	 * @param	pl				An ActionListener for property listener
+	 * @param	jl				An ActionListener for paying to get out of jail
 	 */
 
-	public Window(Square[] squareList, Random random, ActionListener bl, ActionListener ml, ActionListener el, Time time, ActionListener ll, ActionListener sl,  ActionListener mortgageListener, ActionListener pl) {
+	public Window(Square[] squareList, Random random, ActionListener bl, ActionListener ml, ActionListener el, Time time, ActionListener ll, ActionListener sl,  ActionListener mortgageListener, ActionListener pl, ActionListener jl) {
 
 		boardPanel = new BoardPanel(squareList, pl);
 
@@ -59,7 +61,7 @@ public class Window extends JFrame {
 		c.anchor = GridBagConstraints.LAST_LINE_START;
 		this.add(statusPanel, c);
 
-		actionPanel = new ActionPanel(random, bl, ml, el);
+		actionPanel = new ActionPanel(random, bl, ml, el, jl);
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.gridx = 0;
@@ -93,8 +95,15 @@ public class Window extends JFrame {
 	 */
 	public void update(Player p) {
 		statusPanel.update(p);
-
 		boardPanel.update(p);
+		
+		if(p.isInJail()){
+			this.enablePay();
+		}
+		else{
+			this.hidePay();
+		}
+		
 		setVisible(true);
 	}
 
@@ -139,6 +148,16 @@ public class Window extends JFrame {
 
 	public void disableBuy() {
 		actionPanel.buyButton.setEnabled(false);
+	}
+	
+	public void hidePay(){
+		actionPanel.payButton.setEnabled(false);
+		actionPanel.payButton.setVisible(false);
+	}
+	
+	public void enablePay(){
+		actionPanel.payButton.setEnabled(true);
+		actionPanel.payButton.setVisible(true);
 	}
 
 }
