@@ -264,6 +264,7 @@ public class ActionHandler {
 		switch(random.nextInt(5)) {
 			case 0:
 				JOptionPane.showMessageDialog(null, "...And spend a night in Jail\n(choose your favorite misdemeanor)");
+				p.goToJail();
 				break;
 			case 1:
 				Square randSquare = board.getSquare(random.nextInt(OaklandOligarchy.NUMBER_OF_TILES));
