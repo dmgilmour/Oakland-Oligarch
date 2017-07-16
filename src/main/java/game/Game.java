@@ -183,8 +183,8 @@ public class Game {
 	private int[] roll(Long timeMillis) {
 		Random rand = new Random(timeMillis);
 		int[] roll = new int[2];
-		roll[0] = rand.nextInt(1) + 1;	
-		roll[1] = rand.nextInt(1) + 1;	
+		roll[0] = rand.nextInt(6) + 1;	
+		roll[1] = rand.nextInt(6) + 1;	
 		return roll;
 	}
 
