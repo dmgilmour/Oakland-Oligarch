@@ -12,7 +12,7 @@ null		0xA9FFB5	1500	0	-
 4	Robinson Street			100	40	-1	u
 5	Allequippa Street		100	50	-1	u
 6	Oak Hill Drive			120	50	-1	u
-9	Ward Street				140	60	-1	u
+9	Jail
 10	Bates Street			140	70	-1	u
 11	Atwood Street			160	70	-1	u
 14	Melwood Avenue			180	80	-1	u

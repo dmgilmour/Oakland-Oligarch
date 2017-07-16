@@ -14,10 +14,10 @@ public class JailTile extends Tile {
 	
 	public JailTile(int n, Square s){
 		super(n, s);
+		button.setToolTipText("Your mouse is currently in jail");
 		
 		prison = new JPanel();
-		prison.setBackground(Color.BLACK);
-		prison.setPreferredSize(new Dimension(20,30));
+		prison.setBackground(Color.white);
 		this.add(prison);
 		
 	}
@@ -26,9 +26,15 @@ public class JailTile extends Tile {
 	 * Updates the jail and puts people in if they belong there.
 	 */
 	public void update(){
-		for(Player p : ((JailSquare)square).getPrisoners()){
+		for(Player p : OaklandOligarchy.playerList){
 			if(p.isInJail()){
 				prison.add(p.getToken());
+			}
+			else{
+				prison.remove(p.getToken());
+				if(p.getPosition()==OaklandOligarchy.JAIL_POS){
+					this.add(p.getToken());
+				}
 			}
 		}
 	}

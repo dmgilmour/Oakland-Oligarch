@@ -14,6 +14,7 @@ public class ActionPanel extends JPanel {
 	public JButton buyButton;
 	public JButton endButton;
 	public JButton rollButton;
+	public JButton payButton;
 
 	/**
 	 * The constructor of the ActionPanel UI element
@@ -22,8 +23,9 @@ public class ActionPanel extends JPanel {
 	 * @param	bl		An actionlistener for the buy button
 	 * @param	ml		An actionlistener for the move button
 	 * @param	el		An actionlistener for the end button
+	 * @param	jl		An actionlistener to pay to get out of jail
 	 */
-	public ActionPanel(Random random, ActionListener bl, ActionListener ml, ActionListener el) {
+	public ActionPanel(Random random, ActionListener bl, ActionListener ml, ActionListener el, ActionListener jl) {
 		this.setBackground(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
 		this.setOpaque(true);
 		this.setLayout(new GridBagLayout());
@@ -36,6 +38,7 @@ public class ActionPanel extends JPanel {
 		c.gridy = 0;
 		c.weighty = 0.1;
 		add(buyButton, c);
+		
 
 		endButton = new JButton("End");
 		endButton.addActionListener(el);
@@ -49,7 +52,15 @@ public class ActionPanel extends JPanel {
 		c.weighty = 0.6;
 		c.ipadx = 100;
 		c.ipady = 40;
-
 		add(rollButton, c);
+
+		payButton = new JButton("Pay"); //the gridbagconstraints were not really checked here
+		payButton.addActionListener(jl);
+		c.gridy = 3;
+		c.weighty = 0.1;
+		payButton.setEnabled(false);
+		payButton.setVisible(false);
+		payButton.setToolTipText("Pay $" + OaklandOligarchy.JAIL_COST + " to get out of jail.");
+		add(payButton, c);
 	}
 }

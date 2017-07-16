@@ -26,9 +26,12 @@ public class OaklandOligarchy {
 	public static final int NUMBER_OF_TILES = 36;
 	public static final int MAX_NUMBER_OF_PLAYERS = 4;
 	public static final int NUMBER_OF_ACTIONS = 14;
+	public static final int JAIL_COST = 50;
+	public static int JAIL_POS;	//what tile jail is
 	public static int PLAYER_STARTING_MONEY;
 	public static int GO_PAYOUT;
-	
+
+	public static Player[] playerList;
 
 	private static final String FILENAME = "defaultFile.txt";
 	private static Scanner reader;
@@ -37,7 +40,6 @@ public class OaklandOligarchy {
 	private static Window window;
 	private static Square[] squareList;
 	private static Random random;
-	private static Player[] playerList;
 	private static Time time;
 	
 
@@ -103,7 +105,8 @@ public class OaklandOligarchy {
 		PhaseListener endListener = new PhaseListener(GamePhase.END, null);
 		LoadListener loadListener = new LoadListener();
 		SaveListener saveListener = new SaveListener();
-		window = new Window(squareList, random, buyListener, moveListener, endListener, time, loadListener, saveListener, new MortgageListener(), new PropertyListener());
+		PayListener payListener = new PayListener();
+		window = new Window(squareList, random, buyListener, moveListener, endListener, time, loadListener, saveListener, new MortgageListener(), new PropertyListener(), payListener);
 		
 		//Reset the reader to the beginning of the file
 		try {
@@ -132,6 +135,7 @@ public class OaklandOligarchy {
 	 * Changes which phase the game is in currently. Is called by various ActionListeners
 	 *
 	 * @param	gamePhase		Which phase the game should be set to
+	 * @param	player			Player to trade with if switching to tradePhase
 	 */
 	public static void switchPhase(GamePhase gamePhase, Player player) {
 		switch(gamePhase) {
@@ -161,24 +165,34 @@ public class OaklandOligarchy {
 	/**
 	 * Generates an array of Squares (properties and actions) that will act as the game board
 	 *
-	 * @return					the array of squares to be used as a game board
+	 * @return					an int[] of who owns which properties
 	 */
 	private static int[] generateSquares() {
 		squareList = new Square[OaklandOligarchy.NUMBER_OF_TILES];
 		int[] resultList = new int[NUMBER_OF_TILES];
 		
 		while (reader.hasNextLine()) {
-			String[] input = reader.nextLine().split("\t+");	
-			if (input.length != 6) continue;
-			try {
-				int current = Integer.parseInt(input[0]);
-				squareList[current] = new Property(input[1], Integer.parseInt(input[2]), Integer.parseInt(input[3]));
-				resultList[current] = Integer.parseInt(input[4]);
-				if(input[5].equals("m")) {
-					((Property)squareList[current]).setMortgaged(true);
+			String[] input = reader.nextLine().split("\t+");
+			if (input.length == 6){
+				try {
+					int current = Integer.parseInt(input[0]);
+					squareList[current] = new Property(input[1], Integer.parseInt(input[2]), Integer.parseInt(input[3]));
+					resultList[current] = Integer.parseInt(input[4]);
+					if(input[5].equals("m")) {
+						((Property)squareList[current]).setMortgaged(true);
+					}
+				} catch (NumberFormatException e) {
+					//just CONTINUE
 				}
-			} catch (NumberFormatException e) {
-				continue;
+			}
+			else if (input.length == 2){
+				try {
+					int current = Integer.parseInt(input[0]);
+					JAIL_POS = current;
+					squareList[current] = new JailSquare("Jail"); //could be hard coded or take input from defaultFile.txt idc
+				} catch (NumberFormatException e) {
+					//just CONTINUE
+				}
 			}
 		}
 
@@ -238,6 +252,7 @@ public class OaklandOligarchy {
 	 * Creates an array of players with their starting money and names
 	 *
 	 * @param	num_players		The number of players in this game
+	 * @param	ownersList		An array indicating who owns what property
 	 * @return					The array of players in this game
 	 */
 	private static int[] generatePlayers(int num_players, int[] ownersList) {
@@ -258,7 +273,7 @@ public class OaklandOligarchy {
 			try {
 				int currentMoney = Integer.parseInt(input[2]);
 				playerList[playersAdded] = new Player(playersAdded, currentMoney, playerName);
-				playerList[playersAdded].setPosition(Integer.parseInt(input[3]));
+				playerList[playersAdded].setPosition(Integer.parseInt(input[3])); //TODO may need to change for save/load with Jail
 				if(currentMoney < 0) {
 					activePlayers--;
 					playerList[playersAdded].setLoser(true);
@@ -272,7 +287,7 @@ public class OaklandOligarchy {
 		
 		for(int i = 0; i < ownersList.length; i++) {
 			int owner_id = ownersList[i];
-			if(owner_id > -1 && owner_id < num_players && !playerList[owner_id].getLoser()) {
+			if(owner_id > -1 && owner_id < num_players && !playerList[owner_id].getLoser() && !(squareList[i] instanceof JailSquare)) {
 				playerList[owner_id].addProperty((Property)squareList[i]);
 			}
 		}
@@ -393,6 +408,15 @@ public class OaklandOligarchy {
 					bw.close();
 				} catch (IOException except) {}
 			}
+		}
+	}
+	
+	private static class PayListener implements ActionListener{
+		public void actionPerformed(ActionEvent e){
+			game.getCurrentPlayer().charge(JAIL_COST);	//TODO when charge returns a bool check to see if they could pay
+			game.getCurrentPlayer().leaveJail();
+			window.update(game.getCurrentPlayer());
+			JOptionPane.showMessageDialog(null, "You paid $" + JAIL_COST + " to leave jail.");
 		}
 	}
 }

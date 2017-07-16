@@ -41,6 +41,7 @@ public class Player {
 		hasMoved = true;
 		oldPos = 0;
 		loser = false;
+		jailCounter=0;
 	}
 
 	public boolean getLoser(){
@@ -224,13 +225,38 @@ public class Player {
 	
 	public void goToJail(){
 		inJail = true;
+		this.setPosition(OaklandOligarchy.JAIL_POS);
 	}
 	
 	public void leaveJail(){
 		inJail = false;
+		jailCounter = 0;
 	}
 	
 	public boolean isInJail(){
 		return inJail;
+	}
+	
+	public void addToJailCounter(){
+		jailCounter++;
+	}
+	
+	public int getJailCounter(){
+		return jailCounter;
+	}
+	
+	public void resetJailCounter(){
+		jailCounter=0;
+	}
+	
+	/**
+	 * @return	returns the doubles counter after adding 1
+	 */
+	public int addToDoublesCounter(){
+		return ++doublesCounter;
+	}
+	
+	public void resetDoublesCounter(){
+		doublesCounter = 0;
 	}
 }

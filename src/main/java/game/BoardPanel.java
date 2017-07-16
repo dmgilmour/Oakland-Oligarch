@@ -122,5 +122,6 @@ public class BoardPanel extends JPanel {
 				((PropertyTile)t).update();
 			}
 		}
+		((JailTile)tiles[OaklandOligarchy.JAIL_POS]).update();
 	}
 }
