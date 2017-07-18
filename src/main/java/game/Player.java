@@ -156,7 +156,7 @@ public class Player {
 	 * @return 				A boolean indicating success of the purchase
 	 */
 	public boolean buy (Property property) {
-		if (property.getOwner() == null)	{
+		if (property.getOwner() == null && this.money >= property.getPrice())	{
 			int cost = property.getPrice();
 			if (charge(cost)) {
 				return this.addProperty(property);

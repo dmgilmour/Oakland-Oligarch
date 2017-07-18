@@ -123,7 +123,7 @@ public class Property extends Square{
 	 */
   	 public void unmortgage() {
 		if (mortgaged) {
-			if (owner.getMoney() > price) {
+			if (owner.getMoney() >= price) {
 				mortgaged = false;
 				owner.charge(price);
 			}

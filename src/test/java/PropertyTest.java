@@ -8,11 +8,13 @@ public class PropertyTest {
 
 	Player p1;
 	Player p2;
+	Player p3;
 	Property prop;
 
 	public void setup() {
 		p1 = new Player(0, 100, "dummy");
 		p2 = new Player(1, 50, "dummy");
+		p3 = new Player(1, 25, "dummy");
 		prop = new Property("nowhere", 50, 20);
 		prop.setOwner(p2);
 		prop.unmortgage();
@@ -104,7 +106,7 @@ public class PropertyTest {
 	@Test
 	public void Unmortgage_TooExpensive_Invalid() {
 		setup();
-		prop.setOwner(p2);
+		prop.setOwner(p3);
 		prop.setMortgaged(true);
 		prop.unmortgage();
 		assertTrue(prop.getMortgaged());
@@ -115,7 +117,7 @@ public class PropertyTest {
 	@Test
 	public void Unmortgage_TooExpensive_NotCharged() {
 		setup();
-		prop.setOwner(p2);
+		prop.setOwner(p3);
 		prop.setMortgaged(true);
 		prop.unmortgage();
 		assertEquals(p2.getMoney(), 50);

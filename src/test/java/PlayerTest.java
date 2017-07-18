@@ -99,7 +99,6 @@ public class PlayerTest {
 	public void Buy_TooExpensive_NotCharged() {
 		setup();
 		p2.buy(prop2);
-		System.err.println(p2.getMoney());
 		assertEquals(p2.getMoney(), 1500);
 	}
 		
@@ -109,8 +108,10 @@ public class PlayerTest {
 	public void Buy_TooExpensive_PropertyNotStored() {
 		setup();
 		p2.buy(prop2);
-		System.err.println(p2.getProperties().size());
-		assertNull(p2.getProperties());
+		for (Property p : p2.getProperties()) {
+			if (p == prop2) fail();
+		}
+		
 	}
 		
 	// Tests that a player can successfully pay a rent they can afford
@@ -194,8 +195,8 @@ public class PlayerTest {
 	// Tests that a rent payment is not validated when the property they're
 	// paying rent on is unowned
 	@Test
-	public void Rent_UnownedProperty_Invalid() {
+	public void Rent_UnownedProperty_Valid() {
 		setup();
-		assertFalse(p1.payRent(prop2));
+		assertTrue(p1.payRent(prop2));
 	}
 }
