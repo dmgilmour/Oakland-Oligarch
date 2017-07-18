@@ -30,14 +30,14 @@ public class PlayerTest {
 
 	// Test that buying a property a player can afford will let the player buy
 	@Test
-	public void buyStandardValidated() {
+	public void Buy_CanAfford_Valid() {
 		setup();
 	}
 	
 	// Test that buying a property a player can afford will charge the player
 	// the proper amount
 	@Test
-	public void buyStandardCharged() {
+	public void Buy_CanAfford_IsCharged() {
 		setup();
 		p1.buy(prop1);
 		assertEquals(p1.getMoney(), 1000);
@@ -46,7 +46,7 @@ public class PlayerTest {
 	// Test that buying a property a player can afford will add the property to
 	// their property list
 	@Test
-	public void buyStandardIsStored() {
+	public void Buy_CanAfford_PropertyStored() {
 		setup();
 		p1.buy(prop1);
 		assertEquals(p1.getProperties().get(0), prop1);
@@ -54,7 +54,7 @@ public class PlayerTest {
 
 	// Tests that attempting to buy an already owned property is not allowed
 	@Test
-	public void buyOwnedPropertyValidated() {
+	public void Buy_OwnedProperty_Invalid() {
 		setup();
 		assertFalse(p1.buy(prop3));
 	}
@@ -62,7 +62,7 @@ public class PlayerTest {
 	// Tests that attempting to buy a property with price exactly equal to the
 	// player's current money is allowed
 	@Test
-	public void buyMoneyEqualsPriceValidated() {
+	public void Buy_MoneyEqualsPrice_Valid() {
 		setup();
 		assertTrue(p1.buy(prop2));
 	}
@@ -70,7 +70,7 @@ public class PlayerTest {
 	// Tests that attempting to buy a property with price exactly equal to the
 	// player's current money charges them properly and leaves them with $0
 	@Test
-	public void buyMoneyEqualsPriceCharged() {
+	public void Buy_MoneyEqualsPrice_IsCharged() {
 		setup();
 		p1.buy(prop2);
 		assertEquals(p1.getMoney(), 0);
@@ -79,7 +79,7 @@ public class PlayerTest {
 	// Tests that attempting to buy a property with price exactly equal to the
 	// player's current money stores the property in their property list
 	@Test
-	public void buyMoneyEqualsPriceIsStored() {
+	public void Buy_MoneyEqualsPrice_PropertyStored() {
 		setup();
 		p1.buy(prop2);
 		assertEquals(p1.getProperties().get(0), prop2);
@@ -88,7 +88,7 @@ public class PlayerTest {
 	// Tests that attempting to buy a property that the player cannot afford is
 	// not allowed
 	@Test
-	public void buyTooExpensiveValidated() {
+	public void Buy_TooExpensive_Invalid() {
 		setup();
 		assertFalse(p2.buy(prop2));
 	}
@@ -96,7 +96,7 @@ public class PlayerTest {
 	// Tests that attempting to buy a property that the player cannot afford
 	// will not charge them
 	@Test
-	public void buyTooExpensiveCharged() {
+	public void Buy_TooExpensive_NotCharged() {
 		setup();
 		p2.buy(prop2);
 		System.err.println(p2.getMoney());
@@ -106,7 +106,7 @@ public class PlayerTest {
 	// Tests that attempting to buy a property that the player cannot afford 
 	// will not add the property to their propertylist
 	@Test
-	public void buyTooExpensiveIsStored() {
+	public void Buy_TooExpensive_PropertyNotStored() {
 		setup();
 		p2.buy(prop2);
 		System.err.println(p2.getProperties().size());
@@ -115,7 +115,7 @@ public class PlayerTest {
 		
 	// Tests that a player can successfully pay a rent they can afford
 	@Test
-	public void rentStandardValidate() {
+	public void Rent_CanAfford_Valid() {
 		setup();
 		assertTrue(p1.payRent(prop3));
 	}
@@ -123,7 +123,7 @@ public class PlayerTest {
 	// Tests that a player is successfully charged the correct amount of rent
 	// for a property they can afford
 	@Test
-	public void rentStandardCharged() {
+	public void Rent_CanAfford_IsCharged() {
 		setup();
 		p1.payRent(prop3);
 		assertEquals(p1.getMoney(), 500);
@@ -132,7 +132,7 @@ public class PlayerTest {
 	// Tests that money for a successful rent payment goes to the owner of the
 	// property
 	@Test
-	public void rentStandardOwnerPaid() {
+	public void Rent_Standard_OwnerPaid() {
 		setup();
 		p1.payRent(prop3);
 		assertEquals(p4.getMoney(), 2000);
@@ -141,7 +141,7 @@ public class PlayerTest {
 	// Tests that a player can sucessfully pay a rent that is exactly equal to 
 	// their current money
 	@Test 
-	public void rentMoneyEqualsRentValidate() {
+	public void Rent_MoneyEqualsRent_Valid() {
 		setup();
 		assertTrue(p2.payRent(prop3));
 	}
@@ -149,7 +149,7 @@ public class PlayerTest {
 	// Tests that a player is charged and left with $0 for a rent that is
 	// exactly equal to their current money
 	@Test
-	public void rentMoneyEqualsRentCharged() {
+	public void Rent_MoneyEqualsRent_IsCharged() {
 		setup();
 		p2.payRent(prop3);
 		assertEquals(p2.getMoney(), 0);
@@ -158,7 +158,7 @@ public class PlayerTest {
 	// Tests that the property owner is paid for rent charged to a player that
 	// has exactly enough money to afford it
 	@Test
-	public void rentMoneyEqualsRentOwnerPaid() {
+	public void Rent_MoneyEqualsRent_OwnerPaid() {
 		setup();
 		p2.payRent(prop3);
 		assertEquals(p4.getMoney(), 2000);
@@ -167,7 +167,7 @@ public class PlayerTest {
 	// Tests that a player is not validated when attempting to pay a rent they
 	// cannot afford
 	@Test 
-	public void rentTooExpensiveValidate() {
+	public void Rent_TooExpensive_Invalid() {
 		setup();
 		assertFalse(p3.payRent(prop3));
 	}
@@ -176,7 +176,7 @@ public class PlayerTest {
 	// they cannot afford it
 	// FIX WHEN CHARGE BEHAVIOR IS DETERMINED
 	@Test
-	public void rentTooExpensiveCharged() {
+	public void Rent_TooExpensive_NotCharged() {
 		setup();
 		p3.payRent(prop3);
 		assertEquals(p1.getMoney(), 1000);
@@ -185,7 +185,7 @@ public class PlayerTest {
 	// Tests that a property's owner is not given money for rent that a player
 	// cannot afford
 	@Test
-	public void rentTooExpensiveOwnerPaid() {
+	public void Rent_TooExpensive_OwnerNotPaid() {
 		setup();
 		p3.payRent(prop3);
 		assertEquals(p4.getMoney(), 500);
@@ -194,7 +194,7 @@ public class PlayerTest {
 	// Tests that a rent payment is not validated when the property they're
 	// paying rent on is unowned
 	@Test
-	public void rentUnownedPropertyValidate() {
+	public void Rent_UnownedProperty_Invalid() {
 		setup();
 		assertFalse(p1.payRent(prop2));
 	}
