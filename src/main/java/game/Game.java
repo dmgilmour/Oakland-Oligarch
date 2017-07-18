@@ -200,25 +200,25 @@ public class Game {
 		boolean validTrade = false;
 		int traderProfit = 0;
 		while (!validTrade) {
-			String traderProfitString = JOptionPane.showInputDialog("Amount requested");
+			String traderProfitString = JOptionPane.showInputDialog("Amount requested (Negative to give money)");
 			if (traderProfitString == null) return false;
 
 			try {
 				traderProfit = Integer.parseInt(traderProfitString);
+				if (traderProfit >= 0) {
+					validTrade = (tradee.getMoney() >= traderProfit);
+				} else {
+					validTrade = (trader.getMoney() >= traderProfit * -1);
+				}
 			} catch (NumberFormatException e) {
-				continue;
+				validTrade = false; // Restart loop
 			}
 
-			if (traderProfit > 0) {
-				validTrade = (tradee.getMoney() > traderProfit);
-			} else {
-				validTrade = (trader.getMoney() > traderProfit * -1);
-			}
 		}
 
 //		if (JOptionPane.showMessageDialog(null, tradee.getName() + ": Do you want this trade?", "wat", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) return false;
 
-		trade(tradee, traderProperties, tradeeProperties, traderProfit);
+		trade(this.getCurrentPlayer(), tradee, traderProperties, tradeeProperties, traderProfit);
 		window.update(trader);
 		return true;
 	}
@@ -312,8 +312,7 @@ public class Game {
 	 * @param 	tradeeProps		The properties that the tradee is giving in the trade
 	 * @param 	traderProfit		The amount of money the player will be gaining in the trade
 	 */
-	public void trade(Player tradee, Property[] traderProps, Property[] tradeeProps, int traderProfit) {
-		Player trader = this.getCurrentPlayer();
+	public void trade(Player trader, Player tradee, Property[] traderProps, Property[] tradeeProps, int traderProfit) {
 		for (Property prop : traderProps) {
 			tradee.addProperty(trader.removeProperty(prop));
 		}
@@ -324,8 +323,8 @@ public class Game {
 			trader.getPaid(traderProfit);
 			tradee.charge(traderProfit);
 		} else {
-			tradee.getPaid(traderProfit);
-			trader.charge(traderProfit);
+			tradee.getPaid(traderProfit * -1);
+			trader.charge(traderProfit * -1);
 		}
 	}
   
