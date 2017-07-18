@@ -95,9 +95,9 @@ public class Game {
 			int roll[] = roll(System.currentTimeMillis());
 			boolean collectGoMoney;
 			collectGoMoney = this.getCurrentPlayer().moveDistance(roll[0] + roll[1]);
-	
-			String squareName = board.getSquare(this.getCurrentPlayer().getPosition()).getName(); 
-			String message = "You rolled a " + roll[0] + " and a " + roll[1] + " and landed on " + squareName; 
+
+			String squareName = board.getSquare(this.getCurrentPlayer().getPosition()).getName();
+			String message = "You rolled a " + roll[0] + " and a " + roll[1] + " and landed on " + squareName;
 			if (roll[0] == roll[1]) {
 				message += "\nYou got doubles!";
 				if(this.getCurrentPlayer().addToDoublesCounter()==3){
@@ -125,20 +125,20 @@ public class Game {
 		}
 		else{	//the player is currently in jail
 			int roll[] = roll(System.currentTimeMillis());
-			
+
 			String message = "You rolled a " + roll[0] + " and a " + roll[1];
 			if(roll[0] == roll[1]){
 				this.getCurrentPlayer().leaveJail();
 				boolean collectGoMoney;
 				collectGoMoney = this.getCurrentPlayer().moveDistance(roll[0] + roll[1]);
-				
+
 				String squareName = board.getSquare(this.getCurrentPlayer().getPosition()).getName();
 				message += "\nYou got doubles, left jail, and landed on" + squareName;
 				if (collectGoMoney) {
 					message += "\nYou passed go and collected " + OaklandOligarchy.GO_PAYOUT;
 				}
 				JOptionPane.showMessageDialog(null, message);
-				
+
 				window.disableRoll();
 				window.enableEnd();
 				window.update(this.getCurrentPlayer());
@@ -150,7 +150,7 @@ public class Game {
 				JOptionPane.showMessageDialog(null, message);
 				endPhase();
 			}
-			
+
 		}
 	}
 
@@ -184,8 +184,8 @@ public class Game {
 	private int[] roll(Long timeMillis) {
 		Random rand = new Random(timeMillis);
 		int[] roll = new int[2];
-		roll[0] = rand.nextInt(6) + 1;	
-		roll[1] = rand.nextInt(6) + 1;	
+		roll[0] = rand.nextInt(6) + 1;
+		roll[1] = rand.nextInt(6) + 1;
 		return roll;
 	}
 
@@ -327,6 +327,7 @@ public class Game {
 		}
 		JList list = new JList(propList);
 
+		//JOptionPane.showMessageDialog(null, player.getName() + " select properties to trade.");
 		JOptionPane.showMessageDialog(null, list, player.getName(), JOptionPane.PLAIN_MESSAGE);
 		int[] tradeProperties = list.getSelectedIndices();
 		Property[] toReturn = new Property[tradeProperties.length];
@@ -374,7 +375,7 @@ public class Game {
 		}
 		updateBuyButton();
 	}
-  
+
 	/**
 	 * checks to see if a player has lost. If a loser is found, that player is marked as
 	 * a loser and the number of active_players is decremented. If the number of active_players
@@ -413,6 +414,7 @@ public class Game {
 		}
 	}
 
+<<<<<<< HEAD
 	public void updateBuyButton() {
 		Square currentSq = board.getSquare(this.getCurrentPlayer().getPosition());
 		if (currentSq instanceof Property) {
@@ -424,6 +426,21 @@ public class Game {
 				}
 			} else {
 				window.disableBuy();
+=======
+	public void save(BufferedWriter bw) throws IOException{
+		bw.write(num_players + "\n\n");
+		for(int i = 0; i < playerList.length; i++) {
+			Player p = playerList[i];
+			bw.write(p.getName());
+			bw.write("\t\t\t"+p.getColor()+"\t");
+			bw.write(p.getMoney() + "\t");
+			bw.write(p.getPosition() + "\t");
+			if(i == playerTurn) {
+				bw.write("*");
+			}
+			else {
+				bw.write("-");
+>>>>>>> setup
 			}
 		} else {
 			window.disableBuy();
