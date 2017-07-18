@@ -192,7 +192,7 @@ public class PlayerTest {
 		assertEquals(p4.getMoney(), 500);
 	}
 
-	// Tests that a rent payment is not validated when the property they're
+	// Tests that a rent payment is validated when the property they're
 	// paying rent on is unowned
 	@Test
 	public void Rent_UnownedProperty_Valid() {
