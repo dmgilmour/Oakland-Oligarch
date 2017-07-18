@@ -450,6 +450,7 @@ public class Game {
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	public void updateBuyButton() {
 		Square currentSq = board.getSquare(this.getCurrentPlayer().getPosition());
 		if (currentSq instanceof Property) {
@@ -462,6 +463,8 @@ public class Game {
 			} else {
 				window.disableBuy();
 =======
+=======
+>>>>>>> setup
 	public void save(BufferedWriter bw) throws IOException{
 		bw.write(num_players + "\n\n");
 		for(int i = 0; i < playerList.length; i++) {
