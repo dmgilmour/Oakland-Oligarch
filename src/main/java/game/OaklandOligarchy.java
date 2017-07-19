@@ -20,9 +20,9 @@ import java.io.IOException;
  * @author Dan Gilmour
  */
 public class OaklandOligarchy {
-	
+
 	public enum GamePhase {MOVE, ACTION, END, START, BUY, TRADE};
-	
+
 	public static final int NUMBER_OF_TILES = 36;
 	public static final int MAX_NUMBER_OF_PLAYERS = 4;
 	public static final int NUMBER_OF_ACTIONS = 14;
@@ -36,18 +36,19 @@ public class OaklandOligarchy {
 	private static final String FILENAME = "defaultFile.txt";
 	private static Scanner reader;
 
-	private static Game game;
+	protected static Game game;
+
 	private static Window window;
 	private static Square[] squareList;
 	private static Random random;
 	private static Time time;
-	
+
 
 	public static void main(String[] args) {
 		random = new Random(System.currentTimeMillis());
 		File file = new File(FILENAME);
 		int[] ownersList = initializeBoard(file);
-		
+
 		int num_players = 0;
 		int wantToLoad = JOptionPane.showConfirmDialog(null, "Would you like to LOAD a game?", "Load Game", JOptionPane.YES_NO_OPTION);
 		if(wantToLoad == JOptionPane.YES_OPTION) {
@@ -63,7 +64,7 @@ public class OaklandOligarchy {
 			initializeGame(num_players, ownersList);
 		}
 	}
-	
+
 	public static boolean load() {
 		JFileChooser chooser = new JFileChooser();
 		int choice = chooser.showOpenDialog(null);
@@ -80,16 +81,16 @@ public class OaklandOligarchy {
 		} catch (Exception e) {
 			System.exit(1);
 		}
-		
+
 		//need to increment to correct line
 		reader.nextInt();
 		reader.nextInt();
-		
+
 		num_players = reader.nextInt();
 		initializeGame(num_players, ownersList);
 		return true;
 	}
-	
+
 	private static int[] initializeBoard(File file) {
 		try {
 			reader = new Scanner(file);
@@ -99,7 +100,7 @@ public class OaklandOligarchy {
 		time = new Time(reader.nextInt());
 		GO_PAYOUT = reader.nextInt();
 		int[] ownersList = generateSquares();
-		
+
 		PhaseListener buyListener = new PhaseListener(GamePhase.BUY, null);
 		PhaseListener moveListener = new PhaseListener(GamePhase.MOVE, null);
 		PhaseListener endListener = new PhaseListener(GamePhase.END, null);
@@ -107,20 +108,20 @@ public class OaklandOligarchy {
 		SaveListener saveListener = new SaveListener();
 		PayListener payListener = new PayListener();
 		window = new Window(squareList, random, buyListener, moveListener, endListener, time, loadListener, saveListener, new MortgageListener(), new PropertyListener(), payListener);
-		
+
 		//Reset the reader to the beginning of the file
 		try {
 			reader = new Scanner(file);
 		} catch (Exception e) {
 			System.exit(1);
 		}
-		
+
 		return ownersList;
 	}
-	
+
 	private static void initializeGame(int num_players, int[] ownersList) {
 		int[] playerInfo = generatePlayers(num_players, ownersList);
-	
+
 		game = new Game(playerList, squareList, window, random, playerInfo[0], playerInfo[1]);
 		PhaseListener[] tradeListeners = new PhaseListener[num_players];
 		for (int i = 0; i < num_players; i++) {
@@ -170,7 +171,7 @@ public class OaklandOligarchy {
 	private static int[] generateSquares() {
 		squareList = new Square[OaklandOligarchy.NUMBER_OF_TILES];
 		int[] resultList = new int[NUMBER_OF_TILES];
-		
+
 		while (reader.hasNextLine()) {
 			String[] input = reader.nextLine().split("\t+");
 			if (input.length == 6){
@@ -224,7 +225,7 @@ public class OaklandOligarchy {
 	/**
 	 * Prompts the user using a JPane to input the number of players > 1 and < 5
 	 *
-	 * @return			the integer number of players for this game 
+	 * @return			the integer number of players for this game
 	 */
 	private static int promptNumPlayers() {
 
@@ -261,7 +262,7 @@ public class OaklandOligarchy {
 		int playerTurn = -1;
 		int activePlayers = num_players;
 		while (reader.hasNextLine() && playersAdded < num_players) {
-			String[] input = reader.nextLine().split("\t+");	
+			String[] input = reader.nextLine().split("\t+");
 			if (input.length != 5) continue;
 			String playerName = input[0];
 			if(playerName.equals("null")) {
@@ -284,7 +285,7 @@ public class OaklandOligarchy {
 			}
 			playersAdded++;
 		}
-		
+
 		for(int i = 0; i < ownersList.length; i++) {
 			int owner_id = ownersList[i];
 			if(owner_id > -1 && owner_id < num_players && !playerList[owner_id].getLoser() && !(squareList[i] instanceof JailSquare)) {
@@ -297,7 +298,7 @@ public class OaklandOligarchy {
 		int[] res = {playerTurn, activePlayers};
 		return res;
 	}
-	
+
 	/**
 	 * Prompts the user for their name via a JPane
 	 *
@@ -311,7 +312,7 @@ public class OaklandOligarchy {
 			System.exit(0);
 		}
 		return toReturn;
-	}	
+	}
 
 	/**
 	 * Method used by mortgage listeners that will toggle
@@ -339,18 +340,18 @@ public class OaklandOligarchy {
 
 
 	/**
-	 * Creates actionlisteners for the status panel 
+	 * Creates actionlisteners for the status panel
 	 *
 	 * @param	player		the player for which we should display their properties
 	 */
-	
+
 	/**
 	 *	An ActionListener which upon being triggered, will move the game into the assigned phase.
 	 */
 	private static class PhaseListener implements ActionListener {
 		GamePhase gamePhase;
 		Player player;
-		
+
 		PhaseListener(GamePhase gp, Player optionalPlayer) {
 			gamePhase = gp;
 			player = optionalPlayer;
@@ -362,7 +363,7 @@ public class OaklandOligarchy {
 
 
 	private static class PropertyListener implements ActionListener {
-		
+
 		public void actionPerformed(ActionEvent e) {
 			int propertyIndex = Integer.parseInt(e.getActionCommand());
 			displayProperty(propertyIndex);
@@ -370,7 +371,7 @@ public class OaklandOligarchy {
 	}
 
 	/**
-	 * Creates mortgagelisteners for each property 
+	 * Creates mortgagelisteners for each property
 	 *
 	 * @param	prop		the property the actionlistener is trying to control
 	 */
@@ -381,13 +382,13 @@ public class OaklandOligarchy {
 			toggleMortgage(propertyIndex);
 		}
 	}
-	
+
 	private static class LoadListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			OaklandOligarchy.load();
 		}
 	}
-	
+
 	private static class SaveListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser chooser = new JFileChooser();
@@ -403,7 +404,7 @@ public class OaklandOligarchy {
 			}
 		}
 	}
-	
+
 	private static class PayListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			game.getCurrentPlayer().charge(JAIL_COST);	//TODO when charge returns a bool check to see if they could pay
