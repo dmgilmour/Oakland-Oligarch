@@ -11,8 +11,8 @@ import java.util.ArrayList;
  */
 public class Window extends JFrame {
 
-	private final int height = 980;
-	private final int width = 1820;
+	//private final int height = 980;
+	//private final int width = 1820;
 
 	private TopPanel topPanel;
 	private StatusPanel statusPanel;
@@ -34,8 +34,11 @@ public class Window extends JFrame {
 	public Window(Square[] squareList, Random random, ActionListener bl, ActionListener ml, ActionListener el, Time time, ActionListener ll, ActionListener sl,  ActionListener mortgageListener, ActionListener pl, ActionListener jl) {
 
 		boardPanel = new BoardPanel(squareList, pl);
-
-		this.setSize(width, height);
+		
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		this.setUndecorated(true);
+		
+		//this.setSize(width, height);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new GridBagLayout());
 
@@ -161,4 +164,11 @@ public class Window extends JFrame {
 		actionPanel.payButton.setVisible(true);
 	}
 
+	public void enableSave() {
+		topPanel.saveButton.setEnabled(true);
+	}
+	
+	public void disableSave() {
+		topPanel.saveButton.setEnabled(false);
+	}
 }

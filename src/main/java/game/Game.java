@@ -81,6 +81,7 @@ public class Game {
 		window.disableEnd();
 		window.disableBuy();
 		window.enableRoll();
+		window.enableSave();
 		window.update(this.getCurrentPlayer());
 	}
 
@@ -89,7 +90,7 @@ public class Game {
 	 * Runs the game phase during which players roll and move
 	 */
 	public void movePhase() {
-
+		window.disableSave();
 		if(!this.getCurrentPlayer().isInJail()){	//if the player is not in jail take turn as normally
 			int roll[] = roll(System.currentTimeMillis());
 			boolean collectGoMoney;
@@ -411,25 +412,6 @@ public class Game {
 			pReset.setMortgaged(false);
 		}
 	}
-	
-	public void save(BufferedWriter bw) throws IOException{
-		bw.write(num_players + "\n\n");
-		for(int i = 0; i < playerList.length; i++) {
-			Player p = playerList[i];
-			bw.write(p.getName());
-			bw.write("\t\t\t"+p.getColor()+"\t");
-			bw.write(p.getMoney() + "\t");
-			bw.write(p.getPosition() + "\t");
-			if(i == playerTurn) {
-				bw.write("*");
-			}
-			else {
-				bw.write("-");
-			}
-			bw.newLine();
-		}
-		board.save(bw);
-	}
 
 	public void updateBuyButton() {
 		Square currentSq = board.getSquare(this.getCurrentPlayer().getPosition());
@@ -447,5 +429,4 @@ public class Game {
 			window.disableBuy();
 		}
 	}
-
 }

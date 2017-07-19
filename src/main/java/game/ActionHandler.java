@@ -261,7 +261,7 @@ public class ActionHandler {
 		int rand = random.nextInt(5);
 		if(size <= 0 && rand >= 4)
 			rand = random.nextInt(4);
-		switch(random.nextInt(5)) {
+		switch(rand) {
 			case 0:
 				JOptionPane.showMessageDialog(null, "...And spend a night in Jail\n(choose your favorite misdemeanor)");
 				p.goToJail();

@@ -42,6 +42,7 @@ public class Player {
 		oldPos = 0;
 		loser = false;
 		jailCounter=0;
+		inJail = false;
 	}
 
 	public boolean getLoser(){
@@ -69,6 +70,11 @@ public class Player {
 	}
 	public String getName() {
 		return name;
+	}
+	
+	public void setName(String n) {
+		name = n;
+		token = new JLabel(name);
 	}
 
 	public JLabel getToken(){

@@ -23,30 +23,4 @@ public class Board {
 			return squareList[num];
 		return null;
 	}
-
-	public void save(BufferedWriter bw) throws IOException{
-		bw.newLine();
-		for(int i = 0; i < squareList.length; i++) {
-			if(squareList[i] instanceof Property) {
-				Property p = (Property) squareList[i];
-				bw.write(i + "\t");
-				bw.write(p.getName());
-				bw.write("\t\t\t" + p.getPrice());
-				bw.write("\t" + p.getRent());
-				if(p.getOwner() == null) {
-					bw.write("\t-1");
-				}
-				else {
-					bw.write("\t" + p.getOwner().getId());
-				}
-				if(p.getMortgaged()) {
-					bw.write("\tm");
-				}
-				else {
-					bw.write("\tu");
-				}
-				bw.newLine();
-			}
-		}
-	}
 }
