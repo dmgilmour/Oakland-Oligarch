@@ -338,43 +338,12 @@ public class Game {
 		return toReturn;
 	}
 
-<<<<<<< HEAD
 	public void toggleMortgage(int propIndex) {
 		Property prop = this.getCurrentPlayer().getProperties().get(propIndex);
 		if (prop.getMortgaged()) {
 			prop.unmortgage();
 		} else {
 			prop.mortgage();
-=======
-
-	/**
-	 * Will set the property to mortgaged and give the player have the price
-	 *
-	 * @param 	property	the property the player is attempting to mortgage
-	 */
-	public void mortgage(Property property) {
-		if (!property.getMortgaged()) {
-			int mortgageValue = property.getPrice() / 2;
-			property.setMortgaged(true);
-			this.getCurrentPlayer().gainMortgageValue(mortgageValue);
-		}
-	}
-
-	/**
-	 * Will set the property to unmortgaged and take half the price
-	 *
-	 * @param 	property	the property the player is attempting to unmortgage
-	 */
-	public void unmortgage(Property property) {
-		if (property.getMortgaged()) {
-			Player player = this.getCurrentPlayer();
-			int price = property.getPrice();
-			if (player.getMoney() >= price) {
-				property.setMortgaged(false);
-				player.addWorth(price / 2);
-				player.charge(price);
-			}
->>>>>>> 167eba58487667a8eafbbc22ab8cffb8093b8b7b
 		}
 		updateBuyButton();
 }
@@ -466,7 +435,6 @@ public class Game {
 		board.save(bw);
 	}
 
-<<<<<<< HEAD
 	public void updateBuyButton() {
 		if (getCurrentPlayer().getMoney() >= ((Property) board.getSquare(this.getCurrentPlayer().getPosition())).getPrice()) {
 			window.enableBuy();
@@ -475,8 +443,6 @@ public class Game {
 		}
 	}
 
-=======
->>>>>>> 167eba58487667a8eafbbc22ab8cffb8093b8b7b
 	/**
 	 * Starts the mortgagePrompt for a player that owes money and must mortgage properties to pay cost.
 	 * @param player	The player that needs to mortgage properties.
@@ -528,11 +494,7 @@ public class Game {
 	public void loserPhase(Player player){
 		//loop through all properties and morgage them.
 		for(Property prop : player.getProperties()){
-<<<<<<< HEAD
 			prop.mortgage();
-=======
-			mortgage(prop);
->>>>>>> 167eba58487667a8eafbbc22ab8cffb8093b8b7b
 		}
 		//charging all of players money is handeled in Player.payRent() or ActionHandler
 		//print out the loser
