@@ -31,7 +31,7 @@ public class OaklandOligarchy {
 	public static int GO_PAYOUT;
 
 	public static Player[] playerList;
-	private static Game game;
+	protected static Game game;
 	private static Window window;
 	private static Square[] squareList;
 	private static Random random;

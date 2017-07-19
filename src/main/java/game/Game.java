@@ -164,10 +164,12 @@ public class Game {
 				auctionPhase();
 			}
 		}
+		System.out.println(this.getCurrentPlayer().getName() + ": money: " + this.getCurrentPlayer().getMoney() + " worth: " + this.getCurrentPlayer().getWorth());
 		this.getCurrentPlayer().resetDoublesCounter();
 		playerTurn = (playerTurn + 1) % num_players;	//Increment to the next player's turn
-		JOptionPane.showMessageDialog(null, this.getCurrentPlayer().getName() + "'s turn");
 		if (playerList[playerTurn].getLoser() == false){
+			//loserCheck();
+			JOptionPane.showMessageDialog(null, this.getCurrentPlayer().getName() + "'s turn");
 			startPhase();
 		}
 		else{
@@ -204,10 +206,10 @@ public class Game {
 		if(!cannotBuy) {
 			window.enableBuy();
 		}
-		loserCheck();
 		if (square instanceof ActionSquare) {
 			actionHandler.run(player);
 		}
+		loserCheck();
 		window.update(player);
 	}
 
@@ -347,7 +349,6 @@ public class Game {
 		updateBuyButton();
 	}
 
-
 	/**
 	 * Will complete a trade between players
 	 *
@@ -383,8 +384,7 @@ public class Game {
 	 */
 	private void loserCheck(){
 		for(int i = 0; i < playerList.length; i++){
-			if(playerList[i].getMoney() < 0 && playerList[i].getLoser() == false){
-				playerList[i].setLoser(true);
+			if(playerList[i].getMoney() < 0 && playerList[i].getWorth() < 0 && playerList[i].getLoser()){
 				window.printLoser(playerList[i]);
 				active_players --;
 				if(active_players > 1){
@@ -393,7 +393,7 @@ public class Game {
 				else{
 					//winner
 					for(int j = 0; j < playerList.length; j++){
-						if(playerList[j].getLoser() == false){
+						if(!playerList[j].getLoser()){
 							window.endGame(playerList[j]);
 						}
           }
@@ -403,14 +403,17 @@ public class Game {
 	}
 
 	/**
-	 * cleans up the properties and board if there a loser was knocked out of the game
+	 * Cleans up the properties and board if there a loser was knocked out of the game.
+	 * This method is only called when there is a loser being removed from the game.
 	 * @param player player that has just lost the game
 	 */
 	private void loserCleanUp(Player player){
-		for(int i = 0; i < player.getProperties().size(); i++){
-			Property pReset = player.getProperties().get(i);
-			pReset.setOwner(null);
-			pReset.setMortgaged(false);
+		if(player.getLoser()){
+			for(int i = 0; i < player.getProperties().size(); i++){
+				Property pReset = player.getProperties().get(i);
+				pReset.setOwner(null);
+				pReset.setMortgaged(false);
+			}
 		}
 	}
 
@@ -429,5 +432,65 @@ public class Game {
 		} else {
 			window.disableBuy();
 		}
+	}
+
+	/**
+	 * Starts the mortgagePrompt for a player that owes money and must mortgage properties to pay cost.
+	 * @param player	The player that needs to mortgage properties.
+	 * @param cost		The amount of money the player owes.
+	 */
+	public void mortgagePhase(Player player, int cost){
+		while(player.getMoney() < cost && player != null){
+			mortgage(player, mortgagePrompt(player));
+		}
+	}
+
+	/**
+	 * Prompts a Player they need to mortgage properties, followed by a list of properties to choose from.
+	 * @param player the Player that needs morgage properties to prevent losing.
+	 * @return 		returns an array of properties to mortgage.
+	 */
+	public Property[] mortgagePrompt(Player player){
+		ArrayList<Property> playerProperties = player.getProperties();
+		String[] propList = new String[playerProperties.size()];
+		for (int i = 0; i < playerProperties.size(); i++){
+			propList[i] = playerProperties.get(i).getName();
+		}
+		JList list = new JList(propList);
+		JOptionPane.showMessageDialog(null, player.getName() + " choose properties to mortgage.");
+		JOptionPane.showMessageDialog(null, list, player.getName() + " mortgaging.", JOptionPane.PLAIN_MESSAGE);
+		int[] mortgageProperties = list.getSelectedIndices();
+		Property[] toReturn = new Property[mortgageProperties.length];
+		for (int i = 0; i < toReturn.length; i++){
+			toReturn[i] = playerProperties.get(mortgageProperties[i]);
+		}
+		return toReturn;
+	}
+
+	/**
+	 * Mortgages an array of properties specified by mortgagePrompt.
+	 * @param mortgager	Player that is mortgaging properties.
+	 * @param props		Array of properties to be mortgaged.
+	 */
+	public void mortgage(Player mortgager, Property[] props){
+		for(Property prop : props){
+			prop.mortgage();
+		}
+	}
+
+	/**
+	 * Make as much money from mortgaging all properties and pay it to the player owed.
+	 * @param player	The player that is morgaging properties.
+	 */
+	public void loserPhase(Player player){
+		//loop through all properties and morgage them.
+		for(Property prop : player.getProperties()){
+			prop.mortgage();
+		}
+		//charging all of players money is handeled in Player.payRent() or ActionHandler
+		//print out the loser
+		window.printLoser(player);
+		//now clean up the loser.
+		loserCleanUp(player);
 	}
 }
