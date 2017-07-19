@@ -163,10 +163,12 @@ public class Game {
 				auctionPhase();
 			}
 		}
+		System.out.println(this.getCurrentPlayer().getName() + ": money: " + this.getCurrentPlayer().getMoney() + " worth: " + this.getCurrentPlayer().getWorth());
 		this.getCurrentPlayer().resetDoublesCounter();
 		playerTurn = (playerTurn + 1) % num_players;	//Increment to the next player's turn
-		JOptionPane.showMessageDialog(null, this.getCurrentPlayer().getName() + "'s turn");
 		if (playerList[playerTurn].getLoser() == false){
+			//loserCheck();
+			JOptionPane.showMessageDialog(null, this.getCurrentPlayer().getName() + "'s turn");
 			startPhase();
 		}
 		else{
@@ -203,10 +205,10 @@ public class Game {
 		if(!cannotBuy) {
 			window.enableBuy();
 		}
-		loserCheck();
 		if (square instanceof ActionSquare) {
 			actionHandler.run(player);
 		}
+		loserCheck();
 		window.update(player);
 	}
 
@@ -346,7 +348,7 @@ public class Game {
 		if (!property.getMortgaged()) {
 			int mortgageValue = property.getPrice() / 2;
 			property.setMortgaged(true);
-			this.getCurrentPlayer().getPaid(mortgageValue);
+			this.getCurrentPlayer().gainMortgageValue(mortgageValue);
 		}
 	}
 
@@ -359,8 +361,9 @@ public class Game {
 		if (property.getMortgaged()) {
 			Player player = this.getCurrentPlayer();
 			int price = property.getPrice();
-			if (player.getMoney() > price) {
+			if (player.getMoney() >= price) {
 				property.setMortgaged(false);
+				player.addWorth(price / 2);
 				player.charge(price);
 			}
 		}
@@ -398,8 +401,7 @@ public class Game {
 	 */
 	private void loserCheck(){
 		for(int i = 0; i < playerList.length; i++){
-			if(playerList[i].getMoney() < 0 && playerList[i].getLoser() == false){
-				playerList[i].setLoser(true);
+			if(playerList[i].getMoney() < 0 && playerList[i].getWorth() < 0 && playerList[i].getLoser()){
 				window.printLoser(playerList[i]);
 				active_players --;
 				if(active_players > 1){
@@ -408,7 +410,7 @@ public class Game {
 				else{
 					//winner
 					for(int j = 0; j < playerList.length; j++){
-						if(playerList[j].getLoser() == false){
+						if(!playerList[j].getLoser()){
 							window.endGame(playerList[j]);
 						}
           }
@@ -423,10 +425,12 @@ public class Game {
 	 * @param player player that has just lost the game
 	 */
 	private void loserCleanUp(Player player){
-		for(int i = 0; i < player.getProperties().size(); i++){
-			Property pReset = player.getProperties().get(i);
-			pReset.setOwner(null);
-			pReset.setMortgaged(false);
+		if(player.getLoser()){
+			for(int i = 0; i < player.getProperties().size(); i++){
+				Property pReset = player.getProperties().get(i);
+				pReset.setOwner(null);
+				pReset.setMortgaged(false);
+			}
 		}
 	}
 
@@ -489,7 +493,7 @@ public class Game {
 	 */
 	public void mortgage(Player mortgager, Property[] props){
 		for(Property prop : props){
-			mortgage(prop);
+			prop.mortgage();
 		}
 	}
 
@@ -502,7 +506,9 @@ public class Game {
 		for(Property prop : player.getProperties()){
 			mortgage(prop);
 		}
-		//charging all of players money is handeled in Player.payRent()
+		//charging all of players money is handeled in Player.payRent() or ActionHandler
+		//print out the loser
+		window.printLoser(player);
 		//now clean up the loser.
 		loserCleanUp(player);
 	}
