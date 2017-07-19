@@ -115,12 +115,32 @@ public class Property extends Square{
 		}
 	}
 
+  
 	/**
-	 * Sets mortgaged boolean of a property indicating if the property is mortgaged(true) or not(false).
-	 * @param _mortgaged boolean to be set as mortgaged.
+	 * Will set the property to unmortgaged and charge player half the price
+	 *
+	 * @param 	property	the property the player is attempting to unmortgage
 	 */
-	public void setMortgaged(boolean _mortgaged) {
-		mortgaged = _mortgaged;
+  	 public void unmortgage() {
+		if (mortgaged) {
+			if (owner.getMoney() >= price) {
+				mortgaged = false;
+				owner.charge(price);
+			}
+		}
+	}
+	
+
+	/**
+	 * Will set the property to mortgaged and give the player have the price
+	 *
+	 * @param 	property	the property the player is attempting to mortgage
+	 */
+	public void mortgage() {
+		if (!mortgaged) {
+			mortgaged = true;
+			owner.getPaid(price / 2);
+		}
 	}
 
 	/**
@@ -129,5 +149,9 @@ public class Property extends Square{
 	 */
 	public boolean getMortgaged() {
 		return mortgaged;
+	}
+
+	public void setMortgaged(boolean m) {
+		mortgaged = m;
 	}
 }

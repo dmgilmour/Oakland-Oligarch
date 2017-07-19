@@ -160,12 +160,10 @@ public class Player {
 	 * @param	property	A property that this player is buying
 	 * @return 				A boolean indicating success of the purchase
 	 */
-	public boolean buy(Property property) {
-		if(property.getOwner() == null)	
-		{
+	public boolean buy (Property property) {
+		if (property.getOwner() == null && this.money >= property.getPrice())	{
 			int cost = property.getPrice();
-			if(charge(cost))
-			{
+			if (charge(cost)) {
 				return this.addProperty(property);
 			}
 		}

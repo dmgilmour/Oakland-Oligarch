@@ -241,25 +241,25 @@ public class Game {
 		boolean validTrade = false;
 		int traderProfit = 0;
 		while (!validTrade) {
-			String traderProfitString = JOptionPane.showInputDialog("Amount requested");
+			String traderProfitString = JOptionPane.showInputDialog("Amount requested (Negative to give money)");
 			if (traderProfitString == null) return false;
 
 			try {
 				traderProfit = Integer.parseInt(traderProfitString);
+				if (traderProfit >= 0) {
+					validTrade = (tradee.getMoney() >= traderProfit);
+				} else {
+					validTrade = (trader.getMoney() >= traderProfit * -1);
+				}
 			} catch (NumberFormatException e) {
-				continue;
+				validTrade = false; // Restart loop
 			}
 
-			if (traderProfit > 0) {
-				validTrade = (tradee.getMoney() > traderProfit);
-			} else {
-				validTrade = (trader.getMoney() > traderProfit * -1);
-			}
 		}
 
 //		if (JOptionPane.showMessageDialog(null, tradee.getName() + ": Do you want this trade?", "wat", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) return false;
 
-		trade(tradee, traderProperties, tradeeProperties, traderProfit);
+		trade(this.getCurrentPlayer(), tradee, traderProperties, tradeeProperties, traderProfit);
 		window.update(trader);
 		return true;
 	}
@@ -335,35 +335,17 @@ public class Game {
 		return toReturn;
 	}
 
-
-	/**
-	 * Will set the property to mortgaged and give the player have the price
-	 *
-	 * @param 	property	the property the player is attempting to mortgage
-	 */
-	public void mortgage(Property property) {
-		if (!property.getMortgaged()) {
-			int mortgageValue = property.getPrice() / 2;
-			property.setMortgaged(true);
-			this.getCurrentPlayer().getPaid(mortgageValue);
+	public void toggleMortgage(int propIndex) {
+		Property prop = this.getCurrentPlayer().getProperties().get(propIndex);
+		if (prop.getMortgaged()) {
+			prop.unmortgage();	
+		} else {
+			prop.mortgage();
 		}
+		updateBuyButton();
+		
 	}
-
-	/**
-	 * Will set the property to unmortgaged and take half the price
-	 *
-	 * @param 	property	the property the player is attempting to unmortgage
-	 */
-	public void unmortgage(Property property) {
-		if (property.getMortgaged()) {
-			Player player = this.getCurrentPlayer();
-			int price = property.getPrice();
-			if (player.getMoney() > price) {
-				property.setMortgaged(false);
-				player.charge(price);
-			}
-		}
-	}
+	
 
 	/**
 	 * Will complete a trade between players
@@ -373,8 +355,7 @@ public class Game {
 	 * @param 	tradeeProps		The properties that the tradee is giving in the trade
 	 * @param 	traderProfit		The amount of money the player will be gaining in the trade
 	 */
-	public void trade(Player tradee, Property[] traderProps, Property[] tradeeProps, int traderProfit) {
-		Player trader = this.getCurrentPlayer();
+	public void trade(Player trader, Player tradee, Property[] traderProps, Property[] tradeeProps, int traderProfit) {
 		for (Property prop : traderProps) {
 			tradee.addProperty(trader.removeProperty(prop));
 		}
@@ -384,10 +365,14 @@ public class Game {
 		if (traderProfit > 0) {
 			trader.getPaid(traderProfit);
 			tradee.charge(traderProfit);
+			if (getCurrentPlayer().getMoney() > ((Property) board.getSquare(this.getCurrentPlayer().getPosition())).getPrice()) {
+				window.enableBuy();
+			}
 		} else {
-			tradee.getPaid(traderProfit);
-			trader.charge(traderProfit);
+			tradee.getPaid(traderProfit * -1);
+			trader.charge(traderProfit * -1);
 		}
+		updateBuyButton();
 	}
   
 	/**
@@ -446,4 +431,13 @@ public class Game {
 		}
 		board.save(bw);
 	}
+
+	public void updateBuyButton() {
+		if (getCurrentPlayer().getMoney() >= ((Property) board.getSquare(this.getCurrentPlayer().getPosition())).getPrice()) {
+			window.enableBuy();
+		} else {
+			window.disableBuy();
+		}
+	}
+
 }

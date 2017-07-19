@@ -107,6 +107,7 @@ public class Window extends JFrame {
 		setVisible(true);
 	}
 
+
 	/**
 	 * Shows the winner of the game. Exits the game when "ok" is clicked.
 	 * @param player the winning Player of the game to be printed out as the winner.
