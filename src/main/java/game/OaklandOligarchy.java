@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * @author Eddie Hartman
@@ -30,105 +31,90 @@ public class OaklandOligarchy {
 	public static int GO_PAYOUT;
 
 	public static Player[] playerList;
-
-	private static final String FILENAME = "defaultFile.txt";
-	private static Scanner reader;
-
 	private static Game game;
 	private static Window window;
 	private static Square[] squareList;
 	private static Random random;
 	private static Time time;
-	
+	private static Scanner reader;
+	private static FileHandler fh;
 
+	private static PhaseListener buyListener;
+	private static PhaseListener moveListener;
+	private static PhaseListener endListener;
+	private static LoadListener loadListener;
+	private static SaveListener saveListener;
+	private static PayListener payListener;
+	private static MortgageListener mortgageListener;
+	private static PropertyListener propertyListener;
+	
 	public static void main(String[] args) {
 		random = new Random(System.currentTimeMillis());
-		File file = new File(FILENAME);
-		int[] ownersList = initializeBoard(file);
+		fh = new FileHandler();
+		squareList = fh.getBoard();
+		time = fh.getTime();
 		
-		int num_players = 0;
+		buyListener = new PhaseListener(GamePhase.BUY, null);
+		moveListener = new PhaseListener(GamePhase.MOVE, null);
+		endListener = new PhaseListener(GamePhase.END, null);
+		loadListener = new LoadListener();
+		saveListener = new SaveListener();
+		payListener = new PayListener();
+		mortgageListener = new MortgageListener();
+		propertyListener = new PropertyListener();
+		window = new Window(squareList, random, buyListener, moveListener, endListener, time, loadListener, saveListener, mortgageListener, propertyListener, payListener);
+		
 		int wantToLoad = JOptionPane.showConfirmDialog(null, "Would you like to LOAD a game?", "Load Game", JOptionPane.YES_NO_OPTION);
+		boolean load = false;
 		if(wantToLoad == JOptionPane.YES_OPTION) {
-			boolean success = load();
-			if(!success) {
-				JOptionPane.showMessageDialog(null, "Error retrieving file\nStarting new game...");
-				num_players = promptNumPlayers();
-				initializeGame(num_players, ownersList);
+			if(load(true, 0)) {
+				load = true;
+			}
+		}
+		if(!load){
+			int num_players = promptNumPlayers();
+			load(false, num_players);
+		}
+	}
+
+	public static boolean load(boolean loadNewFile, int num_players) {
+		if(loadNewFile) {
+			JFileChooser chooser = new JFileChooser();
+			int choice = chooser.showOpenDialog(null);
+			if(choice == JFileChooser.APPROVE_OPTION) {
+				File file = chooser.getSelectedFile();
+				fh = new FileHandler(file);
+				squareList = fh.getBoard();
+				time = fh.getTime();
+				window.dispose();
+				window = new Window(squareList, random, buyListener, moveListener, endListener, time, loadListener, saveListener, mortgageListener, propertyListener, payListener);
+				playerList = fh.getPlayerList();
+				num_players = playerList.length;
+			}
+			else {
+				return false;
 			}
 		}
 		else {
-			num_players = promptNumPlayers();
-			initializeGame(num_players, ownersList);
+			playerList = Arrays.copyOfRange(fh.getPlayerList(), 0, num_players);
 		}
-	}
-	
-	public static boolean load() {
-		JFileChooser chooser = new JFileChooser();
-		int choice = chooser.showOpenDialog(null);
-		int[] ownersList;
-		int num_players;
-		if(choice != JFileChooser.APPROVE_OPTION) {
-			return false;
-		}
-		File file = chooser.getSelectedFile();
-		window.dispose();
-		ownersList = initializeBoard(file);
-		try {
-			reader = new Scanner(file);
-		} catch (Exception e) {
-			System.exit(1);
-		}
-		
-		//need to increment to correct line
-		reader.nextInt();
-		reader.nextInt();
-		
-		num_players = reader.nextInt();
-		initializeGame(num_players, ownersList);
-		return true;
-	}
-	
-	private static int[] initializeBoard(File file) {
-		try {
-			reader = new Scanner(file);
-		} catch (Exception e) {
-			System.exit(1);
-		}
-		time = new Time(reader.nextInt());
-		GO_PAYOUT = reader.nextInt();
-		int[] ownersList = generateSquares();
-		
-		PhaseListener buyListener = new PhaseListener(GamePhase.BUY, null);
-		PhaseListener moveListener = new PhaseListener(GamePhase.MOVE, null);
-		PhaseListener endListener = new PhaseListener(GamePhase.END, null);
-		LoadListener loadListener = new LoadListener();
-		SaveListener saveListener = new SaveListener();
-		PayListener payListener = new PayListener();
-		window = new Window(squareList, random, buyListener, moveListener, endListener, time, loadListener, saveListener, new MortgageListener(), new PropertyListener(), payListener);
-		
-		//Reset the reader to the beginning of the file
-		try {
-			reader = new Scanner(file);
-		} catch (Exception e) {
-			System.exit(1);
-		}
-		
-		return ownersList;
-	}
-	
-	private static void initializeGame(int num_players, int[] ownersList) {
-		int[] playerInfo = generatePlayers(num_players, ownersList);
-	
-		game = new Game(playerList, squareList, window, random, playerInfo[0], playerInfo[1]);
+		int playerTurn = fh.getPlayerTurn();
+		int activePlayers = fh.getActivePlayers();
+		GO_PAYOUT = fh.getPayout();
+		JAIL_POS = fh.getJailPosition();
+		game = new Game(playerList, squareList, window, random, playerTurn, activePlayers);
 		PhaseListener[] tradeListeners = new PhaseListener[num_players];
 		for (int i = 0; i < num_players; i++) {
 			tradeListeners[i] = new PhaseListener(GamePhase.TRADE, playerList[i]);
+			if(playerList[i].getName().equals("null")) {
+				String name = promptName(i);
+				playerList[i].setName(name);
+			}
 		}
 		window.setPlayers(playerList, tradeListeners);
-		reader.close();
 		game.startPhase();
+		return true;
 	}
-
 	/**
 	 * Changes which phase the game is in currently. Is called by various ActionListeners
 	 *
@@ -161,65 +147,6 @@ public class OaklandOligarchy {
 	}
 
 	/**
-	 * Generates an array of Squares (properties and actions) that will act as the game board
-	 *
-	 * @return					an int[] of who owns which properties
-	 */
-	private static int[] generateSquares() {
-		squareList = new Square[OaklandOligarchy.NUMBER_OF_TILES];
-		int[] resultList = new int[NUMBER_OF_TILES];
-		
-		while (reader.hasNextLine()) {
-			String[] input = reader.nextLine().split("\t+");
-			if (input.length == 6){
-				try {
-					int current = Integer.parseInt(input[0]);
-					squareList[current] = new Property(input[1], Integer.parseInt(input[2]), Integer.parseInt(input[3]));
-					resultList[current] = Integer.parseInt(input[4]);
-					if(input[5].equals("m")) {
-						((Property)squareList[current]).setMortgaged(true);
-					}
-				} catch (NumberFormatException e) {
-					//just CONTINUE
-				}
-			}
-			else if (input.length == 2){
-				try {
-					int current = Integer.parseInt(input[0]);
-					JAIL_POS = current;
-					squareList[current] = new JailSquare("Jail"); //could be hard coded or take input from defaultFile.txt idc
-				} catch (NumberFormatException e) {
-					//just CONTINUE
-				}
-			}
-		}
-
-		for (int i = 0; i < squareList.length; i++) {
-			if (squareList[i] == null) {
-				squareList[i] = new ActionSquare("Action");
-				resultList[i] = -1;
-			}
-		}
-		return resultList;
-
-
-		/*
-		for (int i = 0; i < squareList.length; i++){
-			if(i == 4 || i == 5 || i == 13 || i == 14 || i == 22 || i == 23 || i == 31 || i == 32) {
-				squareList[i] = new ActionSquare("Action "+i);
-			}
-			else if(i == 9){
-				squareList[i] = new JailSquare("Jail");
-			}
-			else {
-				squareList[i] = new Property("Property "+i, i, i);
-			}
-		}
-		return squareList;
-		*/
-	}
-
-	/**
 	 * Prompts the user using a JPane to input the number of players > 1 and < 5
 	 *
 	 * @return			the integer number of players for this game 
@@ -244,56 +171,6 @@ public class OaklandOligarchy {
 			}
 		}
 		return num_players;
-	}
-
-	/**
-	 * Creates an array of players with their starting money and names
-	 *
-	 * @param	num_players		The number of players in this game
-	 * @param	ownersList		An array indicating who owns what property
-	 * @return					The array of players in this game
-	 */
-	private static int[] generatePlayers(int num_players, int[] ownersList) {
-		playerList = new Player[num_players];
-		int playersAdded = 0;
-		int playerTurn = -1;
-		int activePlayers = num_players;
-		while (reader.hasNextLine() && playersAdded < num_players) {
-			String[] input = reader.nextLine().split("\t+");	
-			if (input.length != 5) continue;
-			String playerName = input[0];
-			if(playerName.equals("null")) {
-				playerName = promptName(playersAdded);
-			}
-			if(input[4].equals("*")) {
-				playerTurn = playersAdded;
-			}
-			try {
-				int currentMoney = Integer.parseInt(input[2]);
-				playerList[playersAdded] = new Player(playersAdded, currentMoney, playerName);
-				playerList[playersAdded].setPosition(Integer.parseInt(input[3])); //TODO may need to change for save/load with Jail
-				if(currentMoney < 0) {
-					activePlayers--;
-					playerList[playersAdded].setLoser(true);
-				}
-				playerList[playersAdded].setColor(Integer.decode(input[1]));
-			} catch (NumberFormatException e) {
-				continue;
-			}
-			playersAdded++;
-		}
-		
-		for(int i = 0; i < ownersList.length; i++) {
-			int owner_id = ownersList[i];
-			if(owner_id > -1 && owner_id < num_players && !playerList[owner_id].getLoser() && !(squareList[i] instanceof JailSquare)) {
-				playerList[owner_id].addProperty((Property)squareList[i]);
-			}
-		}
-		if(playerTurn < 0) {
-			playerTurn = 0;
-		}
-		int[] res = {playerTurn, activePlayers};
-		return res;
 	}
 	
 	/**
@@ -389,7 +266,7 @@ public class OaklandOligarchy {
 	
 	private static class LoadListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			OaklandOligarchy.load();
+			OaklandOligarchy.load(true, 0);
 		}
 	}
 	
@@ -398,13 +275,7 @@ public class OaklandOligarchy {
 			JFileChooser chooser = new JFileChooser();
 			if(chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 				File file = chooser.getSelectedFile();
-				try {
-					BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-					bw.write(time.getTime() + "\n");
-					bw.write(GO_PAYOUT + "\n");
-					game.save(bw);
-					bw.close();
-				} catch (IOException except) {}
+				fh.save(file, time, game.getPlayers(), squareList, game.getTurn()); 
 			}
 		}
 	}

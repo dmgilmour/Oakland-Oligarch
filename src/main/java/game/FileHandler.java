@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.io.IOException;
+import java.lang.Throwable;
 
 /**
  * A class that will handle the saving and loading of the game.
@@ -25,6 +26,7 @@ public class FileHandler{
 	
 	public FileHandler(File f) {
 		squareList = new Square[OaklandOligarchy.NUMBER_OF_TILES];
+		playerList = new ArrayList<Player>(OaklandOligarchy.MAX_NUMBER_OF_PLAYERS);
 		activePlayers = 0;
 		load(f);
 	}
@@ -39,7 +41,7 @@ public class FileHandler{
 	
 	public Time getTime() {return time;}
 	public Square[] getBoard() {return squareList;}
-	public Player[] getPlayerList() {return (Player[])playerList.toArray();}
+	public Player[] getPlayerList() {return playerList.toArray(new Player[playerList.size()]);}
 	public int getPayout() {return GO_PAYOUT;}
 	public int getJailPosition() {return JAIL_POS;}
 	public int getActivePlayers() {return activePlayers;}
@@ -56,6 +58,7 @@ public class FileHandler{
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.exit(1);
 		}
 		setSquareOwners(ownerList);
@@ -91,6 +94,7 @@ public class FileHandler{
 			playerTurn = p.getId();
 		}
 		int jail = Integer.parseInt(input[7]);
+		
 		if(jail >= 0) {
 			p.goToJail();
 			for(int i = 0; i < jail; i++) {
@@ -146,8 +150,10 @@ public class FileHandler{
 	public void save(File file, Time time, Player[] players, Square[] squares, int playerTurn) {
 		try {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-			bw.write("Time\t" + time.getTime() + "\n");
-			bw.write("GoPayout\t" + GO_PAYOUT + "\n");
+			bw.write("Time\t" + time.getTime());
+			bw.newLine();
+			bw.write("GoPayout\t" + GO_PAYOUT);
+			bw.newLine();
 			for(Player p: players) {
 				savePlayer(bw, p, playerTurn);
 			}
@@ -186,13 +192,11 @@ public class FileHandler{
 			saveProperty(bw, (Property)s, index);
 		}
 		else if(s instanceof JailSquare) {
-			bw.write("Jail\t");
-			bw.write(index);
+			bw.write("Jail\t" + index);
 			bw.newLine();
 		}
 		else if(s instanceof GoSquare) {
-			bw.write("Go\t");
-			bw.write(index);
+			bw.write("Go\t" + index);
 			bw.newLine();
 		}
 	}
@@ -211,10 +215,10 @@ public class FileHandler{
 			bw.write(owner.getId() + "\t" );
 		}
 		if(p.getMortgaged()) {
-			bw.write("m\t");
+			bw.write("m");
 		}
 		else {
-			bw.write("u\t");
+			bw.write("u");
 		}
 		bw.newLine();
 	}

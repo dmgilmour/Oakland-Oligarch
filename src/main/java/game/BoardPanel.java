@@ -11,6 +11,7 @@ public class BoardPanel extends JPanel {
 
 	private Tile[] tiles;
 	private ActionListener propertyListener;
+	private JailTile jail;
 	
 	/**
 	 * Constructor to build the board panel object.
@@ -32,7 +33,8 @@ public class BoardPanel extends JPanel {
 				tiles[i].getButton().setForeground(Color.BLACK);
 			}
 			else if(squareList[i] instanceof JailSquare){
-				tiles[i] = new JailTile(i, (JailSquare)squareList[i]);
+				jail = new JailTile(i, (JailSquare)squareList[i]);
+				tiles[i] = jail;
 			}
 			else {	//this is going to be an action square. This should probably change somehow
 				tiles[i] = new Tile(i, squareList[i]);
@@ -111,6 +113,7 @@ public class BoardPanel extends JPanel {
 	 * @param	p		The player that the board should be updated based on
 	 */
 	public void update(Player p) {
+		
 		if(p.hasMoved()){
 			tiles[p.getOldPos()].remove(p);
 			tiles[p.getPosition()].add(p);
@@ -121,6 +124,6 @@ public class BoardPanel extends JPanel {
 				((PropertyTile)t).update();
 			}
 		}
-		((JailTile)tiles[OaklandOligarchy.JAIL_POS]).update();
+		jail.update();
 	}
 }
