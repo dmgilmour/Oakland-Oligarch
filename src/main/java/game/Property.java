@@ -92,10 +92,14 @@ public class Property extends Square{
 	 * @return				Returns true if the "buy" button should be disabled
 	 */
 	public boolean act(Player player) {
+<<<<<<< HEAD
 		if(owner != null) {
 			if(owner == player) {
 				return true;
 			}
+=======
+		if(owner != null && !owner.equals(player)) {
+>>>>>>> first workings for a proper win/lose. mortgagePhase and loserPhase added to Game. Cost calls both phases. Shouldn't pay yourself rent anymore. Need to add worth functionality and clean up loserCheck / loserCleanup.
 			if (this.mortgaged) {
 				JOptionPane.showMessageDialog(null, "Mortgaged property");
 			} else {

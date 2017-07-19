@@ -21,7 +21,8 @@ public class Player {
 	private boolean inJail;
 	private int jailCounter;		//how many turns a player has been in jail
 	private int doublesCounter;		//how many times a player has rolled doubles
-	
+	private int worth;				//amount of money a player can have with mortgaging their properties.
+
 
 	/**
 	 * The constructor for Players
@@ -42,7 +43,23 @@ public class Player {
 		oldPos = 0;
 		loser = false;
 		jailCounter=0;
+<<<<<<< HEAD
 		inJail = false;
+=======
+		worth = money;
+	}
+
+	public int getWorth(){
+		return worth;
+	}
+
+	public void addWorth(int w){
+		worth += w;
+	}
+
+	public void removeWorth(int w){
+		worth -= w;
+>>>>>>> first workings for a proper win/lose. mortgagePhase and loserPhase added to Game. Cost calls both phases. Shouldn't pay yourself rent anymore. Need to add worth functionality and clean up loserCheck / loserCleanup.
 	}
 
 	public boolean getLoser(){
@@ -101,7 +118,7 @@ public class Player {
 			return false;
 		}
 	}
-		
+
 
 	public int getMoney() {
 		return money;
@@ -129,7 +146,7 @@ public class Player {
 		property.setOwner(this);
 		return true;
 	}
-	
+
 	/**
 	 * Removes a property from the Player's propertyList at a given index. Also sets the owner of property to this player.
 	 *
@@ -144,7 +161,7 @@ public class Player {
 		prop.setOwner(null);
 		return prop;
 	}
-	
+
 	/**
 	 * Removes a given property from the Player's propertyList. Also sets the owner of property to this player.
 	 *
@@ -166,8 +183,14 @@ public class Player {
 	 * @param	property	A property that this player is buying
 	 * @return 				A boolean indicating success of the purchase
 	 */
+<<<<<<< HEAD
 	public boolean buy (Property property) {
 		if (property.getOwner() == null && this.money >= property.getPrice())	{
+=======
+	public boolean buy(Property property) {
+		if(property.getOwner() == null)
+		{
+>>>>>>> first workings for a proper win/lose. mortgagePhase and loserPhase added to Game. Cost calls both phases. Shouldn't pay yourself rent anymore. Need to add worth functionality and clean up loserCheck / loserCleanup.
 			int cost = property.getPrice();
 			if (charge(cost)) {
 				return this.addProperty(property);
@@ -183,19 +206,25 @@ public class Player {
 	 * @returns				A boolean indicating the success of the transaction
 	 */
 	public boolean charge(int cost) {
-		money -= cost;
-		return true;
-		/*if(money >= cost){
+		if(money >= cost){
 			money -= cost;
 			return true;
 		}
+		else if(worth >= cost){
+			//go to mortgagePhase() to cover the cost.
+			OaklandOligarchy.game.mortgagePhase(this, cost);
+			return true;
+		}
 		else{
+			//go to loserPhase() to cover as much of cost as possible, and remove player from the game.
+			setLoser(true);
+			OaklandOligarchy.game.loserPhase(this);
 			return false;
-		}*/
+		}
 	}
 
 	/**
-	 * This player pays the rent on a given property
+	 * This player pays the rent on a given property, or as much as possible.
 	 *
 	 * @param	property	A Property that this player should pay rent on
 	 * @return 				A boolean indicating the success of the payment
@@ -203,9 +232,13 @@ public class Player {
 	public boolean payRent(Property property) {
 		int cost = property.getRent();
 		Player owner = property.getOwner();
-		boolean success = charge(cost);	
-		if(success && owner != null)
+		boolean success = charge(cost);
+		if(success && owner != null){
 			owner.getPaid(cost);
+		}
+		if(!success && owner != null){
+			owner.getPaid(this.getMoney());
+		}
 		return success;
 	}
 
@@ -226,40 +259,40 @@ public class Player {
 	public int getColor() {
 		return color;
 	}
-	
+
 	public void goToJail(){
 		inJail = true;
 		this.setPosition(OaklandOligarchy.JAIL_POS);
 	}
-	
+
 	public void leaveJail(){
 		inJail = false;
 		jailCounter = 0;
 	}
-	
+
 	public boolean isInJail(){
 		return inJail;
 	}
-	
+
 	public void addToJailCounter(){
 		jailCounter++;
 	}
-	
+
 	public int getJailCounter(){
 		return jailCounter;
 	}
-	
+
 	public void resetJailCounter(){
 		jailCounter=0;
 	}
-	
+
 	/**
 	 * @return	returns the doubles counter after adding 1
 	 */
 	public int addToDoublesCounter(){
 		return ++doublesCounter;
 	}
-	
+
 	public void resetDoublesCounter(){
 		doublesCounter = 0;
 	}

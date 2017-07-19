@@ -403,7 +403,8 @@ public class Game {
 	}
 
 	/**
-	 * cleans up the properties and board if there a loser was knocked out of the game
+	 * Cleans up the properties and board if there a loser was knocked out of the game.
+	 * This method is only called when there is a loser being removed from the game.
 	 * @param player player that has just lost the game
 	 */
 	private void loserCleanUp(Player player){
@@ -445,5 +446,63 @@ public class Game {
 		} else {
 			window.disableBuy();
 		}
+	}
+
+	/**
+	 * Starts the mortgagePrompt for a player that owes money and must mortgage properties to pay cost.
+	 * @param player	The player that needs to mortgage properties.
+	 * @param cost		The amount of money the player owes.
+	 */
+	public void mortgagePhase(Player player, int cost){
+		while(player.getMoney() < cost && player != null){
+			mortgage(player, mortgagePrompt(player));
+		}
+	}
+
+	/**
+	 * Prompts a Player they need to mortgage properties, followed by a list of properties to choose from.
+	 * @param player the Player that needs morgage properties to prevent losing.
+	 * @return 		returns an array of properties to mortgage.
+	 */
+	public Property[] mortgagePrompt(Player player){
+		ArrayList<Property> playerProperties = player.getProperties();
+		String[] propList = new String[playerProperties.size()];
+		for (int i = 0; i < playerProperties.size(); i++){
+			propList[i] = playerProperties.get(i).getName();
+		}
+		JList list = new JList(propList);
+		JOptionPane.showMessageDialog(null, player.getName() + " choose properties to mortgage.");
+		JOptionPane.showMessageDialog(null, list, player.getName() + " mortgaging.", JOptionPane.PLAIN_MESSAGE);
+		int[] mortgageProperties = list.getSelectedIndices();
+		Property[] toReturn = new Property[mortgageProperties.length];
+		for (int i = 0; i < toReturn.length; i++){
+			toReturn[i] = playerProperties.get(mortgageProperties[i]);
+		}
+		return toReturn;
+	}
+
+	/**
+	 * Mortgages an array of properties specified by mortgagePrompt.
+	 * @param mortgager	Player that is mortgaging properties.
+	 * @param props		Array of properties to be mortgaged.
+	 */
+	public void mortgage(Player mortgager, Property[] props){
+		for(Property prop : props){
+			mortgage(prop);
+		}
+	}
+
+	/**
+	 * Make as much money from mortgaging all properties and pay it to the player owed.
+	 * @param player	The player that is morgaging properties.
+	 */
+	public void loserPhase(Player player){
+		//loop through all properties and morgage them.
+		for(Property prop : player.getProperties()){
+			mortgage(prop);
+		}
+		//charging all of players money is handeled in Player.payRent()
+		//now clean up the loser.
+		loserCleanUp(player);
 	}
 }
