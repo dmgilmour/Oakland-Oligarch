@@ -222,7 +222,7 @@ public class Player {
 		}
 		else{
 			//go to loserPhase() to cover as much of cost as possible, and remove player from the game.
-			System.out.println(this.getName() + " is a loser found in charge(). worth: " + worth + " money: " + money);
+			//System.out.println(this.getName() + " is a loser found in charge(). worth: " + worth + " money: " + money);
 			OaklandOligarchy.game.loserPhase(this);
 			//setLoser(true);
 			return false;

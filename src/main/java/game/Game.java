@@ -164,7 +164,7 @@ public class Game {
 				auctionPhase();
 			}
 		}
-		System.out.println("in end game: " + this.getCurrentPlayer().getName() + ": money: " + this.getCurrentPlayer().getMoney() + " worth: " + this.getCurrentPlayer().getWorth() + " loser: " + this.getCurrentPlayer().getLoser());
+		//System.out.println("in end game: " + this.getCurrentPlayer().getName() + ": money: " + this.getCurrentPlayer().getMoney() + " worth: " + this.getCurrentPlayer().getWorth() + " loser: " + this.getCurrentPlayer().getLoser());
 		//loserCheck();
 		this.getCurrentPlayer().resetDoublesCounter();
 		playerTurn = (playerTurn + 1) % num_players;	//Increment to the next player's turn
@@ -386,11 +386,11 @@ public class Game {
 	private void loserCheck(){
 		for(int i = 0; i < playerList.length; i++){
 			if(playerList[i].getMoney() < 0 && playerList[i].getWorth() < 0 && !playerList[i].getLoser()){
-				System.out.println(playerList[i].getName() + ": money: " + playerList[i].getMoney() + " worth: " + playerList[i].getWorth() + " Loser: " + playerList[i].getLoser());
+				//System.out.println(playerList[i].getName() + ": money: " + playerList[i].getMoney() + " worth: " + playerList[i].getWorth() + " Loser: " + playerList[i].getLoser());
 				window.printLoser(playerList[i]);
 				playerList[i].setLoser(true);
-				System.out.println(playerList[i].getName() + ": money: " + playerList[i].getMoney() + " worth: " + playerList[i].getWorth() + " Loser: " + playerList[i].getLoser());
-				System.out.println("active players: " + active_players);
+				//System.out.println(playerList[i].getName() + ": money: " + playerList[i].getMoney() + " worth: " + playerList[i].getWorth() + " Loser: " + playerList[i].getLoser());
+				//System.out.println("active players: " + active_players);
 				active_players --;
 				if(active_players > 1){
 					loserCleanUp(playerList[i]);
