@@ -126,7 +126,7 @@ public class Property extends Square{
 		}
 	}
 
-  
+
 	/**
 	 * Will set the property to unmortgaged and charge player half the price
 	 *
@@ -140,7 +140,7 @@ public class Property extends Square{
 			}
 		}
 	}
-	
+
 
 	/**
 	 * Will set the property to mortgaged and give the player have the price
@@ -150,7 +150,7 @@ public class Property extends Square{
 	public void mortgage() {
 		if (!mortgaged) {
 			mortgaged = true;
-			owner.getPaid(price / 2);
+			owner.gainMortgageValue(price / 2);
 		}
 	}
 

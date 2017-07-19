@@ -339,13 +339,13 @@ public class Game {
 		return toReturn;
 	}
 
-<<<<<<< HEAD
 	public void toggleMortgage(int propIndex) {
 		Property prop = this.getCurrentPlayer().getProperties().get(propIndex);
 		if (prop.getMortgaged()) {
 			prop.unmortgage();
 		} else {
 			prop.mortgage();
+<<<<<<< HEAD
 =======
 
 	/**
@@ -408,6 +408,11 @@ public class Game {
 >>>>>>> more merge conflicts to fix
 	}
 
+=======
+		}
+		updateBuyButton();
+}
+>>>>>>> pre-last PR from dan and woody
 
 	/**
 	 * Will complete a trade between players
@@ -611,7 +616,7 @@ public class Game {
 	public void loserPhase(Player player){
 		//loop through all properties and morgage them.
 		for(Property prop : player.getProperties()){
-			mortgage(prop);
+			prop.mortgage();
 		}
 <<<<<<< HEAD
 <<<<<<< HEAD
