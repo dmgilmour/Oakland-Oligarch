@@ -99,14 +99,14 @@ public class Window extends JFrame {
 	public void update(Player p) {
 		statusPanel.update(p);
 		boardPanel.update(p);
-		
+
 		if(p.isInJail()){
 			this.enablePay();
 		}
 		else{
 			this.hidePay();
 		}
-		
+
 		setVisible(true);
 	}
 
@@ -153,12 +153,12 @@ public class Window extends JFrame {
 	public void disableBuy() {
 		actionPanel.buyButton.setEnabled(false);
 	}
-	
+
 	public void hidePay(){
 		actionPanel.payButton.setEnabled(false);
 		actionPanel.payButton.setVisible(false);
 	}
-	
+
 	public void enablePay(){
 		actionPanel.payButton.setEnabled(true);
 		actionPanel.payButton.setVisible(true);

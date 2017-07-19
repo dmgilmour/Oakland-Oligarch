@@ -11,7 +11,7 @@ public class ActionHandler {
 	private Player[] playerList;
 	private Board board;
 	private Random random;
-	
+
 	private final int COST_OF_WATER = 100;
 	private final int TAPINGO_FEE = 100;
 	private final int QDOBA_DAMAGES = 500;
@@ -20,7 +20,7 @@ public class ActionHandler {
 	private final int STUDENT_ACTIVITY_FEE = 25;
 	private final int SMELL_COMPLAINT = 32;
 	private final int OWNS_PROPERTY_ACTIONS = 2;
-	
+
 	/**
 	 * The constructor for the ActionHandler
 	 *
@@ -33,7 +33,7 @@ public class ActionHandler {
 		board = b;
 		playerList = pll;
 	}
-	
+
 	/**
 	 * Performs a random action from the list upon the give player
 	 *
@@ -95,7 +95,7 @@ public class ActionHandler {
 				break;
 		}
 	}
-	
+
 	/**
 	 * Gives a random property (owned or unowned) to the given player
 	 *
@@ -108,7 +108,7 @@ public class ActionHandler {
 		}
 		JOptionPane.showMessageDialog(null, "Orientation Week!\nFreshmen move in and " + p.getName() + "\ngains the property: " + ((Property)randSquare).getName());
 	}
-	
+
 	/**
 	 * Removes a random property from all players
 	 */
@@ -128,7 +128,7 @@ public class ActionHandler {
 		}
 		JOptionPane.showMessageDialog(null, message);
 	}
-	
+
 	/**
 	 * Removes all money from a given player
 	 *
@@ -138,7 +138,7 @@ public class ActionHandler {
 		p.charge(p.getMoney());
 		JOptionPane.showMessageDialog(null, "Have a bad week:\n" + p.getName() + " had Facebook hacked, got a bad haircut, lost Panther ID, laptop broke, and stress-ate\n" + "You are BROKE");
 	}
-	
+
 	/**
 	 * Selects a random property. If it is owned, all players pay the owner. If it is unowned, allows the given player to buy it for twice the cost.
 	 *
@@ -161,16 +161,21 @@ public class ActionHandler {
 		else {
 			String message = owner.getName() + " is selling water:\n";
 			for(Player player: playerList) {
-				if(player != owner) {
+				if(player != owner && !player.getLoser()) {
 					if(player.charge(COST_OF_WATER)) {
 						message += player.getName() + " paid $" + COST_OF_WATER + "\n";
+					}
+					else{
+						message += player.getName() + " paid $" + player.getMoney() + "\n";
+						player.setMoney(-1);
+						player.setWorth(-1);
 					}
 				}
 			}
 			JOptionPane.showMessageDialog(null, message);
 		}
 	}
-	
+
 	/**
 	 * Gives the given player a sum of money equal to the rent of all properties owned
 	 *
@@ -184,7 +189,7 @@ public class ActionHandler {
 		p.getPaid(total);
 		JOptionPane.showMessageDialog(null, "First of the month!\nYou have been paid rent by all tenants\n" + p.getName() + " recieved $" + total);
 	}
-	
+
 	/**
 	 * All players pay the given player
 	 *
@@ -196,11 +201,17 @@ public class ActionHandler {
 				if(player.charge(TAPINGO_FEE)) {
 					p.getPaid(TAPINGO_FEE);
 				}
+				else{
+					p.getPaid(player.getMoney());
+					p.addWorth(player.getMoney());
+					player.setMoney(-1);
+					player.setWorth(-1);
+				}
 			}
 		}
 		JOptionPane.showMessageDialog(null, "Work for Tapingo delivery:\nAll players pay " + p.getName() + " $" + TAPINGO_FEE);
 	}
-	
+
 	/**
 	 * The given player gets a random property and loses all money
 	 *
@@ -214,7 +225,7 @@ public class ActionHandler {
 		p.charge(p.getMoney());
 		JOptionPane.showMessageDialog(null, "You found a significant other!\n" + p.getName() + " gained " + ((Property)randSquare).getName() + ",\nbut lost all money");
 	}
-	
+
 	/**
 	 * Given player pays an amount and all other players are paid a fraction of that amount
 	 *
@@ -223,14 +234,14 @@ public class ActionHandler {
 	private void qdoba(Player p) {
 		p.charge(QDOBA_DAMAGES);
 		for(Player player: playerList) {
-			if(player != p) {
+			if(player != p && !player.getLoser()) {
 				player.getPaid(QDOBA_DAMAGES / 10);
 			}
 		}
 		JOptionPane.showMessageDialog(null, "To impress a girl\nyou try to jump the gap\nin the roof of Qdoba...\nand fail!");
 		JOptionPane.showMessageDialog(null, p.getName() + " pays $" + QDOBA_DAMAGES + "\nAll other plays recieve a $" + (QDOBA_DAMAGES / 10) + " gift card\nwhen it reopens");
 	}
-	
+
 	/**
 	 * Given player pays an amount and takes an additional turn
 	 *
@@ -243,7 +254,7 @@ public class ActionHandler {
 			OaklandOligarchy.switchPhase(OaklandOligarchy.GamePhase.START, null);
 		}
 	}
-	
+
 	/**
 	 * Chooses a random action for a given player from:
 	 *  -Lose a random property
@@ -275,15 +286,20 @@ public class ActionHandler {
 				break;
 			case 2:
 				p.charge(FRAT_DUES);
-				JOptionPane.showMessageDialog(null, "...And need to pay your dues\n" + p.getName() + " pays $" + FRAT_DUES);
+				JOptionPane.showMessageDialog(null, "...And need to pay your dues\n" + p.getName() + " pays $" + FRAT_DUES + "\n");
 				break;
 			case 3:
 				String message = "...And all members pay you dues\n";
 				for(Player player: playerList) {
-					if(player != p) {
+					if(player != p && !player.getLoser()) {
 						if(player.charge(FRAT_DUES)) {
 							p.getPaid(FRAT_DUES);
 							message += player.getName() + " pays $" + FRAT_DUES;
+						}
+						else{
+							int playerDues = player.getMoney();
+							p.getPaid(playerDues);
+							message += player.getName() + " pays $" + playerDues;
 						}
 					}
 				}
@@ -299,7 +315,7 @@ public class ActionHandler {
 				break;
 		}
 	}
-	
+
 	/**
 	 * Given player collects an amount for each property he/she owns
 	 *
@@ -313,7 +329,7 @@ public class ActionHandler {
 		p.getPaid(totalGain);
 		JOptionPane.showMessageDialog(null, "Student Activities Fee:\nCollect $" + STUDENT_ACTIVITY_FEE + " for each property you own\n" + p.getName() + " gains $" + totalGain);
 	}
-	
+
 	/**
 	 * All players pay twice the rent of the tile they currently occupy (regardles of owner) plus an amount
 	 */
@@ -330,10 +346,15 @@ public class ActionHandler {
 			if(player.charge(charges)){
 				message += player.getName() + " pays $" + charges + "\n";
 			}
+			else{
+				message += player.getName() + " pays $" + player.getMoney() + "\n";
+				player.setMoney(-1);
+				player.setWorth(-1);
+			}
 		}
 		JOptionPane.showMessageDialog(null, message);
 	}
-	
+
 	/**
 	 * A random 3 consectutive tiles become unowned
 	 */
@@ -373,7 +394,7 @@ public class ActionHandler {
 		}
 		JOptionPane.showMessageDialog(null, "INDEFINITE Construction:\n" + prevProp.getName() + " becomes unowned\n" + midProp.getName() + " becomes unowned\n" + nextProp.getName() + " becomes unowned\n");
 	}
-	
+
 	/**
 	 * A given player moves to a random property that they do not own and pays rent on that property
 	 *

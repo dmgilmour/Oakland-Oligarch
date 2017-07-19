@@ -57,6 +57,10 @@ public class Player {
 		worth += w;
 	}
 
+	public void setWorth(int value){
+		worth = value;
+	}
+
 	public void removeWorth(int w){
 		worth -= w;
 >>>>>>> first workings for a proper win/lose. mortgagePhase and loserPhase added to Game. Cost calls both phases. Shouldn't pay yourself rent anymore. Need to add worth functionality and clean up loserCheck / loserCleanup.
@@ -68,6 +72,8 @@ public class Player {
 
 	public void setLoser(boolean b){
 		loser = b;
+		money = -1;
+		worth = -1;
 	}
 
 	public int getOldPos() {
@@ -119,6 +125,9 @@ public class Player {
 		}
 	}
 
+	public void setMoney(int value){
+		money = value;
+	}
 
 	public int getMoney() {
 		return money;
@@ -144,6 +153,7 @@ public class Player {
 		}
 		properties.add(property);
 		property.setOwner(this);
+		this.addWorth(property.getPrice() / 2);
 		return true;
 	}
 
@@ -159,6 +169,7 @@ public class Player {
 		}
 		Property prop = properties.remove(index);
 		prop.setOwner(null);
+		this.removeWorth(prop.getPrice() / 2);
 		return prop;
 	}
 
@@ -208,17 +219,21 @@ public class Player {
 	public boolean charge(int cost) {
 		if(money >= cost){
 			money -= cost;
+			worth -= cost;
 			return true;
 		}
 		else if(worth >= cost){
 			//go to mortgagePhase() to cover the cost.
 			OaklandOligarchy.game.mortgagePhase(this, cost);
+			money -= cost;
+			worth -= cost;
 			return true;
 		}
 		else{
 			//go to loserPhase() to cover as much of cost as possible, and remove player from the game.
-			setLoser(true);
+			System.out.println(this.getName() + " is a loser found in charge(). worth: " + worth + " money: " + money);
 			OaklandOligarchy.game.loserPhase(this);
+			setLoser(true);
 			return false;
 		}
 	}
@@ -236,20 +251,33 @@ public class Player {
 		if(success && owner != null){
 			owner.getPaid(cost);
 		}
-		if(!success && owner != null){
+		if(!success && owner != null){		//should only run if a loser has to pay the rest of their money.
 			owner.getPaid(this.getMoney());
+			this.setMoney(-1);
+			this.setWorth(-1);
 		}
 		return success;
 	}
 
 	/**
-	 *	Deposits funds into this player's account
+	 *	Deposits funds into this player's account and increase player's worth.
 	 *
 	 * @param	payment		An integer value that the player should receive
 	 */
 	public void getPaid(int payment) {
 		if(payment > 0)
 			money += payment;
+			worth += payment;
+	}
+
+	/**
+	 * Increases player's money without increasing the player's worth.
+	 * @param value		Integer value the player should have added to money.
+	 */
+	public void gainMortgageValue(int value){
+		if(value > 0){
+			money += value;
+		}
 	}
 
 	public void setColor(int c) {
