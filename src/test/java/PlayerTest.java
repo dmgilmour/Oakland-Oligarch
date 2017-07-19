@@ -165,6 +165,7 @@ public class PlayerTest {
 		assertEquals(p4.getMoney(), 2000);
 	}
 
+/*
 	// Tests that a player is not validated when attempting to pay a rent they
 	// cannot afford
 	@Test 
@@ -173,7 +174,6 @@ public class PlayerTest {
 		assertFalse(p3.payRent(prop3));
 	}
 
-/*
 	// I hate Woody
 	// Tests that a player is (or isn't) charged the amount of the rent when
 	// they cannot afford it
