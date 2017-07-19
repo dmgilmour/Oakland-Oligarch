@@ -394,7 +394,7 @@ public class Game {
 		Square currentSq = board.getSquare(this.getCurrentPlayer().getPosition());
 		if (currentSq instanceof Property) {
 			if (((Property) currentSq).getOwner() == null) {
-				if (getCurrentPlayer().getMoney() >= ((Property) board.getSquare(this.getCurrentPlayer().getPosition())).getPrice()) {
+				if (getCurrentPlayer().getMoney() >= ((Property) currentSq).getPrice()) {
 					window.enableBuy();
 				} else {
 					window.disableBuy();
@@ -402,6 +402,8 @@ public class Game {
 			} else {
 				window.disableBuy();
 			}
+		} else {
+			window.disableBuy();
 		}
 	}
 
