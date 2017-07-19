@@ -52,4 +52,5 @@ public class ActionPanel extends JPanel {
 
 		add(rollButton, c);
 	}
+
 }

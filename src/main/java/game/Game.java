@@ -301,6 +301,8 @@ public class Game {
 		} else {
 			prop.mortgage();
 		}
+		updateBuyButton();
+		
 	}
 	
 
@@ -322,10 +324,14 @@ public class Game {
 		if (traderProfit > 0) {
 			trader.getPaid(traderProfit);
 			tradee.charge(traderProfit);
+			if (getCurrentPlayer().getMoney() > ((Property) board.getSquare(this.getCurrentPlayer().getPosition())).getPrice()) {
+				window.enableBuy();
+			}
 		} else {
 			tradee.getPaid(traderProfit * -1);
 			trader.charge(traderProfit * -1);
 		}
+		updateBuyButton();
 	}
   
 	/**
@@ -384,4 +390,13 @@ public class Game {
 		}
 		board.save(bw);
 	}
+
+	public void updateBuyButton() {
+		if (getCurrentPlayer().getMoney() >= ((Property) board.getSquare(this.getCurrentPlayer().getPosition())).getPrice()) {
+			window.enableBuy();
+		} else {
+			window.disableBuy();
+		}
+	}
+
 }

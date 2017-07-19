@@ -93,10 +93,10 @@ public class Window extends JFrame {
 	 */
 	public void update(Player p) {
 		statusPanel.update(p);
-
 		boardPanel.update(p);
 		setVisible(true);
 	}
+
 
 	/**
 	 * Shows the winner of the game. Exits the game when "ok" is clicked.
