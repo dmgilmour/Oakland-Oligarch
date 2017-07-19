@@ -40,17 +40,24 @@ public class OaklandOligarchy {
 
 	protected static Game game;
 
+<<<<<<< HEAD
 >>>>>>> first workings for a proper win/lose. mortgagePhase and loserPhase added to Game. Cost calls both phases. Shouldn't pay yourself rent anymore. Need to add worth functionality and clean up loserCheck / loserCleanup.
+=======
+>>>>>>> post Dan's test branch
 	private static Window window;
 	private static Square[] squareList;
 	private static Random random;
 	private static Time time;
+<<<<<<< HEAD
 <<<<<<< HEAD
 	private static Scanner reader;
 	private static FileHandler fh;
 =======
 
 >>>>>>> first workings for a proper win/lose. mortgagePhase and loserPhase added to Game. Cost calls both phases. Shouldn't pay yourself rent anymore. Need to add worth functionality and clean up loserCheck / loserCleanup.
+=======
+
+>>>>>>> post Dan's test branch
 
 	private static PhaseListener buyListener;
 	private static PhaseListener moveListener;
@@ -98,6 +105,7 @@ public class OaklandOligarchy {
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	public static boolean load(boolean loadNewFile, int num_players) {
 		if(loadNewFile) {
 			JFileChooser chooser = new JFileChooser();
@@ -125,6 +133,8 @@ public class OaklandOligarchy {
 		JAIL_POS = fh.getJailPosition();
 		game = new Game(playerList, squareList, window, random, playerTurn, activePlayers);
 =======
+=======
+>>>>>>> post Dan's test branch
 	public static boolean load() {
 		JFileChooser chooser = new JFileChooser();
 		int choice = chooser.showOpenDialog(null);
@@ -369,7 +379,10 @@ public class OaklandOligarchy {
 		return res;
 	}
 
+<<<<<<< HEAD
 >>>>>>> first workings for a proper win/lose. mortgagePhase and loserPhase added to Game. Cost calls both phases. Shouldn't pay yourself rent anymore. Need to add worth functionality and clean up loserCheck / loserCleanup.
+=======
+>>>>>>> post Dan's test branch
 	/**
 	 * Prompts the user for their name via a JPane
 	 *

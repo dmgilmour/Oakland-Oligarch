@@ -44,8 +44,11 @@ public class Player {
 		loser = false;
 		jailCounter=0;
 <<<<<<< HEAD
+<<<<<<< HEAD
 		inJail = false;
 =======
+=======
+>>>>>>> post Dan's test branch
 		worth = money;
 	}
 
@@ -57,6 +60,7 @@ public class Player {
 		worth += w;
 	}
 
+<<<<<<< HEAD
 	public void setWorth(int value){
 		worth = value;
 	}
@@ -64,6 +68,10 @@ public class Player {
 	public void removeWorth(int w){
 		worth -= w;
 >>>>>>> first workings for a proper win/lose. mortgagePhase and loserPhase added to Game. Cost calls both phases. Shouldn't pay yourself rent anymore. Need to add worth functionality and clean up loserCheck / loserCleanup.
+=======
+	public void removeWorth(int w){
+		worth -= w;
+>>>>>>> post Dan's test branch
 	}
 
 	public boolean getLoser(){
@@ -125,9 +133,12 @@ public class Player {
 		}
 	}
 
+<<<<<<< HEAD
 	public void setMoney(int value){
 		money = value;
 	}
+=======
+>>>>>>> post Dan's test branch
 
 	public int getMoney() {
 		return money;
@@ -218,6 +229,7 @@ public class Player {
 	 */
 	public boolean charge(int cost) {
 		if(money >= cost){
+<<<<<<< HEAD
 			money -= cost;
 			worth -= cost;
 			return true;
@@ -225,15 +237,27 @@ public class Player {
 		else if(worth >= cost){
 			//go to mortgagePhase() to cover the cost.
 			OaklandOligarchy.game.mortgagePhase(this, cost);
+=======
+>>>>>>> post Dan's test branch
 			money -= cost;
 			worth -= cost;
 			return true;
 		}
+		else if(worth >= cost){
+			//go to mortgagePhase() to cover the cost.
+			OaklandOligarchy.game.mortgagePhase(this, cost);
+			return true;
+		}
 		else{
 			//go to loserPhase() to cover as much of cost as possible, and remove player from the game.
+<<<<<<< HEAD
 			System.out.println(this.getName() + " is a loser found in charge(). worth: " + worth + " money: " + money);
 			OaklandOligarchy.game.loserPhase(this);
 			setLoser(true);
+=======
+			setLoser(true);
+			OaklandOligarchy.game.loserPhase(this);
+>>>>>>> post Dan's test branch
 			return false;
 		}
 	}
@@ -251,10 +275,15 @@ public class Player {
 		if(success && owner != null){
 			owner.getPaid(cost);
 		}
+<<<<<<< HEAD
 		if(!success && owner != null){		//should only run if a loser has to pay the rest of their money.
 			owner.getPaid(this.getMoney());
 			this.setMoney(-1);
 			this.setWorth(-1);
+=======
+		if(!success && owner != null){
+			owner.getPaid(this.getMoney());
+>>>>>>> post Dan's test branch
 		}
 		return success;
 	}
