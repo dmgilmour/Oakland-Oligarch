@@ -43,12 +43,7 @@ public class Player {
 		oldPos = 0;
 		loser = false;
 		jailCounter=0;
-<<<<<<< HEAD
-<<<<<<< HEAD
 		inJail = false;
-=======
-=======
->>>>>>> post Dan's test branch
 		worth = money;
 	}
 
@@ -60,21 +55,8 @@ public class Player {
 		worth += w;
 	}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> more merge conflicts to fix
-	public void setWorth(int value){
-		worth = value;
-	}
-
 	public void removeWorth(int w){
 		worth -= w;
->>>>>>> first workings for a proper win/lose. mortgagePhase and loserPhase added to Game. Cost calls both phases. Shouldn't pay yourself rent anymore. Need to add worth functionality and clean up loserCheck / loserCleanup.
-=======
-	public void removeWorth(int w){
-		worth -= w;
->>>>>>> post Dan's test branch
 	}
 
 	public boolean getLoser(){
@@ -83,8 +65,6 @@ public class Player {
 
 	public void setLoser(boolean b){
 		loser = b;
-		money = -1;
-		worth = -1;
 	}
 
 	public int getOldPos() {
@@ -105,7 +85,7 @@ public class Player {
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String n) {
 		name = n;
 		token = new JLabel(name);
@@ -136,18 +116,6 @@ public class Player {
 		}
 	}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-	public void setMoney(int value){
-		money = value;
-	}
-=======
->>>>>>> post Dan's test branch
-=======
-	public void setMoney(int value){
-		money = value;
-	}
->>>>>>> more merge conflicts to fix
 
 	public int getMoney() {
 		return money;
@@ -173,7 +141,6 @@ public class Player {
 		}
 		properties.add(property);
 		property.setOwner(this);
-		this.addWorth(property.getPrice() / 2);
 		return true;
 	}
 
@@ -189,7 +156,6 @@ public class Player {
 		}
 		Property prop = properties.remove(index);
 		prop.setOwner(null);
-		this.removeWorth(prop.getPrice() / 2);
 		return prop;
 	}
 
@@ -216,14 +182,6 @@ public class Player {
 	 */
 	public boolean buy (Property property) {
 		if (property.getOwner() == null && this.money >= property.getPrice())	{
-<<<<<<< HEAD
-=======
-	public boolean buy(Property property) {
-		if(property.getOwner() == null)
-		{
->>>>>>> first workings for a proper win/lose. mortgagePhase and loserPhase added to Game. Cost calls both phases. Shouldn't pay yourself rent anymore. Need to add worth functionality and clean up loserCheck / loserCleanup.
-=======
->>>>>>> pre-last PR from dan
 			int cost = property.getPrice();
 			if (charge(cost)) {
 				return this.addProperty(property);
@@ -240,43 +198,18 @@ public class Player {
 	 */
 	public boolean charge(int cost) {
 		if(money >= cost){
-<<<<<<< HEAD
 			money -= cost;
-			worth -= cost;
 			return true;
 		}
 		else if(worth >= cost){
 			//go to mortgagePhase() to cover the cost.
 			OaklandOligarchy.game.mortgagePhase(this, cost);
-=======
->>>>>>> post Dan's test branch
-			money -= cost;
-			worth -= cost;
-			return true;
-		}
-		else if(worth >= cost){
-			//go to mortgagePhase() to cover the cost.
-			OaklandOligarchy.game.mortgagePhase(this, cost);
-			money -= cost;
-			worth -= cost;
 			return true;
 		}
 		else{
 			//go to loserPhase() to cover as much of cost as possible, and remove player from the game.
-<<<<<<< HEAD
-<<<<<<< HEAD
-			System.out.println(this.getName() + " is a loser found in charge(). worth: " + worth + " money: " + money);
-			OaklandOligarchy.game.loserPhase(this);
-			setLoser(true);
-=======
 			setLoser(true);
 			OaklandOligarchy.game.loserPhase(this);
->>>>>>> post Dan's test branch
-=======
-			System.out.println(this.getName() + " is a loser found in charge(). worth: " + worth + " money: " + money);
-			OaklandOligarchy.game.loserPhase(this);
-			setLoser(true);
->>>>>>> more merge conflicts to fix
 			return false;
 		}
 	}
@@ -294,45 +227,20 @@ public class Player {
 		if(success && owner != null){
 			owner.getPaid(cost);
 		}
-<<<<<<< HEAD
-<<<<<<< HEAD
-		if(!success && owner != null){		//should only run if a loser has to pay the rest of their money.
-			owner.getPaid(this.getMoney());
-			this.setMoney(-1);
-			this.setWorth(-1);
-=======
 		if(!success && owner != null){
 			owner.getPaid(this.getMoney());
->>>>>>> post Dan's test branch
-=======
-		if(!success && owner != null){		//should only run if a loser has to pay the rest of their money.
-			owner.getPaid(this.getMoney());
-			this.setMoney(-1);
-			this.setWorth(-1);
->>>>>>> more merge conflicts to fix
 		}
 		return success;
 	}
 
 	/**
-	 *	Deposits funds into this player's account and increase player's worth.
+	 *	Deposits funds into this player's account
 	 *
 	 * @param	payment		An integer value that the player should receive
 	 */
 	public void getPaid(int payment) {
 		if(payment > 0)
 			money += payment;
-			worth += payment;
-	}
-
-	/**
-	 * Increases player's money without increasing the player's worth.
-	 * @param value		Integer value the player should have added to money.
-	 */
-	public void gainMortgageValue(int value){
-		if(value > 0){
-			money += value;
-		}
 	}
 
 	public void setColor(int c) {
