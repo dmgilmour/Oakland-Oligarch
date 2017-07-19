@@ -173,6 +173,8 @@ public class PlayerTest {
 		assertFalse(p3.payRent(prop3));
 	}
 
+/*
+	// I hate Woody
 	// Tests that a player is (or isn't) charged the amount of the rent when
 	// they cannot afford it
 	// FIX WHEN CHARGE BEHAVIOR IS DETERMINED
@@ -199,4 +201,5 @@ public class PlayerTest {
 		setup();
 		assertTrue(p1.payRent(prop2));
 	}
+*/
 }
