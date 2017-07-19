@@ -164,7 +164,7 @@ public class Game {
 				auctionPhase();
 			}
 		}
-		//System.out.println("in end game: " + this.getCurrentPlayer().getName() + ": money: " + this.getCurrentPlayer().getMoney() + " worth: " + this.getCurrentPlayer().getWorth() + " loser: " + this.getCurrentPlayer().getLoser());
+		System.out.println("in end game: " + this.getCurrentPlayer().getName() + ": money: " + this.getCurrentPlayer().getMoney() + " worth: " + this.getCurrentPlayer().getWorth() + " loser: " + this.getCurrentPlayer().getLoser());
 		//loserCheck();
 		this.getCurrentPlayer().resetDoublesCounter();
 		playerTurn = (playerTurn + 1) % num_players;	//Increment to the next player's turn
@@ -361,12 +361,12 @@ public class Game {
 		for (Property prop : traderProps) {
 			tradee.addProperty(trader.removeProperty(prop));
 			//tradee.addWorth(prop.getPrice() / 2);
-			trader.removeWorth(prop.getPrice() / 2);
+			//trader.removeWorth(prop.getPrice() / 2);
 		}
 		for (Property prop : tradeeProps) {
 			trader.addProperty(tradee.removeProperty(prop));
-			trader.addWorth(prop.getPrice() / 2);
-			tradee.removeWorth(prop.getPrice() / 2);
+			//trader.addWorth(prop.getPrice() / 2);
+			//tradee.removeWorth(prop.getPrice() / 2);
 		}
 		if (traderProfit > 0) {
 			trader.getPaid(traderProfit);
@@ -386,11 +386,11 @@ public class Game {
 	private void loserCheck(){
 		for(int i = 0; i < playerList.length; i++){
 			if(playerList[i].getMoney() < 0 && playerList[i].getWorth() < 0 && !playerList[i].getLoser()){
-				//System.out.println(playerList[i].getName() + ": money: " + playerList[i].getMoney() + " worth: " + playerList[i].getWorth() + " Loser: " + playerList[i].getLoser());
+				System.out.println(playerList[i].getName() + ": money: " + playerList[i].getMoney() + " worth: " + playerList[i].getWorth() + " Loser: " + playerList[i].getLoser());
 				window.printLoser(playerList[i]);
 				playerList[i].setLoser(true);
-				//System.out.println(playerList[i].getName() + ": money: " + playerList[i].getMoney() + " worth: " + playerList[i].getWorth() + " Loser: " + playerList[i].getLoser());
-				//System.out.println("active players: " + active_players);
+				System.out.println(playerList[i].getName() + ": money: " + playerList[i].getMoney() + " worth: " + playerList[i].getWorth() + " Loser: " + playerList[i].getLoser());
+				System.out.println("active players: " + active_players);
 				active_players --;
 				if(active_players > 1){
 					loserCleanUp(playerList[i]);
@@ -460,7 +460,9 @@ public class Game {
 		ArrayList<Property> playerProperties = player.getProperties();
 		String[] propList = new String[playerProperties.size()];
 		for (int i = 0; i < playerProperties.size(); i++){
-			propList[i] = playerProperties.get(i).getName();
+			if(!playerProperties.get(i).getMortgaged()){
+				propList[i] = playerProperties.get(i).getName();
+			}
 		}
 		JList list = new JList(propList);
 		JOptionPane.showMessageDialog(null, player.getName() + " choose properties to mortgage.");
@@ -493,8 +495,8 @@ public class Game {
 		/*for(Property prop : player.getProperties()){
 			prop.mortgage();
 		}*/
-		player.setMoney(-1);
-		player.setWorth(-1);
+		//player.setMoney(-1);
+		//player.setWorth(-1);
 		//charging all of players money is handeled in Player.payRent() or ActionHandler
 		//there was a loser go to loserCheck to have it handle them.
 		loserCheck();

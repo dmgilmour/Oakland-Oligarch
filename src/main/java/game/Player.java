@@ -181,6 +181,7 @@ public class Player {
 		}
 		prop.setOwner(null);
 		properties.remove(prop);
+		this.removeWorth(prop.getPrice() / 2);
 		return prop;
 	}
 
@@ -221,7 +222,7 @@ public class Player {
 		}
 		else{
 			//go to loserPhase() to cover as much of cost as possible, and remove player from the game.
-			//System.out.println(this.getName() + " is a loser found in charge(). worth: " + worth + " money: " + money);
+			System.out.println(this.getName() + " is a loser found in charge(). worth: " + worth + " money: " + money);
 			OaklandOligarchy.game.loserPhase(this);
 			//setLoser(true);
 			return false;
@@ -242,7 +243,7 @@ public class Player {
 			owner.getPaid(cost);
 		}
 		if(!success && owner != null){		//should only run if a loser has to pay the rest of their money.
-			owner.getPaid(this.getMoney());
+			owner.getPaid(this.getWorth());
 			this.setMoney(-1);
 			this.setWorth(-1);
 		}

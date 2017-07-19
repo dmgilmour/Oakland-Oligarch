@@ -206,8 +206,8 @@ public class ActionHandler {
 					p.getPaid(TAPINGO_FEE);
 				}
 				else{
-					p.getPaid(player.getMoney());
-					p.addWorth(player.getMoney());
+					p.getPaid(player.getWorth());
+					p.addWorth(player.getWorth());
 					player.setMoney(-1);
 					player.setWorth(-1);
 				}
@@ -351,7 +351,7 @@ public class ActionHandler {
 				message += player.getName() + " pays $" + charges + "\n";
 			}
 			else{
-				message += player.getName() + " pays $" + player.getMoney() + "\n";
+				message += player.getName() + " pays $" + player.getWorth() + "\n";
 				player.setMoney(-1);
 				player.setWorth(-1);
 			}
