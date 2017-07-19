@@ -321,8 +321,20 @@ public class OaklandOligarchy {
 	 * @param	propIndex	The index of the property to toggle
 	 */
 	private static void toggleMortgage(int propIndex) {
+<<<<<<< HEAD
 		game.toggleMortgage(propIndex);
 		window.update(game.getCurrentPlayer());
+=======
+		Player player = game.getCurrentPlayer();
+
+		Property prop = player.getProperties().get(propIndex);
+		if (prop.getMortgaged()) {
+			game.unmortgage(prop);
+		} else {
+			game.mortgage(prop);
+		}
+		window.update(player);
+>>>>>>> 167eba58487667a8eafbbc22ab8cffb8093b8b7b
 	}
 
 	private static void displayProperty(int propIndex) {
