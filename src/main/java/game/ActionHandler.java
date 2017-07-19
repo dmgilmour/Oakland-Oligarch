@@ -160,19 +160,23 @@ public class ActionHandler {
 		}
 		else {
 			String message = owner.getName() + " is selling water:\n";
+			int moneyMade = 0;
 			for(Player player: playerList) {
 				if(player != owner && !player.getLoser()) {
 					if(player.charge(COST_OF_WATER)) {
 						message += player.getName() + " paid $" + COST_OF_WATER + "\n";
+						moneyMade += COST_OF_WATER;
 					}
 					else{
 						message += player.getName() + " paid $" + player.getMoney() + "\n";
+						moneyMade += player.getMoney();
 						player.setMoney(-1);
 						player.setWorth(-1);
 					}
 				}
 			}
 			JOptionPane.showMessageDialog(null, message);
+			owner.getPaid(moneyMade);
 		}
 	}
 
@@ -294,7 +298,7 @@ public class ActionHandler {
 					if(player != p && !player.getLoser()) {
 						if(player.charge(FRAT_DUES)) {
 							p.getPaid(FRAT_DUES);
-							message += player.getName() + " pays $" + FRAT_DUES;
+							message += player.getName() + " pays $" + FRAT_DUES + "\n";
 						}
 						else{
 							int playerDues = player.getMoney();

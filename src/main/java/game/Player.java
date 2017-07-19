@@ -166,7 +166,6 @@ public class Player {
 		}
 		Property prop = properties.remove(index);
 		prop.setOwner(null);
-		this.removeWorth(prop.getPrice() / 2);
 		return prop;
 	}
 
@@ -220,16 +219,11 @@ public class Player {
 			worth -= cost;
 			return true;
 		}
-		else if(worth >= cost){
-			//go to mortgagePhase() to cover the cost.
-			OaklandOligarchy.game.mortgagePhase(this, cost);
-			return true;
-		}
 		else{
 			//go to loserPhase() to cover as much of cost as possible, and remove player from the game.
-			System.out.println(this.getName() + " is a loser found in charge(). worth: " + worth + " money: " + money);
+			//System.out.println(this.getName() + " is a loser found in charge(). worth: " + worth + " money: " + money);
 			OaklandOligarchy.game.loserPhase(this);
-			setLoser(true);
+			//setLoser(true);
 			return false;
 		}
 	}

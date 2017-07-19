@@ -100,12 +100,12 @@ public class Property extends Square{
 				JOptionPane.showMessageDialog(null, player.getName()+ " pays $" + getRent() + " to " + owner.getName());
 			}
 			return true;
-		} else {
+		}
+		else {
 			// If too poor, do not prompt to buy and disable button
 			if (player.getMoney() < price) {
 				return true;
 			}
-
 			int choice = JOptionPane.showConfirmDialog(null, "Would you like to buy " + getName() + "?", "Buy property?", JOptionPane.YES_NO_OPTION);
 			if (choice == JOptionPane.YES_OPTION) {
 				player.buy(this);
@@ -126,6 +126,7 @@ public class Property extends Square{
 			if (owner.getMoney() >= price) {
 				mortgaged = false;
 				owner.charge(price);
+				owner.addWorth(price / 2);
 			}
 		}
 	}
