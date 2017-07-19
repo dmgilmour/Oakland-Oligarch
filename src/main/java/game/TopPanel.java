@@ -70,6 +70,7 @@ public class TopPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			int wantToLoad = JOptionPane.showConfirmDialog(null, "Would you like to save the game?", "Save on Exit?", JOptionPane.YES_NO_OPTION);
 			if(wantToLoad == JOptionPane.YES_OPTION) {
+				saveButton.setEnabled(true);
 				saveButton.doClick();
 			}
 			System.exit(0);
