@@ -61,6 +61,9 @@ public class Player {
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> more merge conflicts to fix
 	public void setWorth(int value){
 		worth = value;
 	}
@@ -134,11 +137,17 @@ public class Player {
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	public void setMoney(int value){
 		money = value;
 	}
 =======
 >>>>>>> post Dan's test branch
+=======
+	public void setMoney(int value){
+		money = value;
+	}
+>>>>>>> more merge conflicts to fix
 
 	public int getMoney() {
 		return money;
@@ -246,10 +255,13 @@ public class Player {
 		else if(worth >= cost){
 			//go to mortgagePhase() to cover the cost.
 			OaklandOligarchy.game.mortgagePhase(this, cost);
+			money -= cost;
+			worth -= cost;
 			return true;
 		}
 		else{
 			//go to loserPhase() to cover as much of cost as possible, and remove player from the game.
+<<<<<<< HEAD
 <<<<<<< HEAD
 			System.out.println(this.getName() + " is a loser found in charge(). worth: " + worth + " money: " + money);
 			OaklandOligarchy.game.loserPhase(this);
@@ -258,6 +270,11 @@ public class Player {
 			setLoser(true);
 			OaklandOligarchy.game.loserPhase(this);
 >>>>>>> post Dan's test branch
+=======
+			System.out.println(this.getName() + " is a loser found in charge(). worth: " + worth + " money: " + money);
+			OaklandOligarchy.game.loserPhase(this);
+			setLoser(true);
+>>>>>>> more merge conflicts to fix
 			return false;
 		}
 	}
@@ -276,6 +293,7 @@ public class Player {
 			owner.getPaid(cost);
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 		if(!success && owner != null){		//should only run if a loser has to pay the rest of their money.
 			owner.getPaid(this.getMoney());
 			this.setMoney(-1);
@@ -284,6 +302,12 @@ public class Player {
 		if(!success && owner != null){
 			owner.getPaid(this.getMoney());
 >>>>>>> post Dan's test branch
+=======
+		if(!success && owner != null){		//should only run if a loser has to pay the rest of their money.
+			owner.getPaid(this.getMoney());
+			this.setMoney(-1);
+			this.setWorth(-1);
+>>>>>>> more merge conflicts to fix
 		}
 		return success;
 	}

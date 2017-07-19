@@ -358,6 +358,7 @@ public class Game {
 			int mortgageValue = property.getPrice() / 2;
 			property.setMortgaged(true);
 			this.getCurrentPlayer().gainMortgageValue(mortgageValue);
+<<<<<<< HEAD
 		}
 	}
 
@@ -375,13 +376,36 @@ public class Game {
 				player.addWorth(price / 2);
 				player.charge(price);
 			}
+=======
+>>>>>>> more merge conflicts to fix
 >>>>>>> pre-shit storm
 		}
 		updateBuyButton();
 <<<<<<< HEAD
 =======
 
+<<<<<<< HEAD
 >>>>>>> post Dan's test branch
+=======
+<<<<<<< HEAD
+=======
+	/**
+	 * Will set the property to unmortgaged and take half the price
+	 *
+	 * @param 	property	the property the player is attempting to unmortgage
+	 */
+	public void unmortgage(Property property) {
+		if (property.getMortgaged()) {
+			Player player = this.getCurrentPlayer();
+			int price = property.getPrice();
+			if (player.getMoney() >= price) {
+				property.setMortgaged(false);
+				player.addWorth(price / 2);
+				player.charge(price);
+			}
+		}
+>>>>>>> pre-shit storm
+>>>>>>> more merge conflicts to fix
 	}
 
 
@@ -575,7 +599,7 @@ public class Game {
 	 */
 	public void mortgage(Player mortgager, Property[] props){
 		for(Property prop : props){
-			mortgage(prop);
+			prop.mortgage();
 		}
 	}
 
@@ -590,12 +614,18 @@ public class Game {
 			mortgage(prop);
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 		//charging all of players money is handeled in Player.payRent() or ActionHandler
 		//print out the loser
 		window.printLoser(player);
 =======
 		//charging all of players money is handeled in Player.payRent()
 >>>>>>> post Dan's test branch
+=======
+		//charging all of players money is handeled in Player.payRent() or ActionHandler
+		//print out the loser
+		window.printLoser(player);
+>>>>>>> more merge conflicts to fix
 		//now clean up the loser.
 		loserCleanUp(player);
 	}
