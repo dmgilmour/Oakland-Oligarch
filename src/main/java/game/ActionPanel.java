@@ -63,4 +63,5 @@ public class ActionPanel extends JPanel {
 		payButton.setToolTipText("Pay $" + OaklandOligarchy.JAIL_COST + " to get out of jail.");
 		add(payButton, c);
 	}
+
 }
