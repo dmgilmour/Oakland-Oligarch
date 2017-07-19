@@ -302,7 +302,6 @@ public class Game {
 			prop.mortgage();
 		}
 		updateBuyButton();
-		
 	}
 	
 
@@ -392,10 +391,17 @@ public class Game {
 	}
 
 	public void updateBuyButton() {
-		if (getCurrentPlayer().getMoney() >= ((Property) board.getSquare(this.getCurrentPlayer().getPosition())).getPrice()) {
-			window.enableBuy();
-		} else {
-			window.disableBuy();
+		Square currentSq = board.getSquare(this.getCurrentPlayer().getPosition());
+		if (currentSq instanceof Property) {
+			if (((Property) currentSq).getOwner() == null) {
+				if (getCurrentPlayer().getMoney() >= ((Property) board.getSquare(this.getCurrentPlayer().getPosition())).getPrice()) {
+					window.enableBuy();
+				} else {
+					window.disableBuy();
+				}
+			} else {
+				window.disableBuy();
+			}
 		}
 	}
 
