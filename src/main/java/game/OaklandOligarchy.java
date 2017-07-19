@@ -405,9 +405,9 @@ public class OaklandOligarchy {
 	 * @param	propIndex	The index of the property to toggle
 	 */
 	private static void toggleMortgage(int propIndex) {
-<<<<<<< HEAD
 		game.toggleMortgage(propIndex);
 		window.update(game.getCurrentPlayer());
+<<<<<<< HEAD
 =======
 		Player player = game.getCurrentPlayer();
 
@@ -419,6 +419,8 @@ public class OaklandOligarchy {
 		}
 		window.update(player);
 >>>>>>> first workings for a proper win/lose. mortgagePhase and loserPhase added to Game. Cost calls both phases. Shouldn't pay yourself rent anymore. Need to add worth functionality and clean up loserCheck / loserCleanup.
+=======
+>>>>>>> pre-last PR from dan
 	}
 
 	private static void displayProperty(int propIndex) {

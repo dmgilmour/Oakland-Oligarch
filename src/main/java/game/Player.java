@@ -214,14 +214,16 @@ public class Player {
 	 * @param	property	A property that this player is buying
 	 * @return 				A boolean indicating success of the purchase
 	 */
-<<<<<<< HEAD
 	public boolean buy (Property property) {
 		if (property.getOwner() == null && this.money >= property.getPrice())	{
+<<<<<<< HEAD
 =======
 	public boolean buy(Property property) {
 		if(property.getOwner() == null)
 		{
 >>>>>>> first workings for a proper win/lose. mortgagePhase and loserPhase added to Game. Cost calls both phases. Shouldn't pay yourself rent anymore. Need to add worth functionality and clean up loserCheck / loserCleanup.
+=======
+>>>>>>> pre-last PR from dan
 			int cost = property.getPrice();
 			if (charge(cost)) {
 				return this.addProperty(property);

@@ -346,6 +346,7 @@ public class Game {
 		} else {
 			prop.mortgage();
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 	/**
@@ -409,6 +410,8 @@ public class Game {
 	}
 
 =======
+=======
+>>>>>>> pre-last PR from dan
 		}
 		updateBuyButton();
 }
@@ -518,6 +521,7 @@ public class Game {
 		}
 	}
 
+<<<<<<< HEAD
 	/**
 	 * Starts the mortgagePrompt for a player that owes money and must mortgage properties to pay cost.
 	 * @param player	The player that needs to mortgage properties.
@@ -526,6 +530,13 @@ public class Game {
 	public void mortgagePhase(Player player, int cost){
 		while(player.getMoney() < cost && player != null){
 			mortgage(player, mortgagePrompt(player));
+=======
+	public void updateBuyButton() {
+		if (getCurrentPlayer().getMoney() >= ((Property) board.getSquare(this.getCurrentPlayer().getPosition())).getPrice()) {
+			window.enableBuy();
+		} else {
+			window.disableBuy();
+>>>>>>> pre-last PR from dan
 		}
 	}
 
