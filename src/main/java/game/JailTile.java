@@ -12,6 +12,10 @@ import javax.swing.JPanel;
 public class JailTile extends Tile {
 	JPanel prison;
 	
+	/**
+	 * A tile to represent the Jail
+	 *
+	 */
 	public JailTile(int n, Square s){
 		super(n, s);
 		button.setToolTipText("Your mouse is currently in jail");

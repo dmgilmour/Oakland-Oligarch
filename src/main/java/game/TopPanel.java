@@ -19,7 +19,6 @@ public class TopPanel extends JPanel {
 	/**
 	 * The constructor for the TopPanel UI element
 	 *
-	 * @param	random		A psuedo-random number generator used to select the background color
 	 */
 	public TopPanel(Random random, Time t, ActionListener loadListener, ActionListener saveListener) {
 		time = t;

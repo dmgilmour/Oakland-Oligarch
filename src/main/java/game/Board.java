@@ -12,12 +12,15 @@ public class Board {
 	/**
 	 * The constructor for the game Board
 	 *
-	 * @param	_sl		an array of squares that will makeup this board
 	 */
 	public Board(Square[] _sl) {
 		squareList = _sl;
 	}
 	
+	/**
+	 * Retrieves the square at a given index
+	 *
+	 */
 	public Square getSquare(int num) {
 		if(num < OaklandOligarchy.NUMBER_OF_TILES)
 			return squareList[num];
