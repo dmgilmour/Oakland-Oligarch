@@ -48,17 +48,7 @@ public class BoardPanel extends JPanel {
 		
 
 		GridBagConstraints constraint = new GridBagConstraints();
-
-		/*
-		JButton centerSquare = new JButton("Center");
-		constraint.gridx = 1;
-		constraint.gridy = 1;
-		constraint.gridheight = 8;
-		constraint.gridwidth = 8;
-		constraint.weightx = 0.8;
-		constraint.weighty = 0.8;
-		add(centerSquare, constraint);
-		*/
+		
 		
 		//r = button ROW
 		//c = button COLLUMN
@@ -94,6 +84,21 @@ public class BoardPanel extends JPanel {
 			this.add(tiles[i],constraint);
 			i++;
 		}
+		
+		
+		JPanel centerSquare = new JPanel();
+		ImageIcon image = new ImageIcon("meeseeks.jpg");
+		JLabel background = new JLabel();
+		background.setIcon(image);
+		centerSquare.add(background);
+		constraint.gridx = 1;
+		constraint.gridy = 1;
+		constraint.gridheight = 8;
+		constraint.gridwidth = 8;
+		constraint.weightx = 0.1;
+		constraint.weighty = 0.1;
+		constraint.fill = GridBagConstraints.BOTH;
+		add(centerSquare, constraint);
 	}	
 	
 	/**
