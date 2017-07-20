@@ -27,10 +27,9 @@ public class Player {
 	/**
 	 * The constructor for Players
 	 *
-	 * @param	id			the unique identifying number for this player
-	 * @param	money		the starting money for this player
-	 * @param	name		the name of this player
-	 * @param	properties	the starting properties that this player owns
+	 * @param	int		the unique ID number for this player
+	 * @param	int		the starting money for this player
+	 * @param	String	the name of this player
 	 */
 	public Player (int id, int money, String name) {
 		this.id = id;

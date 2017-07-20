@@ -14,7 +14,7 @@ import java.lang.Throwable;
  * @author Woodrow Fulmer
  */
 public class FileHandler{
-	private static final String DEFAULT_FILE = "defaultFile.txt";
+	private static final String DEFAULT_FILE_NAME = "defaultFile.txt";
 	
 	private ArrayList<Player> playerList;	
 	private Time time;
@@ -24,6 +24,11 @@ public class FileHandler{
 	private int JAIL_POS;
 	private int activePlayers;
 	
+	/**
+	 * Creates a FileHandler to save and load from any files.
+	 *
+	 * @param	File	The file to load from
+	 */
 	public FileHandler(File f) {
 		squareList = new Square[OaklandOligarchy.NUMBER_OF_TILES];
 		playerList = new ArrayList<Player>(OaklandOligarchy.MAX_NUMBER_OF_PLAYERS);
@@ -31,12 +36,20 @@ public class FileHandler{
 		load(f);
 	}
 	
+	/**
+	 * Creates a FileHandler to save a load from any files.
+	 *
+	 * @param	String	The name of the file to load
+	 */
 	public FileHandler(String fn) {
 		this(new File(fn));
 	}
 	
+	/**
+	 * Creates a FileHandler to save and load from any files.
+	 */
 	public FileHandler() {
-		this(DEFAULT_FILE);
+		this(DEFAULT_FILE_NAME);
 	}
 	
 	public Time getTime() {return time;}
@@ -47,6 +60,11 @@ public class FileHandler{
 	public int getActivePlayers() {return activePlayers;}
 	public int getPlayerTurn() {return playerTurn;}
 	
+	/**
+	 * Reads through a given file and parses out all the information into appropriate structures
+	 *
+	 * @param	file	File to be loaded from
+	 */
 	private void load(File f) {
 		int[] ownerList = new int[OaklandOligarchy.NUMBER_OF_TILES];
 		try{
@@ -65,6 +83,13 @@ public class FileHandler{
 		loadPlayersIntoJail();
 	} 
 	
+	/**
+	 * Loads all the appropriate information from a single line of text
+	 *		which has been split at each tab.
+	 *
+	 * @param	input		A single line from the file, split by tabs
+	 * @param	ownerList	A list which matches property indices to the ID of their owner
+	 */
 	private void loadLine(String[] input, int[] ownerList) {
 		if(input[0].equals("Time")) {
 			time = new Time(Integer.parseInt(input[1]));
@@ -80,6 +105,11 @@ public class FileHandler{
 		}
 	}
 	
+	/**
+	 * Loads player info from a line that is designated as a player.
+	 *
+	 * @param	input	A single line from the file, split by tabs
+	 */
 	private void loadPlayer(String[] input) {
 		Player p = new Player(Integer.parseInt(input[1]), Integer.parseInt(input[4]), input[2]);
 		p.setPosition(Integer.parseInt(input[5]));
@@ -104,6 +134,12 @@ public class FileHandler{
 		playerList.add(p);
 	}
 	
+	/**
+	 * Parses a single line from a file for information pertaining to a Square.
+	 *
+	 * @param	input		A single line from the file, split by tabs
+	 * @param	ownerList	A list which matches property indices to the ID of their owner
+	 */
 	private void loadSquare(String[] input, int[] ownerList) {
 		int current = Integer.parseInt(input[1]);
 		if(input[0].equals("Property")) {
@@ -124,6 +160,11 @@ public class FileHandler{
 		}
 	}
 	
+	/**
+	 * Assigns unmarked squares as actions. Sets the owner of each property if it has one.
+	 *
+	 * @param	ownerList	A list which matches property indices to the ID of their owner
+	 */
 	private void setSquareOwners(int[] ownerList) {
 		for (int i = 0; i < squareList.length; i++) {
 			if (squareList[i] == null) {
@@ -139,6 +180,9 @@ public class FileHandler{
 		}
 	}
 	
+	/**
+	 * Puts a player in jail if they are incarcerated.
+	 */
 	private void loadPlayersIntoJail() {
 		for(Player p: playerList) {
 			if(p.isInJail()) {
@@ -147,6 +191,15 @@ public class FileHandler{
 		}
 	}
 	
+	/**
+	 * Saves the time, the go payout, all square info, and all player info to a given file.
+	 *
+	 * @param	file		The file to save to
+	 * @param	time		The elapsed game time
+	 * @param	players		The full list of players
+	 * @param	squares		All the squares on the board
+	 * @param	playerTurn	The ID of the player whose turn it is
+	 */
 	public void save(File file, Time time, Player[] players, Square[] squares, int playerTurn) {
 		try {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
@@ -165,6 +218,13 @@ public class FileHandler{
 		} catch (IOException except) {}
 	}
 	
+	/**
+	 * Writes all the information from a given player to the specified output buffer.
+	 *
+	 * @param	bw			The output buffer to write to
+	 * @param	p			The player to be saved to file
+	 * @param	playerTurn	The ID of the player whose turn it is
+	 */
 	private void savePlayer(BufferedWriter bw, Player p, int playerTurn) throws IOException {
 		bw.write("Player\t");
 		bw.write(p.getId()+"\t");
@@ -187,6 +247,13 @@ public class FileHandler{
 		bw.newLine();
 	}
 	
+	/**
+	 * Writes all the information from a given square to the specified output buffer.
+	 *
+	 * @param	bw		The output buffer to write to
+	 * @param	s		The square to be saved to file
+	 * @param	index	The index of the given square within the board
+	 */	
 	private void saveSquare(BufferedWriter bw, Square s, int index) throws IOException {
 		if(s instanceof Property) {
 			saveProperty(bw, (Property)s, index);
@@ -201,6 +268,13 @@ public class FileHandler{
 		}
 	}
 	
+	/**
+	 * Writes all the information from a given property to the specified output buffer.
+	 *
+	 * @param	bw		The output buffer to write to
+	 * @param	p		The property to be saved to file
+	 * @param	index	The index of the given property within the board
+	 */	
 	private void saveProperty(BufferedWriter bw, Property p, int index) throws IOException {
 		bw.write("Property\t");
 		bw.write(index + "\t");
