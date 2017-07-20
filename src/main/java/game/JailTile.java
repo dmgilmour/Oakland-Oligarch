@@ -15,6 +15,8 @@ public class JailTile extends Tile {
 	/**
 	 * A tile to represent the Jail
 	 *
+	 * @param	n	The name used for this tile
+	 * @param	s	The JailSquare associated with this tile
 	 */
 	public JailTile(int n, Square s){
 		super(n, s);

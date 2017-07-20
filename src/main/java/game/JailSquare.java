@@ -11,6 +11,7 @@ public class JailSquare extends Square {
 	/**
 	 * Constructor for the Jail square.
 	 * 
+	 * @param n		The name of Jail
 	 */
 	public JailSquare(String n) {
 		name = n;
@@ -19,6 +20,7 @@ public class JailSquare extends Square {
 	/**
 	 * No action occurs if a player lands on Jail
 	 *	
+	 * @returns		TRUE, Jail cannot be bought
 	 */
 	public boolean act(Player player) {
 		return true;
@@ -27,6 +29,7 @@ public class JailSquare extends Square {
 	/**
 	 * Retrieves all the players currently incarcerated
 	 *
+	 * @returns		The prisoners currently in Jail
 	 */
 	public Player[] getPrisoners(){
 		return prisoners;
@@ -35,6 +38,7 @@ public class JailSquare extends Square {
 	/**
 	 * Adds the newest inmate to Jail
 	 *
+	 * @param	p	The player being imprisoned
 	 */
 	public void addPrisoner(Player p){
 		prisoners[p.getId()] = p;
@@ -43,6 +47,7 @@ public class JailSquare extends Square {
 	/**
 	 * Releases a specified inmate back into Oakland
 	 *
+	 * @param	p	The current resident being released
 	 */
 	public void removePrisoner(Player p){
 		prisoners[p.getId()] = null;
