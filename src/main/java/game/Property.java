@@ -92,10 +92,7 @@ public class Property extends Square{
 	 * @return				Returns true if the "buy" button should be disabled
 	 */
 	public boolean act(Player player) {
-		if(owner != null) {
-			if(owner == player) {
-				return true;
-			}
+		if(owner != null && !owner.equals(player)) {
 			if (this.mortgaged) {
 				JOptionPane.showMessageDialog(null, "Mortgaged property");
 			} else {
@@ -103,12 +100,12 @@ public class Property extends Square{
 				JOptionPane.showMessageDialog(null, player.getName()+ " pays $" + getRent() + " to " + owner.getName());
 			}
 			return true;
-		} else {
+		}
+		else {
 			// If too poor, do not prompt to buy and disable button
 			if (player.getMoney() < price) {
 				return true;
 			}
-
 			int choice = JOptionPane.showConfirmDialog(null, "Would you like to buy " + getName() + "?", "Buy property?", JOptionPane.YES_NO_OPTION);
 			if (choice == JOptionPane.YES_OPTION) {
 				player.buy(this);
@@ -118,7 +115,7 @@ public class Property extends Square{
 		}
 	}
 
-  
+
 	/**
 	 * Will set the property to unmortgaged and charge player half the price
 	 *
@@ -129,10 +126,11 @@ public class Property extends Square{
 			if (owner.getMoney() >= price) {
 				mortgaged = false;
 				owner.charge(price);
+				owner.addWorth(price / 2);
 			}
 		}
 	}
-	
+
 
 	/**
 	 * Will set the property to mortgaged and give the player have the price
@@ -142,7 +140,7 @@ public class Property extends Square{
 	public void mortgage() {
 		if (!mortgaged) {
 			mortgaged = true;
-			owner.getPaid(price / 2);
+			owner.gainMortgageValue(price / 2);
 		}
 	}
 

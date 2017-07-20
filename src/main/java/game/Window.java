@@ -34,10 +34,10 @@ public class Window extends JFrame {
 	public Window(Square[] squareList, Random random, ActionListener bl, ActionListener ml, ActionListener el, Time time, ActionListener ll, ActionListener sl,  ActionListener mortgageListener, ActionListener pl, ActionListener jl) {
 
 		boardPanel = new BoardPanel(squareList, pl);
-		
-		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setUndecorated(true);
-		
+
 		//this.setSize(width, height);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new GridBagLayout());
@@ -99,14 +99,14 @@ public class Window extends JFrame {
 	public void update(Player p) {
 		statusPanel.update(p);
 		boardPanel.update(p);
-		
+
 		if(p.isInJail()){
 			this.enablePay();
 		}
 		else{
 			this.hidePay();
 		}
-		
+
 		setVisible(true);
 	}
 
@@ -128,6 +128,10 @@ public class Window extends JFrame {
 	public void printLoser(Player player){
 		String loser = player.getName();
 		JOptionPane.showMessageDialog(null, loser + " has lost the game.");
+	}
+
+	public void printMortgage(Player player, int cost){
+		JOptionPane.showMessageDialog(null, player.getName() + " needs $" + cost + " more.");
 	}
 
 	public void enableRoll() {
@@ -153,12 +157,12 @@ public class Window extends JFrame {
 	public void disableBuy() {
 		actionPanel.buyButton.setEnabled(false);
 	}
-	
+
 	public void hidePay(){
 		actionPanel.payButton.setEnabled(false);
 		actionPanel.payButton.setVisible(false);
 	}
-	
+
 	public void enablePay(){
 		actionPanel.payButton.setEnabled(true);
 		actionPanel.payButton.setVisible(true);
@@ -167,7 +171,7 @@ public class Window extends JFrame {
 	public void enableSave() {
 		topPanel.saveButton.setEnabled(true);
 	}
-	
+
 	public void disableSave() {
 		topPanel.saveButton.setEnabled(false);
 	}

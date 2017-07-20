@@ -21,7 +21,8 @@ public class Player {
 	private boolean inJail;
 	private int jailCounter;		//how many turns a player has been in jail
 	private int doublesCounter;		//how many times a player has rolled doubles
-	
+	private int worth;				//amount of money a player can have with mortgaging their properties.
+
 
 	/**
 	 * The constructor for Players
@@ -43,6 +44,23 @@ public class Player {
 		loser = false;
 		jailCounter=0;
 		inJail = false;
+		worth = money;
+	}
+
+	public int getWorth(){
+		return worth;
+	}
+
+	public void addWorth(int w){
+		worth += w;
+	}
+
+	public void setWorth(int value){
+		worth = value;
+	}
+
+	public void removeWorth(int w){
+		worth -= w;
 	}
 
 	public boolean getLoser(){
@@ -51,6 +69,8 @@ public class Player {
 
 	public void setLoser(boolean b){
 		loser = b;
+		money = -1;
+		worth = -1;
 	}
 
 	public int getOldPos() {
@@ -71,7 +91,7 @@ public class Player {
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String n) {
 		name = n;
 		token = new JLabel(name);
@@ -101,7 +121,10 @@ public class Player {
 			return false;
 		}
 	}
-		
+
+	public void setMoney(int value){
+		money = value;
+	}
 
 	public int getMoney() {
 		return money;
@@ -127,9 +150,10 @@ public class Player {
 		}
 		properties.add(property);
 		property.setOwner(this);
+		this.addWorth(property.getPrice() / 2);
 		return true;
 	}
-	
+
 	/**
 	 * Removes a property from the Player's propertyList at a given index. Also sets the owner of property to this player.
 	 *
@@ -144,7 +168,7 @@ public class Player {
 		prop.setOwner(null);
 		return prop;
 	}
-	
+
 	/**
 	 * Removes a given property from the Player's propertyList. Also sets the owner of property to this player.
 	 *
@@ -157,6 +181,7 @@ public class Player {
 		}
 		prop.setOwner(null);
 		properties.remove(prop);
+		this.removeWorth(prop.getPrice() / 2);
 		return prop;
 	}
 
@@ -183,19 +208,29 @@ public class Player {
 	 * @returns				A boolean indicating the success of the transaction
 	 */
 	public boolean charge(int cost) {
-		money -= cost;
-		return true;
-		/*if(money >= cost){
+		if(money >= cost){
 			money -= cost;
+			worth -= cost;
+			return true;
+		}
+		else if(worth >= cost){
+			//go to mortgagePhase() to cover the cost.
+			OaklandOligarchy.game.mortgagePhase(this, cost);
+			money -= cost;
+			worth -= cost;
 			return true;
 		}
 		else{
+			//go to loserPhase() to cover as much of cost as possible, and remove player from the game.
+			//System.out.println(this.getName() + " is a loser found in charge(). worth: " + worth + " money: " + money);
+			OaklandOligarchy.game.loserPhase(this);
+			//setLoser(true);
 			return false;
-		}*/
+		}
 	}
 
 	/**
-	 * This player pays the rent on a given property
+	 * This player pays the rent on a given property, or as much as possible.
 	 *
 	 * @param	property	A Property that this player should pay rent on
 	 * @return 				A boolean indicating the success of the payment
@@ -203,20 +238,37 @@ public class Player {
 	public boolean payRent(Property property) {
 		int cost = property.getRent();
 		Player owner = property.getOwner();
-		boolean success = charge(cost);	
-		if(success && owner != null)
+		boolean success = charge(cost);
+		if(success && owner != null){
 			owner.getPaid(cost);
+		}
+		if(!success && owner != null){		//should only run if a loser has to pay the rest of their money.
+			owner.getPaid(this.getWorth());
+			this.setMoney(-1);
+			this.setWorth(-1);
+		}
 		return success;
 	}
 
 	/**
-	 *	Deposits funds into this player's account
+	 *	Deposits funds into this player's account and increase player's worth.
 	 *
 	 * @param	payment		An integer value that the player should receive
 	 */
 	public void getPaid(int payment) {
 		if(payment > 0)
 			money += payment;
+			worth += payment;
+	}
+
+	/**
+	 * Increases player's money without increasing the player's worth.
+	 * @param value		Integer value the player should have added to money.
+	 */
+	public void gainMortgageValue(int value){
+		if(value > 0){
+			money += value;
+		}
 	}
 
 	public void setColor(int c) {
@@ -226,40 +278,40 @@ public class Player {
 	public int getColor() {
 		return color;
 	}
-	
+
 	public void goToJail(){
 		inJail = true;
 		this.setPosition(OaklandOligarchy.JAIL_POS);
 	}
-	
+
 	public void leaveJail(){
 		inJail = false;
 		jailCounter = 0;
 	}
-	
+
 	public boolean isInJail(){
 		return inJail;
 	}
-	
+
 	public void addToJailCounter(){
 		jailCounter++;
 	}
-	
+
 	public int getJailCounter(){
 		return jailCounter;
 	}
-	
+
 	public void resetJailCounter(){
 		jailCounter=0;
 	}
-	
+
 	/**
 	 * @return	returns the doubles counter after adding 1
 	 */
 	public int addToDoublesCounter(){
 		return ++doublesCounter;
 	}
-	
+
 	public void resetDoublesCounter(){
 		doublesCounter = 0;
 	}
