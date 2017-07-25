@@ -193,11 +193,16 @@ public class Player {
 	public boolean buy (Property property) {
 		if (property.getOwner() == null && this.money >= property.getPrice())	{
 			int cost = property.getPrice();
-			if (charge(cost)) {
+			if (canAfford(cost)) {
+				charge(cost);
 				return this.addProperty(property);
 			}
 		}
 		return false;
+	}
+
+	public boolean canAfford(int cost) {
+		return money >= cost;
 	}
 
 	/**
@@ -206,20 +211,41 @@ public class Player {
 	 * @param	cost		An integer value indicating the cost incurred
 	 * @returns				A boolean indicating the success of the transaction
 	 */
-	public boolean charge(int cost) {
-		if(money >= cost){
+	public int charge(int cost) {
+
+		money -= cost;
+		worth -= cost;
+
+		if (money > 0) {
+
+			return cost;
+
+		} else if (money < 0 && worth > 0) {
+
+			OaklandOligarchy.game.mortgagePhase(this, cost);
+			return cost;
+
+		} else {
+
+			OaklandOligarchy.game.loserPhase(this);
+			return cost + worth;
+
+		}
+	}
+			
+			
+/*
+		if (money >= cost){
 			money -= cost;
 			worth -= cost;
 			return true;
-		}
-		else if(worth >= cost){
+		} else if (worth >= cost){
 			//go to mortgagePhase() to cover the cost.
 			OaklandOligarchy.game.mortgagePhase(this, cost);
 			money -= cost;
 			worth -= cost;
 			return true;
-		}
-		else{
+		} else {
 			//go to loserPhase() to cover as much of cost as possible, and remove player from the game.
 			//System.out.println(this.getName() + " is a loser found in charge(). worth: " + worth + " money: " + money);
 			OaklandOligarchy.game.loserPhase(this);
@@ -227,6 +253,7 @@ public class Player {
 			return false;
 		}
 	}
+*/
 
 	/**
 	 * This player pays the rent on a given property, or as much as possible.
@@ -236,16 +263,11 @@ public class Player {
 	 */
 	public boolean payRent(Property property) {
 		int cost = property.getRent();
+		boolean success = canAfford(cost);
+
 		Player owner = property.getOwner();
-		boolean success = charge(cost);
-		if(success && owner != null){
-			owner.getPaid(cost);
-		}
-		if(!success && owner != null){		//should only run if a loser has to pay the rest of their money.
-			owner.getPaid(this.getWorth());
-			this.setMoney(-1);
-			this.setWorth(-1);
-		}
+		owner.getPaid(charge(cost));
+		
 		return success;
 	}
 

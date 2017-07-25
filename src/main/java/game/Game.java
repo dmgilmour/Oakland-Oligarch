@@ -91,7 +91,7 @@ public class Game {
 	 */
 	public void movePhase() {
 		window.disableSave();
-		if(!this.getCurrentPlayer().isInJail()){	//if the player is not in jail take turn as normally
+		if (!this.getCurrentPlayer().isInJail()){	//if the player is not in jail take turn as normally
 			int roll[] = roll(System.currentTimeMillis());
 			boolean collectGoMoney;
 			collectGoMoney = this.getCurrentPlayer().moveDistance(roll[0] + roll[1]);
@@ -100,7 +100,7 @@ public class Game {
 			String message = "You rolled a " + roll[0] + " and a " + roll[1] + " and landed on " + squareName;
 			if (roll[0] == roll[1]) {
 				message += "\nYou got doubles!";
-				if(this.getCurrentPlayer().addToDoublesCounter()==3){
+				if (this.getCurrentPlayer().addToDoublesCounter()==3){
 					this.getCurrentPlayer().goToJail();
 					message += "\nYou got 3 doubles in a row so you go to jail.";
 					JOptionPane.showMessageDialog(null, message);
@@ -122,12 +122,11 @@ public class Game {
 				window.disableEnd();
 			}
 			actionPhase();
-		}
-		else{	//the player is currently in jail
+		} else {	//the player is currently in jail
 			int roll[] = roll(System.currentTimeMillis());
 
 			String message = "You rolled a " + roll[0] + " and a " + roll[1];
-			if(roll[0] == roll[1]){
+			if (roll[0] == roll[1]){
 				this.getCurrentPlayer().leaveJail();
 				boolean collectGoMoney;
 				collectGoMoney = this.getCurrentPlayer().moveDistance(roll[0] + roll[1]);
@@ -143,8 +142,7 @@ public class Game {
 				window.enableEnd();
 				window.update(this.getCurrentPlayer());
 				actionPhase();
-			}
-			else{
+			} else {
 				this.getCurrentPlayer().addToJailCounter();
 				message += "\nThis is your " + this.getCurrentPlayer().getJailCounter() + " turn lost in jail.";
 				JOptionPane.showMessageDialog(null, message);
@@ -168,11 +166,10 @@ public class Game {
 		//loserCheck();
 		this.getCurrentPlayer().resetDoublesCounter();
 		playerTurn = (playerTurn + 1) % num_players;	//Increment to the next player's turn
-		if (playerList[playerTurn].getLoser() == false){
+		if (playerList[playerTurn].getLoser() == false) {
 			JOptionPane.showMessageDialog(null, this.getCurrentPlayer().getName() + "'s turn");
 			startPhase();
-		}
-		else{
+		} else {
 			endPhase();
 		}
 	}
@@ -219,8 +216,7 @@ public class Game {
 	public void buyPhase() {
 		Player player = this.getCurrentPlayer();
 		Square square = board.getSquare(player.getPosition());
-		if(square.act(player))
-		{
+		if(square.act(player)) {
 			window.disableBuy();
 		}
 		window.update(player);
@@ -383,25 +379,24 @@ public class Game {
 	 * a loser and the number of active_players is decremented. If the number of active_players
 	 * reaches 1, there is a winner. The winner is passed to window.endGame(). GG
 	 */
-	private void loserCheck(){
-		for(int i = 0; i < playerList.length; i++){
-			if(playerList[i].getMoney() < 0 && playerList[i].getWorth() < 0 && !playerList[i].getLoser()){
+	private void loserCheck() {
+		for (int i = 0; i < playerList.length; i++){
+			if (playerList[i].getMoney() < 0 && playerList[i].getWorth() < 0 && !playerList[i].getLoser()){
 				//System.out.println(playerList[i].getName() + ": money: " + playerList[i].getMoney() + " worth: " + playerList[i].getWorth() + " Loser: " + playerList[i].getLoser());
 				window.printLoser(playerList[i]);
 				playerList[i].setLoser(true);
 				//System.out.println(playerList[i].getName() + ": money: " + playerList[i].getMoney() + " worth: " + playerList[i].getWorth() + " Loser: " + playerList[i].getLoser());
 				//System.out.println("active players: " + active_players);
 				active_players --;
-				if(active_players > 1){
+				if (active_players > 1){
 					loserCleanUp(playerList[i]);
-				}
-				else{
+				} else {
 					//winner
-					for(int j = 0; j < playerList.length; j++){
-						if(!playerList[j].getLoser()){
+					for (int j = 0; j < playerList.length; j++){
+						if (!playerList[j].getLoser()){
 							window.endGame(playerList[j]);
 						}
-          }
+          				}
 				}
 			}
 		}
@@ -413,8 +408,8 @@ public class Game {
 	 * @param player player that has just lost the game
 	 */
 	private void loserCleanUp(Player player){
-		if(player.getLoser()){
-			for(int i = 0; i < player.getProperties().size(); i++){
+		if (player.getLoser()){
+			for (int i = 0; i < player.getProperties().size(); i++){
 				Property pReset = player.getProperties().get(i);
 				pReset.setOwner(null);
 				pReset.setMortgaged(false);
@@ -445,7 +440,7 @@ public class Game {
 	 * @param cost		The amount of money the player owes.
 	 */
 	public void mortgagePhase(Player player, int cost){
-		while(player.getMoney() < cost && player != null){
+		while (player.getMoney() < cost && player != null){
 			window.printMortgage(player, cost);
 			mortgage(player, mortgagePrompt(player));
 		}
@@ -460,7 +455,7 @@ public class Game {
 		ArrayList<Property> playerProperties = player.getProperties();
 		String[] propList = new String[playerProperties.size()];
 		for (int i = 0; i < playerProperties.size(); i++){
-			if(!playerProperties.get(i).getMortgaged()){
+			if (!playerProperties.get(i).getMortgaged()){
 				propList[i] = playerProperties.get(i).getName();
 			}
 		}
@@ -481,7 +476,7 @@ public class Game {
 	 * @param props		Array of properties to be mortgaged.
 	 */
 	public void mortgage(Player mortgager, Property[] props){
-		for(Property prop : props){
+		for (Property prop : props){
 			prop.mortgage();
 		}
 	}
