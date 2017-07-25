@@ -15,7 +15,8 @@ import java.lang.StringBuilder;
  * @author Woodrow Fulmer
  */
 public class FileHandler{
-	private static final String DEFAULT_FILE = "defaultFile.txt";
+	private static final String DEFAULT_FILE = "default_file_encrypt.txt";
+	private static final int CIPHER = 3;
 	
 	private ArrayList<Player> playerList;	
 	private Time time;
@@ -234,10 +235,18 @@ public class FileHandler{
 	}
 	
 	private String decrypt(String input) {
-		return input;
+		char [] chars = input.toCharArray();
+		for(int i = 0; i < chars.length; i++) {
+			chars[i] = (char)(chars[i] + CIPHER);
+		}
+		return new String(chars);
 	}
 	
 	private String encrypt(String input) {
-		return input;
+		char [] chars = input.toCharArray();
+		for(int i = 0; i < chars.length; i++) {
+			chars[i] = (char)(chars[i] - CIPHER);
+		}
+		return new String(chars);
 	}
 }
