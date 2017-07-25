@@ -14,12 +14,12 @@ public class Property extends Square{
 
 	/**
 	 * Constructor for property object. Initializes name, pice, rent, owner,
-	 * mortgaged, and ownerToken.
-	 * name, price, and rent are parameters passed when the constructor is called.
-	 * owner, mortgaged, and ownerToken are Initialized to null, false, and null.
-	 * @param n the name of property
-	 * @param p the price of property
-	 * @param r the rent of property
+	 * 		mortgaged, and ownerToken. Owner, Mortgaged, and OwnerToken are 
+	 *		initialized to null, false, and null, respectively.
+	 *
+	 * @param n	 	the name of property
+	 * @param p		the price of property
+	 * @param r		the rent of property
 	 */
 	public Property(String n, int p, int r){
 		name = n;
@@ -31,24 +31,27 @@ public class Property extends Square{
 	}
 
 	/**
-	 * Returns the name of a property as a String.
-	 * @return 		name of property.
+	 * Returns the name of a property.
+	 *
+	 * @return		The name of this property
 	 */
 	public String getName(){
 		return name;
 	}
 
 	/**
-	 * Returns the price of a property as an integer.
-	 * @return 		price of property.
+	 * Returns the price of a property.
+	 *
+	 * @return		The price of this property
 	 */
 	public int getPrice(){
 		return price;
 	}
 
 	/**
-	 * Returns the rent of a property as an integer.
-	 * @return 		rent of property.
+	 * Returns the rent of a property.
+	 *
+	 * @return		The rent of this property
 	 */
 	public int getRent(){
 		return rent;
@@ -56,23 +59,24 @@ public class Property extends Square{
 
 	/**
 	 * Returns the owner of a property as a Player object.
-	 * @return 		owner of property.
+	 * @return		The owner of this property
 	 */
 	public Player getOwner(){
 		return owner;
 	}
 
 	/**
-	 * Returns the ownerToken of the property as a JLabel.
-	 * @return 		ownerToken of property.
+	 * Returns the token for the owner of this property.
+	 * @return		Token for the owner of this property
 	 */
 	public JLabel getOwnerToken() {
 		return ownerToken;
 	}
 
 	/**
-	 * Sets the owner and ownerToken of a property.
-	 * @param p Player to be set as owner of property.
+	 * Sets the owner and token for this property.
+	 *
+	 * @param	p 	The new owner of this property
 	 */
 	public void setOwner(Player p){
 		owner=p;
@@ -88,14 +92,11 @@ public class Property extends Square{
 	 * Performs the action on a property square. If the property is owned, this makes the player pay rent
 	 * on the property and is alerted. If the property is unowned, the player is prompted to purchase this property.
 	 *
-	 * @param	player		The player that this property is interacting with
-	 * @return				Returns true if the "buy" button should be disabled
+	 * @param	player	The player that this property is interacting with
+	 * @return			Returns true if the "buy" button should be disabled
 	 */
 	public boolean act(Player player) {
-		if(owner != null) {
-			if(owner == player) {
-				return true;
-			}
+		if(owner != null && !owner.equals(player)) {
 			if (this.mortgaged) {
 				JOptionPane.showMessageDialog(null, "Mortgaged property");
 			} else {
@@ -103,12 +104,12 @@ public class Property extends Square{
 				JOptionPane.showMessageDialog(null, player.getName()+ " pays $" + getRent() + " to " + owner.getName());
 			}
 			return true;
-		} else {
+		}
+		else {
 			// If too poor, do not prompt to buy and disable button
 			if (player.getMoney() < price) {
 				return true;
 			}
-
 			int choice = JOptionPane.showConfirmDialog(null, "Would you like to buy " + getName() + "?", "Buy property?", JOptionPane.YES_NO_OPTION);
 			if (choice == JOptionPane.YES_OPTION) {
 				player.buy(this);
@@ -118,42 +119,45 @@ public class Property extends Square{
 		}
 	}
 
-  
+
 	/**
-	 * Will set the property to unmortgaged and charge player half the price
-	 *
-	 * @param 	property	the property the player is attempting to unmortgage
+	 * Will set the property to unmortgaged and charge player for the price
 	 */
   	 public void unmortgage() {
 		if (mortgaged) {
 			if (owner.getMoney() >= price) {
 				mortgaged = false;
 				owner.charge(price);
+				owner.addWorth(price / 2);
 			}
 		}
 	}
-	
+
 
 	/**
-	 * Will set the property to mortgaged and give the player have the price
-	 *
-	 * @param 	property	the property the player is attempting to mortgage
+	 * Will set the property to mortgaged and give the player half the price
 	 */
 	public void mortgage() {
 		if (!mortgaged) {
 			mortgaged = true;
-			owner.getPaid(price / 2);
+			owner.gainMortgageValue(price / 2);
 		}
 	}
 
 	/**
 	 * Returns mortgaged boolean of property.
-	 * @return 		returns if the property is mortgaged(true) or not(false).
+	 *
+	 * @return	TRUE if the property is mortgaged, else false
 	 */
 	public boolean getMortgaged() {
 		return mortgaged;
 	}
 
+	/**
+	 * Sets the mortgaged value for this property
+	 *
+	 * @param	The truth value to set the mortgage state to
+	 */
 	public void setMortgaged(boolean m) {
 		mortgaged = m;
 	}

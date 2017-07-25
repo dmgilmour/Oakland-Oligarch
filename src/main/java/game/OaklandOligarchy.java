@@ -19,24 +19,22 @@ import java.util.Arrays;
  * @author Dan Gilmour
  */
 public class OaklandOligarchy {
-	
+
 	public enum GamePhase {MOVE, ACTION, END, START, BUY, TRADE};
-	
+
 	public static final int NUMBER_OF_TILES = 36;
 	public static final int MAX_NUMBER_OF_PLAYERS = 4;
 	public static final int NUMBER_OF_ACTIONS = 14;
 	public static final int JAIL_COST = 50;
-	public static int JAIL_POS;	//what tile jail is
-	public static int PLAYER_STARTING_MONEY;
+	public static int JAIL_POS;
 	public static int GO_PAYOUT;
 
 	public static Player[] playerList;
-	private static Game game;
+	protected static Game game;
 	private static Window window;
 	private static Square[] squareList;
 	private static Random random;
 	private static Time time;
-	private static Scanner reader;
 	private static FileHandler fh;
 
 	private static PhaseListener buyListener;
@@ -47,13 +45,13 @@ public class OaklandOligarchy {
 	private static PayListener payListener;
 	private static MortgageListener mortgageListener;
 	private static PropertyListener propertyListener;
-	
+
 	public static void main(String[] args) {
 		random = new Random(System.currentTimeMillis());
 		fh = new FileHandler();
 		squareList = fh.getBoard();
 		time = fh.getTime();
-		
+
 		buyListener = new PhaseListener(GamePhase.BUY, null);
 		moveListener = new PhaseListener(GamePhase.MOVE, null);
 		endListener = new PhaseListener(GamePhase.END, null);
@@ -63,21 +61,24 @@ public class OaklandOligarchy {
 		mortgageListener = new MortgageListener();
 		propertyListener = new PropertyListener();
 		window = new Window(squareList, random, buyListener, moveListener, endListener, time, loadListener, saveListener, mortgageListener, propertyListener, payListener);
-		
+
 		int wantToLoad = JOptionPane.showConfirmDialog(null, "Would you like to LOAD a game?", "Load Game", JOptionPane.YES_NO_OPTION);
-		boolean load = false;
 		if(wantToLoad == JOptionPane.YES_OPTION) {
-			if(load(true, 0)) {
-				load = true;
+			if(load(true)) {
+				return;
 			}
 		}
-		if(!load){
-			int num_players = promptNumPlayers();
-			load(false, num_players);
-		}
+		load(false);
 	}
 
-	public static boolean load(boolean loadNewFile, int num_players) {
+	/**
+	 * Loads game info from a selected file or sets up the board if a new game is selected.
+	 *
+	 * @param	loadNewFile		True if a file is to be loaded, else creates a new game
+	 * @returns				Returns false if no file is selected. Else returns true.
+	 */
+	public static boolean load(boolean loadNewFile) {
+		int num_players;
 		if(loadNewFile) {
 			JFileChooser chooser = new JFileChooser();
 			int choice = chooser.showOpenDialog(null);
@@ -96,6 +97,7 @@ public class OaklandOligarchy {
 			}
 		}
 		else {
+			num_players = promptNumPlayers();
 			playerList = Arrays.copyOfRange(fh.getPlayerList(), 0, num_players);
 		}
 		int playerTurn = fh.getPlayerTurn();
@@ -116,10 +118,10 @@ public class OaklandOligarchy {
 		return true;
 	}
 	/**
-	 * Changes which phase the game is in currently. Is called by various ActionListeners
+	 * Changes which phase the game is in currently. Is called by PhaseListener.
 	 *
 	 * @param	gamePhase		Which phase the game should be set to
-	 * @param	player			Player to trade with if switching to tradePhase
+	 * @param	player			Player to trade with (null if not TradeListener)
 	 */
 	public static void switchPhase(GamePhase gamePhase, Player player) {
 		switch(gamePhase) {
@@ -149,7 +151,7 @@ public class OaklandOligarchy {
 	/**
 	 * Prompts the user using a JPane to input the number of players > 1 and < 5
 	 *
-	 * @return			the integer number of players for this game 
+	 * @return		The number of players to be put into the game
 	 */
 	private static int promptNumPlayers() {
 
@@ -172,12 +174,12 @@ public class OaklandOligarchy {
 		}
 		return num_players;
 	}
-	
+
 	/**
 	 * Prompts the user for their name via a JPane
 	 *
-	 * @param	playerID		the ID number of the player we are prompting for his/her name
-	 * @return					the String defining the player's name
+	 * @param	playerID	the ID number of the player being prompted
+	 * @return				The input player name
 	 */
 	private static String promptName(int playerID) {
 		String toReturn;
@@ -186,11 +188,11 @@ public class OaklandOligarchy {
 			System.exit(0);
 		}
 		return toReturn;
-	}	
+	}
 
 	/**
 	 * Method used by mortgage listeners that will toggle
-	 * whether a property is mortgaged or not
+	 * 		whether a property is mortgaged or not
 	 *
 	 * @param	propIndex	The index of the property to toggle
 	 */
@@ -199,6 +201,12 @@ public class OaklandOligarchy {
 		window.update(game.getCurrentPlayer());
 	}
 
+	/**
+	 * Displays the popup of information about a property. Used
+	 *		by PropertyListener.
+	 *
+	 * @param	propIndex	The index of the property to display
+	 */
 	private static void displayProperty(int propIndex) {
 		Property prop = (Property) squareList[propIndex];
 		String message = prop.getName();
@@ -211,21 +219,19 @@ public class OaklandOligarchy {
 		message += "\nRent: $" + prop.getRent();
 		JOptionPane.showMessageDialog(null, message);
 	}
-
-
-	/**
-	 * Creates actionlisteners for the status panel 
-	 *
-	 * @param	player		the player for which we should display their properties
-	 */
 	
-	/**
-	 *	An ActionListener which upon being triggered, will move the game into the assigned phase.
-	 */
+	
+	
 	private static class PhaseListener implements ActionListener {
 		GamePhase gamePhase;
 		Player player;
-		
+
+		/**
+		 *	An ActionListener which upon being triggered, will move the game into the assigned phase.
+		 *
+		 * @param	gp				An enumeration for which phase to trigger
+		 * @param	optionalPlayer	Which player you are trading with (null if not TradeListener)
+		 */
 		PhaseListener(GamePhase gp, Player optionalPlayer) {
 			gamePhase = gp;
 			player = optionalPlayer;
@@ -234,45 +240,37 @@ public class OaklandOligarchy {
 			OaklandOligarchy.switchPhase(gamePhase, player);
 		}
 	}
-
-
+	
 	private static class PropertyListener implements ActionListener {
-		
 		public void actionPerformed(ActionEvent e) {
 			int propertyIndex = Integer.parseInt(e.getActionCommand());
 			displayProperty(propertyIndex);
 		}
 	}
 
-	/**
-	 * Creates mortgagelisteners for each property 
-	 *
-	 * @param	prop		the property the actionlistener is trying to control
-	 */
 	private static class MortgageListener implements ActionListener {
-
 		public void actionPerformed(ActionEvent e) {
 			int propertyIndex = Integer.parseInt(e.getActionCommand());
 			toggleMortgage(propertyIndex);
 		}
 	}
-	
+
 	private static class LoadListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			OaklandOligarchy.load(true, 0);
+			OaklandOligarchy.load(true);
 		}
 	}
-	
+
 	private static class SaveListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser chooser = new JFileChooser();
 			if(chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 				File file = chooser.getSelectedFile();
-				fh.save(file, time, game.getPlayers(), squareList, game.getTurn()); 
+				fh.save(file, time, game.getPlayers(), squareList, game.getTurn());
 			}
 		}
 	}
-	
+
 	private static class PayListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			game.getCurrentPlayer().charge(JAIL_COST);	//TODO when charge returns a bool check to see if they could pay

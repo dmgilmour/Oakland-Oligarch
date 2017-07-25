@@ -11,9 +11,6 @@ import java.util.ArrayList;
  */
 public class Window extends JFrame {
 
-	//private final int height = 980;
-	//private final int width = 1820;
-
 	private TopPanel topPanel;
 	private StatusPanel statusPanel;
 	private ActionPanel actionPanel;
@@ -22,23 +19,25 @@ public class Window extends JFrame {
 	/**
 	 * Constructor of the UI window
 	 *
-	 * @param	squareList		The list of squares to be used in this game
-	 * @param	random			A seeded psuedo-random number generator used to stylize the UI
-	 * @param	bl				An ActionListener for the Buy phase of a turn
-	 * @param	ml				An ActionListener for the Move phase of a turn
-	 * @param	el				An ActionListener for the End phase of a turn
-	 * @param	pl				An ActionListener for property listener
-	 * @param	jl				An ActionListener for paying to get out of jail
+	 * @param	squareList			The properties and other spaces making up the board
+	 * @param	random				Randomizes the color scheme of the UI
+	 * @param	bl					Buy button trigger
+	 * @param	ml					Roll button trigger
+	 * @param	el					End button trigger
+	 * @param	time				Elapsed game time
+	 * @param	ll					Load button trigger
+	 * @param	sl					Save button trigger
+	 * @param	mortgageListener	Mortgage button trigger
+	 * @param	pl					Property info button trigger
+	 * @param	jl					Pay button trigger for paying to escape jail
 	 */
-
 	public Window(Square[] squareList, Random random, ActionListener bl, ActionListener ml, ActionListener el, Time time, ActionListener ll, ActionListener sl,  ActionListener mortgageListener, ActionListener pl, ActionListener jl) {
 
 		boardPanel = new BoardPanel(squareList, pl);
-		
-		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setUndecorated(true);
-		
-		//this.setSize(width, height);
+
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new GridBagLayout());
 
@@ -86,6 +85,12 @@ public class Window extends JFrame {
 		this.setVisible(true);
 	}
 
+	/**
+	 * Initializes the status panel with the players and sets up trading
+	 *
+	 * @param	playerList		The players in this game
+	 * @param	tradeListeners	Player button trigger, starts a trade between players
+	 */
 	public void setPlayers(Player[] playerList, ActionListener[] tradeListeners) {
 		statusPanel.setPlayers(playerList, tradeListeners);
 		for(Player p: playerList) {
@@ -95,25 +100,28 @@ public class Window extends JFrame {
 
 	/**
 	 * Refreshes the UI
+	 *
+	 * @param	p	Who's turn it is
 	 */
 	public void update(Player p) {
 		statusPanel.update(p);
 		boardPanel.update(p);
-		
+
 		if(p.isInJail()){
 			this.enablePay();
 		}
 		else{
 			this.hidePay();
 		}
-		
+
 		setVisible(true);
 	}
 
 
 	/**
 	 * Shows the winner of the game. Exits the game when "ok" is clicked.
-	 * @param player the winning Player of the game to be printed out as the winner.
+	 *
+	 * @param player	The winner of the game
 	 */
 	 public void endGame(Player player){
 		 String winner = player.getName();
@@ -123,11 +131,22 @@ public class Window extends JFrame {
 
 	 /**
 	  * Shows a pop up of a loser of the game, to let all players know someone lost.
-	  * @param player loser of the game to be announced.
+	  *
+	  * @param player	The recent loser
 	  */
 	public void printLoser(Player player){
 		String loser = player.getName();
 		JOptionPane.showMessageDialog(null, loser + " has lost the game.");
+	}
+
+	/**
+	 * Shows a pop-up JPane of how much a player owes.
+	 *
+	 * @param	player	The debtor
+	 * @param	cost	The amount of money being charged
+	 */
+	public void printMortgage(Player player, int cost){
+		JOptionPane.showMessageDialog(null, player.getName() + " needs $" + cost + " more.");
 	}
 
 	public void enableRoll() {
@@ -153,12 +172,12 @@ public class Window extends JFrame {
 	public void disableBuy() {
 		actionPanel.buyButton.setEnabled(false);
 	}
-	
+
 	public void hidePay(){
 		actionPanel.payButton.setEnabled(false);
 		actionPanel.payButton.setVisible(false);
 	}
-	
+
 	public void enablePay(){
 		actionPanel.payButton.setEnabled(true);
 		actionPanel.payButton.setVisible(true);
@@ -167,7 +186,7 @@ public class Window extends JFrame {
 	public void enableSave() {
 		topPanel.saveButton.setEnabled(true);
 	}
-	
+
 	public void disableSave() {
 		topPanel.saveButton.setEnabled(false);
 	}
