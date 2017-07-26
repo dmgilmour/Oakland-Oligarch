@@ -110,6 +110,7 @@ public class Window extends JFrame {
 	public void update(Player p) {
 		statusPanel.update(p);
 		boardPanel.update(p);
+		actionPanel.update(p);
 
 		if(p.isInJail()){
 			this.enablePay();

@@ -35,7 +35,7 @@ public class Player {
 		this.id = id;
 		this.money = money;
 		this.name = name;
-		token = new JLabel(name);
+		token = new JLabel();
 		properties = new ArrayList<Property>();
 		position = 0;
 		hasMoved = true;
@@ -98,6 +98,10 @@ public class Player {
 
 	public JLabel getToken(){
 		return token;
+	}
+	
+	public void setToken(JLabel t) {
+		token = t;
 	}
 
 	public int getPosition(){

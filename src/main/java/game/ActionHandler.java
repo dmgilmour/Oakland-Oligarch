@@ -417,7 +417,7 @@ public class ActionHandler {
 		}
 		p.moveDistance(moveAmount);
 		Property randProp = (Property)randSquare;
-		p.payRent(randProp);
+		p.charge(randProp.getRent());
 		JOptionPane.showMessageDialog(null, "Become a subletter:\n" + p.getName() + " moves to " + randProp.getName() + "\nand pays $" + randProp.getRent());
 	}
 }
