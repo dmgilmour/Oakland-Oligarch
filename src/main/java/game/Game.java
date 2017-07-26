@@ -4,6 +4,8 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.BufferedWriter;
 import java.io.IOException;
 
@@ -232,40 +234,130 @@ public class Game {
 	 * @param	tradee		the player the current player is trading with
 	 * @returns			a boolean for whether the trade was successful
 	 */
-	public boolean tradePhase(Player tradee) {
-		Player trader = this.getCurrentPlayer();
-		if (trader == tradee) {
-			return false;
-		}
-		Property[] traderProperties = tradePrompt(trader);
-		if (traderProperties == null) return false;
-		Property[] tradeeProperties = tradePrompt(tradee);
-		if (tradeeProperties == null) return false;
-		boolean validTrade = false;
-		int traderProfit = 0;
-		while (!validTrade) {
-			String traderProfitString = JOptionPane.showInputDialog("Amount requested (Negative to give money)");
-			if (traderProfitString == null) return false;
-
-			try {
-				traderProfit = Integer.parseInt(traderProfitString);
-				if (traderProfit >= 0) {
-					validTrade = (tradee.getMoney() >= traderProfit);
-				} else {
-					validTrade = (trader.getMoney() >= traderProfit * -1);
-				}
-			} catch (NumberFormatException e) {
-				validTrade = false; // Restart loop
-			}
-
-		}
-
-//		if (JOptionPane.showMessageDialog(null, tradee.getName() + ": Do you want this trade?", "wat", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) return false;
-
-		trade(this.getCurrentPlayer(), tradee, traderProperties, tradeeProperties, traderProfit);
-		window.update(trader);
-		return true;
+	public void tradePhase(Player tradee) {
+		tradePhase(getCurrentPlayer(), tradee);
 	}
+		
+	public void tradePhase(Player trader, Player tradee) {
+
+		JFrame tradeFrame = new JFrame("Trade between " + trader.getName() + " and " + tradee.getName());
+		tradeFrame.setSize(400, 500);
+
+		tradeFrame.setLayout(new GridBagLayout());
+		GridBagConstraints constraints = new GridBagConstraints();
+
+		JPanel tradePanel = new JPanel();
+		tradePanel.setLayout(new GridBagLayout());
+
+		JLabel traderName = new JLabel(trader.getName());
+		JLabel tradeeName = new JLabel(tradee.getName());
+
+		traderName.setHorizontalAlignment(JLabel.CENTER);
+		tradeeName.setHorizontalAlignment(JLabel.CENTER);
+
+		traderName.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
+		tradeeName.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
+
+
+		String[] traderProperties = new String[trader.getProperties().size()];
+		for (int i = 0; i < trader.getProperties().size(); i++) {
+			traderProperties[i] = trader.getProperties().get(i).getName();
+		}
+
+		JList traderList = new JList(traderProperties);
+
+		String[] tradeeProperties = new String[tradee.getProperties().size()];
+		for (int i = 0; i < tradee.getProperties().size(); i++) {
+			tradeeProperties[i] = tradee.getProperties().get(i).getName();
+		}
+		JList tradeeList = new JList(tradeeProperties);
+
+
+
+		SpinnerModel traderSpinnerModel = new SpinnerNumberModel(0, 0, trader.getMoney(), 1);
+		JSpinner traderMoneySpinner = new JSpinner(traderSpinnerModel);
+		SpinnerModel tradeeSpinnerModel = new SpinnerNumberModel(0, 0, tradee.getMoney(), 1);
+		JSpinner tradeeMoneySpinner = new JSpinner(tradeeSpinnerModel);
+
+
+		constraints.insets = new Insets(10,30,10,30);
+
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		tradePanel.add(traderName, constraints);
+		constraints.gridx = 1;
+		constraints.gridy = 0;
+		tradePanel.add(tradeeName, constraints);
+
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		tradePanel.add(traderList, constraints);
+		constraints.gridx = 1;
+		constraints.gridy = 1;
+		tradePanel.add(tradeeList, constraints);
+
+		constraints.gridx = 0;
+		constraints.gridy = 2;
+		tradePanel.add(traderMoneySpinner, constraints);
+		constraints.gridx = 1;
+		constraints.gridy = 2;
+		tradePanel.add(tradeeMoneySpinner, constraints);
+
+		constraints.gridx = 1;
+		constraints.gridy = 0;
+		tradeFrame.add(tradePanel, constraints);
+
+		JButton submit = new JButton("Submit Trade");
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		constraints.gridwidth = 2;
+		tradeFrame.add(submit, constraints);
+
+		submit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				int dialogResult = JOptionPane.showConfirmDialog (null, tradee.getName() + ": Do you accept this trade?" , "Confirm Trade", JOptionPane.YES_NO_OPTION);
+				if (dialogResult == JOptionPane.YES_OPTION) {
+
+					int traderProfit = (Integer) tradeeMoneySpinner.getValue() - (Integer) traderMoneySpinner.getValue();
+
+
+
+					int[] temp = traderList.getSelectedIndices();
+					Property[] traderProperties = new Property[temp.length];
+					for (int i = 0; i < traderProperties.length; i++) {
+						traderProperties[i] = trader.getProperties().get(temp[i]);
+					}
+
+					temp = tradeeList.getSelectedIndices();
+					Property[] tradeeProperties = new Property[temp.length];
+					for (int i = 0; i < tradeeProperties.length; i++) {
+						tradeeProperties[i] = tradee.getProperties().get(temp[i]);
+					}
+
+					trade(trader, tradee, traderProperties, tradeeProperties, traderProfit);
+					tradeFrame.dispose();
+				}
+			}
+		});
+
+		tradeFrame.setVisible(true);
+	}
+
+
+		
+
+
+	public void toggleMortgage(int propIndex) {
+		Property prop = this.getCurrentPlayer().getProperties().get(propIndex);
+		if (prop.getMortgaged()) {
+			prop.unmortgage();
+		} else {
+			prop.mortgage();
+		}
+		updateBuyButton();
+	}
+
 
 	/**
 	 * Runs the game phase where the property is auctioned to the other players
@@ -312,41 +404,6 @@ public class Game {
 			highestBidder.addProperty(prop);
 			highestBidder.charge(topAmount);
 		}
-	}
-
-
-	/**
-	 * Prompts which properties want to be traded for a given player
-	 *
-	 * @param 	player 		the player whose properties are being selected for trade
-	 * @return 			the list of properties the players want to trade
-	 */
-	public Property[] tradePrompt(Player player) {
-		ArrayList<Property> playerProperties = player.getProperties();
-		String[] propList = new String[playerProperties.size()];
-		for (int i = 0; i < playerProperties.size(); i++) {
-			propList[i] = playerProperties.get(i).getName();
-		}
-		JList list = new JList(propList);
-
-		//JOptionPane.showMessageDialog(null, player.getName() + " select properties to trade.");
-		JOptionPane.showMessageDialog(null, list, player.getName(), JOptionPane.PLAIN_MESSAGE);
-		int[] tradeProperties = list.getSelectedIndices();
-		Property[] toReturn = new Property[tradeProperties.length];
-		for (int i = 0; i < toReturn.length; i++) {
-			toReturn[i] = playerProperties.get(tradeProperties[i]);
-		}
-		return toReturn;
-	}
-
-	public void toggleMortgage(int propIndex) {
-		Property prop = this.getCurrentPlayer().getProperties().get(propIndex);
-		if (prop.getMortgaged()) {
-			prop.unmortgage();
-		} else {
-			prop.mortgage();
-		}
-		updateBuyButton();
 	}
 
 	/**
