@@ -240,10 +240,8 @@ public class Game {
 		
 	public void tradePhase(Player trader, Player tradee) {
 
-		JFrame tradeFrame = new JFrame("Trade between " + trader.getName() + " and " + tradee.getName());
-		tradeFrame.setSize(400, 500);
+		JDialog tradeDialog = new JDialog(window, "Trade", true);
 
-		tradeFrame.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 
 		JPanel tradePanel = new JPanel();
@@ -303,15 +301,15 @@ public class Game {
 		constraints.gridy = 2;
 		tradePanel.add(tradeeMoneySpinner, constraints);
 
-		constraints.gridx = 1;
-		constraints.gridy = 0;
-		tradeFrame.add(tradePanel, constraints);
 
 		JButton submit = new JButton("Submit Trade");
 		constraints.gridx = 0;
-		constraints.gridy = 1;
+		constraints.gridy = 3;
 		constraints.gridwidth = 2;
-		tradeFrame.add(submit, constraints);
+		tradePanel.add(submit, constraints);
+
+		tradeDialog.getContentPane().add(tradePanel);
+		tradeDialog.pack();
 
 		submit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -336,13 +334,13 @@ public class Game {
 					}
 
 					trade(trader, tradee, traderProperties, tradeeProperties, traderProfit);
-					tradeFrame.dispose();
+					tradeDialog.dispose();
 					window.update(getCurrentPlayer());
 				}
 			}
 		});
 
-		tradeFrame.setVisible(true);
+		tradeDialog.setVisible(true);
 	}
 
 
@@ -443,7 +441,7 @@ public class Game {
 	 */
 	private void loserCheck(){
 		for(int i = 0; i < playerList.length; i++){
-			if(playerList[i].getMoney() < 0 && playerList[i].getWorth() < 0 && !playerList[i].getLoser()){
+			if (playerList[i].getMoney() < 0 && playerList[i].getWorth() < 0 && !playerList[i].getLoser()){
 				//System.out.println(playerList[i].getName() + ": money: " + playerList[i].getMoney() + " worth: " + playerList[i].getWorth() + " Loser: " + playerList[i].getLoser());
 				window.printLoser(playerList[i]);
 				playerList[i].setLoser(true);
@@ -495,6 +493,112 @@ public class Game {
 		} else {
 			window.disableBuy();
 		}
+	}
+
+	public void debtCollection(Player debtor) {
+
+		JDialog debtDialog = new JDialog(window, "Debt Collection", true);
+		debtDialog.setSize(600, 600);
+
+		JPanel debtPanel = new JPanel();
+		debtPanel.setLayout(new GridBagLayout());
+
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.insets = new Insets(10,30,10,30);
+
+		JLabel tradeWithPlayersLabel = new JLabel("Trade with the following players");
+		constraints.gridwidth = active_players - 1;
+		constraints.gridy = 0;
+		debtPanel.add(tradeWithPlayersLabel, constraints);
+
+		constraints.gridy++;	
+		for (Player p : playerList) {
+			if (p != debtor && !p.getLoser()) {
+				constraints.gridx++;
+				JButton temp = new JButton(p.getName());
+				temp.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						tradePhase(debtor, p);
+						debtDialog.dispose();
+						window.update(getCurrentPlayer());
+						debtCollection(debtor);
+					}
+				});
+				debtPanel.add(temp, constraints);
+			}
+		}
+
+		JLabel temp = new JLabel(" ");
+		constraints.gridy++;
+		debtPanel.add(temp, constraints);
+
+
+		ArrayList<Property> playerProperties = new ArrayList<Property>(debtor.getProperties());
+		for (int i = 0; i < playerProperties.size(); i++) {
+			Property p = playerProperties.get(i);
+			if (p.getMortgaged()) {
+				playerProperties.remove(p);
+				i--;
+			}
+		}
+		if (playerProperties.size() > 0) {
+			String[] propList = new String[playerProperties.size()];
+			for (int i = 0; i < playerProperties.size(); i++){
+				propList[i] = playerProperties.get(i).getName();
+			}
+			JList list = new JList(propList);
+
+			constraints.gridwidth = active_players - 1;
+			constraints.gridy++;
+			constraints.gridx = 0;
+
+			debtPanel.add(list, constraints);
+
+			JButton submitMortgage = new JButton("Mortgage Selected");
+			submitMortgage.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int[] mortgagePropertiesIndices = list.getSelectedIndices();
+					Property[] mortgageProperties = new Property[mortgagePropertiesIndices.length];
+					for (int i = 0; i < mortgageProperties.length; i++){
+						mortgageProperties[i] = playerProperties.get(mortgagePropertiesIndices[i]);
+					}
+					mortgage(debtor, mortgageProperties);
+					debtDialog.dispose();
+					window.update(getCurrentPlayer());
+					debtCollection(debtor);
+				}
+			});
+
+			constraints.gridy++;
+			debtPanel.add(submitMortgage, constraints);
+		}
+
+		temp = new JLabel(" ");
+		constraints.gridy++;
+		debtPanel.add(temp, constraints);
+
+		JButton exit = new JButton();
+		if (debtor.getMoney() >= 0) {
+			exit.setText("Return to Game");
+		} else {
+			exit.setText("Accept Your Fate");
+		}
+		exit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				debtDialog.dispose();
+			}
+		});
+
+		constraints.gridy++;
+		debtPanel.add(exit, constraints);		
+
+
+
+		debtDialog.getContentPane().add(debtPanel);
+		debtDialog.pack();
+
+		debtDialog.setVisible(true);
+
 	}
 
 	/**
