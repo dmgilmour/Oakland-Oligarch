@@ -337,6 +337,7 @@ public class Game {
 
 					trade(trader, tradee, traderProperties, tradeeProperties, traderProfit);
 					tradeFrame.dispose();
+					window.update(getCurrentPlayer());
 				}
 			}
 		});
