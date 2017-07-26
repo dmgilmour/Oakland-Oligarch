@@ -207,6 +207,7 @@ public class Player {
 	 * @returns				A boolean indicating the success of the transaction
 	 */
 	public boolean charge(int cost) {
+		OaklandOligarchy.game.debtCollection(this);
 		if(money >= cost){
 			money -= cost;
 			worth -= cost;
