@@ -83,6 +83,10 @@ public class Window extends JFrame {
 		this.add(boardPanel, c);
 
 		this.setVisible(true);
+
+		boardPanel.updateMeeseeks();
+
+		this.setVisible(true);
 	}
 
 	/**

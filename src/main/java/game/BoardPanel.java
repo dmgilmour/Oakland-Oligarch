@@ -12,6 +12,7 @@ public class BoardPanel extends JPanel {
 	private Tile[] tiles;
 	private ActionListener propertyListener;
 	private JailTile jail;
+	private JPanel centerSquare;
 	
 	/**
 	 * Constructor to build the board panel object.
@@ -86,11 +87,8 @@ public class BoardPanel extends JPanel {
 		}
 		
 		
-		JPanel centerSquare = new JPanel();
-		ImageIcon image = new ImageIcon("meeseeks.jpg");
-		JLabel background = new JLabel();
-		background.setIcon(image);
-		centerSquare.add(background);
+		centerSquare = new JPanel(new BorderLayout());
+		centerSquare.setBackground(new Color(0x0196C3));
 		constraint.gridx = 1;
 		constraint.gridy = 1;
 		constraint.gridheight = 8;
@@ -132,4 +130,15 @@ public class BoardPanel extends JPanel {
 		}
 		jail.update();
 	}
+
+	public void updateMeeseeks() {
+		ImageIcon image = new ImageIcon("meeseeks2.jpg");
+
+		image = new ImageIcon(image.getImage().getScaledInstance((centerSquare.getHeight() / 2), (centerSquare.getHeight() / 2), java.awt.Image.SCALE_FAST));
+		JLabel background = new JLabel();
+		background.setIcon(image);
+		centerSquare.setLayout(new GridBagLayout());
+		centerSquare.add(background, new GridBagConstraints());
+	}
+		
 }
