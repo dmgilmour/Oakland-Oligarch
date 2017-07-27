@@ -16,7 +16,8 @@ public class BoardPanel extends JPanel {
 	/**
 	 * Constructor to build the board panel object.
 	 * 
-	 * @param squareList	Array of squares to add to the game.
+	 * @param	squareList	Squares making up the board
+	 * @param	pl			Triggers the property info pop-up
 	 */
 	public BoardPanel(Square[] squareList, ActionListener pl){
 		//The buttons are just place holders for tiles right now. The layout itself is complicated 

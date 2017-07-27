@@ -20,7 +20,8 @@ public class StatusPanel extends JPanel {
 	/**
 	 * Initializes the status panel showing players and their properties
 	 *
-	 * @param	random		A psuedo-random number generator used to select the background color
+	 * @param	random	A psuedo-random number generator used to select the background color
+	 * @param	ml		ActionListener for triggering the mortagaging and unmortgaging of properties
 	 */
 	public StatusPanel(Random random, ActionListener ml) {
 		this.setBackground(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
@@ -29,6 +30,12 @@ public class StatusPanel extends JPanel {
 		mortgageListener = ml;
 	}
 
+	/**
+	 * Sets up the playerButtons on the panel once the players have been loaded
+	 *
+	 * @param	_playerlist		The players in this game
+	 * @param	tradeListeners	Establishes a trade between players on click
+	 */
 	public void setPlayers(Player[] _playerList, ActionListener[] tradeListeners) {
 		playerList = _playerList;
 		num_players = playerList.length;
@@ -48,8 +55,11 @@ public class StatusPanel extends JPanel {
 		}
 	}
 
-  /*
-	 * Updates the panel with the new money values of the players
+	/**
+	 * Updates the panel with the new money values of the players. Also,
+	 *		updates the properties for mortgaging and the player buttons.
+	 *
+	 * @param	player		The player whos turn it is
 	 */
 	public void update(Player player) {
 
