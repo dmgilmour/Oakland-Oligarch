@@ -138,6 +138,7 @@ public class Property extends Square{
 	 */
 	public void mortgage() {
 		if (!mortgaged) {
+			owner.getPaid(this.price / 2);
 			mortgaged = true;
 		}
 	}

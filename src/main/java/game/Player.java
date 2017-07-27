@@ -169,7 +169,7 @@ public class Player {
 	 * @param	property	A property that this player is buying
 	 * @return 				A boolean indicating success of the purchase
 	 */
-	public boolean buy (Property property) {
+	public boolean buy(Property property) {
 		if (property.getOwner() == null && this.money >= property.getPrice())	{
 			int cost = property.getPrice();
 			if (canAfford(cost)) {
@@ -196,16 +196,11 @@ public class Player {
 
 		if (money < 0) {
 
-			System.out.println("Cannot afford");
-			System.out.println("Has: " + money);
-
 			OaklandOligarchy.game.lose(this);
 			return cost + money;
 
 		} else {
 
-			System.out.println("Can afford");
-			System.out.println("Has: " + money);
 			return cost;
 
 		}
@@ -223,7 +218,11 @@ public class Player {
 		boolean success = canAfford(cost);
 
 		Player owner = property.getOwner();
-		owner.getPaid(charge(cost));
+		if (owner != null) {
+			owner.getPaid(charge(cost));
+		} else {
+			charge(cost);
+		}
 		
 		return success;
 	}

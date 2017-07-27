@@ -273,9 +273,11 @@ public class OaklandOligarchy {
 	private static class PayListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			game.getCurrentPlayer().charge(JAIL_COST);
-			game.getCurrentPlayer().leaveJail();
-			window.update(game.getCurrentPlayer());
-			JOptionPane.showMessageDialog(null, "You paid $" + JAIL_COST + " to leave jail.");
+			if (!game.getCurrentPlayer().getLoser()) {
+				game.getCurrentPlayer().leaveJail();
+				window.update(game.getCurrentPlayer());
+				JOptionPane.showMessageDialog(null, "You paid $" + JAIL_COST + " to leave jail.");
+			}
 		}
 	}
 }

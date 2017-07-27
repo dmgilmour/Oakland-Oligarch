@@ -425,7 +425,7 @@ public class Game {
 	 * @param props		Array of properties to be mortgaged.
 	 */
 	public void mortgage(Player mortgager, Property[] props){
-		for (Property prop : props){
+		for (Property prop : props) {
 			prop.mortgage();
 		}
 	}
@@ -441,6 +441,10 @@ public class Game {
 			loserCleanUp(fknLoser);
 
 			winCheck();
+
+			if (getCurrentPlayer() == fknLoser) {
+				endPhase();
+			}
 
 		}
 	}
