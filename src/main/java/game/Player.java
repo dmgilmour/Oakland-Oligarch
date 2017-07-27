@@ -200,6 +200,7 @@ public class Player {
 
 		if (money < 0) {
 
+			OaklandOligarchy.game.debtCollection(this);
 			OaklandOligarchy.game.lose(this);
 			return cost + money;
 

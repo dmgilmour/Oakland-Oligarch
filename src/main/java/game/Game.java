@@ -278,9 +278,20 @@ public class Game {
 
 
 
-		SpinnerModel traderSpinnerModel = new SpinnerNumberModel(0, 0, trader.getMoney(), 1);
+		int max = 0;
+		if (trader.getMoney() > 0) {
+			max = trader.getMoney();
+		} else {
+			max = 0;
+		}
+		SpinnerModel traderSpinnerModel = new SpinnerNumberModel(0, 0, max, 1);
 		JSpinner traderMoneySpinner = new JSpinner(traderSpinnerModel);
-		SpinnerModel tradeeSpinnerModel = new SpinnerNumberModel(0, 0, tradee.getMoney(), 1);
+		if (tradee.getMoney() > 0) {
+			max = tradee.getMoney();
+		} else {
+			max = 0;
+		}
+		SpinnerModel tradeeSpinnerModel = new SpinnerNumberModel(0, 0, max, 1);
 		JSpinner tradeeMoneySpinner = new JSpinner(tradeeSpinnerModel);
 
 
