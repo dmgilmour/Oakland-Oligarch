@@ -148,6 +148,13 @@ public class Game {
 				this.getCurrentPlayer().addToJailCounter();
 				message += "\nThis is your " + this.getCurrentPlayer().getJailCounter() + " turn lost in jail.";
 				JOptionPane.showMessageDialog(null, message);
+				if(this.getCurrentPlayer().getJailCounter()==OaklandOligarchy.MAX_JAIL_TURNS){
+					this.getCurrentPlayer().charge(OaklandOligarchy.JAIL_COST);
+					this.getCurrentPlayer().leaveJail();
+					window.disableRoll();
+					window.enableEnd();
+					window.update(this.getCurrentPlayer());
+				}
 				endPhase();
 			}
 
