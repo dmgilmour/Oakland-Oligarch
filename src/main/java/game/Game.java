@@ -430,19 +430,19 @@ public class Game {
 		}
 	}
 
-	public void lose(Player fknLoser) {
+	public void lose(Player player) {
 
-		if (fknLoser.getMoney() < 0) {
+		if (player.getMoney() < 0) {
 
-			window.printLoser(fknLoser);
-			fknLoser.setLoser(true);
+			window.printLoser(player);
+			player.setLoser(true);
 			active_players--;
 			
-			loserCleanUp(fknLoser);
+			loserCleanUp(player);
 
 			winCheck();
 
-			if (getCurrentPlayer() == fknLoser) {
+			if (getCurrentPlayer() == player) {
 				endPhase();
 			}
 
