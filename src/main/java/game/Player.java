@@ -222,12 +222,13 @@ public class Player {
 
 		} else if (money < 0 && worth > 0) {
 
-			OaklandOligarchy.game.mortgagePhase(this, cost);
+			// OaklandOligarchy.game.mortgagePhase(this, cost);
+			OaklandOligarchy.game.lose(this);
 			return cost;
 
 		} else {
 
-			OaklandOligarchy.game.loserPhase(this);
+			OaklandOligarchy.game.lose(this);
 			return cost + worth;
 
 		}
