@@ -35,6 +35,7 @@ public class BoardPanel extends JPanel {
 			}
 			else if(squareList[i] instanceof JailSquare){
 				jail = new JailTile(i, (JailSquare)squareList[i]);
+				tiles[i].getButton().setBackground(Color.lightGray);
 				tiles[i] = jail;
 			}
 			else {	//this is going to be an action square. This should probably change somehow

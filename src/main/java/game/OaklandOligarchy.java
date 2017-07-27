@@ -26,7 +26,8 @@ public class OaklandOligarchy {
 	public static final int MAX_NUMBER_OF_PLAYERS = 4;
 	public static final int NUMBER_OF_ACTIONS = 14;
 	public static final int JAIL_COST = 50;
-	public static int JAIL_POS;
+	public static final int MAX_JAIL_TURNS = 3;	//the maximum amount of turns a player can spend in jail
+	public static int JAIL_POS;	//what tile jail is
 	public static int GO_PAYOUT;
 
 	public static Player[] playerList;
