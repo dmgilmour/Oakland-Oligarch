@@ -30,14 +30,20 @@ public class Game {
 	 * @param	squareList		The array of squares to be used in this game
 	 * @param	w				The window this game is running in
 	 */
-	public Game(Player[] _playerList, Square[] squareList, Window w, Random random, int pt, int ap) {
+	public Game(Player[] _playerList, Square[] squareList, Window w, Random random, int pt) {
 		playerList = _playerList;
 		board = new Board(squareList);
 		window = w;
 		actionHandler = new ActionHandler(board, playerList, random);
 		playerTurn = pt;
 		num_players = playerList.length;
-		active_players = ap-1;
+		active_players = num_players;
+		for (Player p : playerList) {
+			if (p.getLoser()) {
+				active_players--;
+			}
+		}
+		winCheck();
 	}
 
 	/**

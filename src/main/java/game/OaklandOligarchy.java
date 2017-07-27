@@ -101,10 +101,9 @@ public class OaklandOligarchy {
 			playerList = Arrays.copyOfRange(fh.getPlayerList(), 0, num_players);
 		}
 		int playerTurn = fh.getPlayerTurn();
-		int activePlayers = fh.getActivePlayers();
 		GO_PAYOUT = fh.getPayout();
 		JAIL_POS = fh.getJailPosition();
-		game = new Game(playerList, squareList, window, random, playerTurn, activePlayers);
+		game = new Game(playerList, squareList, window, random, playerTurn);
 		PhaseListener[] tradeListeners = new PhaseListener[num_players];
 		for (int i = 0; i < num_players; i++) {
 			tradeListeners[i] = new PhaseListener(GamePhase.TRADE, playerList[i]);
@@ -273,7 +272,7 @@ public class OaklandOligarchy {
 
 	private static class PayListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
-			game.getCurrentPlayer().charge(JAIL_COST);	//TODO when charge returns a bool check to see if they could pay
+			game.getCurrentPlayer().charge(JAIL_COST);
 			game.getCurrentPlayer().leaveJail();
 			window.update(game.getCurrentPlayer());
 			JOptionPane.showMessageDialog(null, "You paid $" + JAIL_COST + " to leave jail.");
