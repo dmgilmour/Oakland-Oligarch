@@ -31,7 +31,7 @@ public class Window extends JFrame {
 	 * @param	jl				An ActionListener for paying to get out of jail
 	 */
 
-	public Window(Square[] squareList, Random random, ActionListener bl, ActionListener ml, ActionListener el, Time time, ActionListener ll, ActionListener sl,  ActionListener mortgageListener, ActionListener pl, ActionListener jl) {
+	public Window(Square[] squareList, Random random, ActionListener bl, ActionListener ml, ActionListener el, Time time, ActionListener ll, ActionListener sl,  ActionListener mortgageListener, ActionListener pl, ActionListener jl, ActionListener il, ActionListener asl) {
 
 		boardPanel = new BoardPanel(squareList, pl);
 
@@ -45,7 +45,7 @@ public class Window extends JFrame {
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 
-		topPanel = new TopPanel(random, time, ll, sl);
+		topPanel = new TopPanel(random, time, ll, sl, il, asl);
 		c.gridwidth = 2;
 		c.gridheight = 1;
 		c.gridx = 0;
