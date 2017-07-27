@@ -11,9 +11,10 @@ public class Property extends Square{
 	private Player owner;
 	private boolean mortgaged;
 	private JLabel ownerToken;
+	private boolean transport;
 
 	/**
-	 * Constructor for property object. Initializes name, pice, rent, owner,
+	 * Constructor for property object. Initializes name, price, rent, owner,
 	 * 		mortgaged, and ownerToken. Owner, Mortgaged, and OwnerToken are 
 	 *		initialized to null, false, and null, respectively.
 	 *
@@ -28,6 +29,7 @@ public class Property extends Square{
 		owner = null;
 		mortgaged = false;
 		ownerToken = null;
+		transport = false;
 	}
 
 	/**
@@ -160,5 +162,13 @@ public class Property extends Square{
 	 */
 	public void setMortgaged(boolean m) {
 		mortgaged = m;
+	}
+	
+	/**
+	 * Returns whether or not this is a transport property.
+	 * @return	True if it is a transport property.
+	 */
+	public boolean isTransport(){
+		return transport;
 	}
 }
