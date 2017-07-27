@@ -21,7 +21,6 @@ public class Player {
 	private boolean inJail;
 	private int jailCounter;		//how many turns a player has been in jail
 	private int doublesCounter;		//how many times a player has rolled doubles
-	private int worth;				//amount of money a player can have with mortgaging their properties.
 
 
 	/**
@@ -43,23 +42,6 @@ public class Player {
 		loser = false;
 		jailCounter=0;
 		inJail = false;
-		worth = money;
-	}
-
-	public int getWorth(){
-		return worth;
-	}
-
-	public void addWorth(int w){
-		worth += w;
-	}
-
-	public void setWorth(int value){
-		worth = value;
-	}
-
-	public void removeWorth(int w){
-		worth -= w;
 	}
 
 	public boolean getLoser(){
@@ -69,7 +51,6 @@ public class Player {
 	public void setLoser(boolean b){
 		loser = b;
 		money = -1;
-		worth = -1;
 	}
 
 	public int getOldPos() {
@@ -149,7 +130,6 @@ public class Player {
 		}
 		properties.add(property);
 		property.setOwner(this);
-		this.addWorth(property.getPrice() / 2);
 		return true;
 	}
 
@@ -180,7 +160,6 @@ public class Player {
 		}
 		prop.setOwner(null);
 		properties.remove(prop);
-		this.removeWorth(prop.getPrice() / 2);
 		return prop;
 	}
 
@@ -190,14 +169,19 @@ public class Player {
 	 * @param	property	A property that this player is buying
 	 * @return 				A boolean indicating success of the purchase
 	 */
-	public boolean buy (Property property) {
+	public boolean buy(Property property) {
 		if (property.getOwner() == null && this.money >= property.getPrice())	{
 			int cost = property.getPrice();
-			if (charge(cost)) {
+			if (canAfford(cost)) {
+				charge(cost);
 				return this.addProperty(property);
 			}
 		}
 		return false;
+	}
+
+	public boolean canAfford(int cost) {
+		return money >= cost;
 	}
 
 	/**
@@ -206,28 +190,23 @@ public class Player {
 	 * @param	cost		An integer value indicating the cost incurred
 	 * @returns				A boolean indicating the success of the transaction
 	 */
-	public boolean charge(int cost) {
-		if(money >= cost){
-			money -= cost;
-			worth -= cost;
-			return true;
-		}
-		else if(worth >= cost){
-			//go to mortgagePhase() to cover the cost.
-			OaklandOligarchy.game.mortgagePhase(this, cost);
-			money -= cost;
-			worth -= cost;
-			return true;
-		}
-		else{
-			//go to loserPhase() to cover as much of cost as possible, and remove player from the game.
-			//System.out.println(this.getName() + " is a loser found in charge(). worth: " + worth + " money: " + money);
-			OaklandOligarchy.game.loserPhase(this);
-			//setLoser(true);
-			return false;
+	public int charge(int cost) {
+
+		money -= cost;
+
+		if (money < 0) {
+
+			OaklandOligarchy.game.lose(this);
+			return cost + money;
+
+		} else {
+
+			return cost;
+
 		}
 	}
-
+			
+			
 	/**
 	 * This player pays the rent on a given property, or as much as possible.
 	 *
@@ -236,38 +215,26 @@ public class Player {
 	 */
 	public boolean payRent(Property property) {
 		int cost = property.getRent();
+		boolean success = canAfford(cost);
+
 		Player owner = property.getOwner();
-		boolean success = charge(cost);
-		if(success && owner != null){
-			owner.getPaid(cost);
+		if (owner != null) {
+			owner.getPaid(charge(cost));
+		} else {
+			charge(cost);
 		}
-		if(!success && owner != null){		//should only run if a loser has to pay the rest of their money.
-			owner.getPaid(this.getWorth());
-			this.setMoney(-1);
-			this.setWorth(-1);
-		}
+		
 		return success;
 	}
 
 	/**
-	 *	Deposits funds into this player's account and increase player's worth.
+	 *	Deposits funds into this player's account
 	 *
 	 * @param	payment		An integer value that the player should receive
 	 */
 	public void getPaid(int payment) {
 		if(payment > 0)
 			money += payment;
-			worth += payment;
-	}
-
-	/**
-	 * Increases player's money without increasing the player's worth.
-	 * @param value		Integer value the player should have added to money.
-	 */
-	public void gainMortgageValue(int value){
-		if(value > 0){
-			money += value;
-		}
 	}
 
 	public void setColor(int c) {
