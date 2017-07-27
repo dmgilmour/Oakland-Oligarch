@@ -45,8 +45,6 @@ public class ActionHandler {
 		if(!ownsProperty && randInt >= OaklandOligarchy.NUMBER_OF_ACTIONS - OWNS_PROPERTY_ACTIONS) {
 			randInt = random.nextInt(OaklandOligarchy.NUMBER_OF_ACTIONS - OWNS_PROPERTY_ACTIONS);
 		}
-		rain();
-		/*
 		switch(randInt){
 			case 0:
 				construction();
@@ -96,7 +94,6 @@ public class ActionHandler {
 				System.err.println("Action Handler: default case");
 				break;
 		}
-		*/
 	}
 
 	/**
