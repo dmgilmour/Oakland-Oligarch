@@ -210,25 +210,19 @@ public class Player {
 	 * @param	cost		An integer value indicating the cost incurred
 	 * @returns				A boolean indicating the success of the transaction
 	 */
-	public boolean charge(int cost) {
-		if(money >= cost){
-			money -= cost;
-			worth -= cost;
-			return true;
-		}
-		else if(worth >= cost){
-			//go to mortgagePhase() to cover the cost.
-			OaklandOligarchy.game.mortgagePhase(this, cost);
-			money -= cost;
-			worth -= cost;
-			return true;
-		}
-		else{
-			//go to loserPhase() to cover as much of cost as possible, and remove player from the game.
-			//System.out.println(this.getName() + " is a loser found in charge(). worth: " + worth + " money: " + money);
-			OaklandOligarchy.game.loserPhase(this);
-			//setLoser(true);
-			return false;
+	public int charge(int cost) {
+
+		money -= cost;
+
+		if (money < 0) {
+
+			OaklandOligarchy.game.lose(this);
+			return cost + money;
+
+		} else {
+
+			return cost;
+
 		}
 	}
 
