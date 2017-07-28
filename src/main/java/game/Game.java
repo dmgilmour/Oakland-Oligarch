@@ -108,9 +108,9 @@ public class Game {
 				message += "\nYou got doubles!";
 				if (this.getCurrentPlayer().addToDoublesCounter()==3){
 					this.getCurrentPlayer().goToJail();
+					window.update(this.getCurrentPlayer());
 					message += "\nYou got 3 doubles in a row so you go to jail.";
 					JOptionPane.showMessageDialog(null, message);
-					window.update(this.getCurrentPlayer());
 					endPhase();
 					return;
 				}
@@ -118,8 +118,8 @@ public class Game {
 			if (collectGoMoney) {
 				message += "\nYou passed go and collected " + OaklandOligarchy.GO_PAYOUT;
 			}
-			JOptionPane.showMessageDialog(null, message);
 			window.update(this.getCurrentPlayer());
+			JOptionPane.showMessageDialog(null, message);
 			if (roll[0] != roll[1]) {
 				window.disableRoll();
 				window.enableEnd();
@@ -142,15 +142,14 @@ public class Game {
 				if (collectGoMoney) {
 					message += "\nYou passed go and collected " + OaklandOligarchy.GO_PAYOUT;
 				}
-				JOptionPane.showMessageDialog(null, message);
-
 				window.disableRoll();
 				window.enableEnd();
 				window.update(this.getCurrentPlayer());
+				JOptionPane.showMessageDialog(null, message);
 				actionPhase();
 			} else {
 				this.getCurrentPlayer().addToJailCounter();
-				message += "\nThis is your " + this.getCurrentPlayer().getJailCounter() + " turn lost in jail.";
+				message += "\nYou've lost " + this.getCurrentPlayer().getJailCounter() + " turn(s) lost in jail.";
 				JOptionPane.showMessageDialog(null, message);
 				if(this.getCurrentPlayer().getJailCounter()==OaklandOligarchy.MAX_JAIL_TURNS){
 					this.getCurrentPlayer().charge(OaklandOligarchy.JAIL_COST);
