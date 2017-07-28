@@ -11,7 +11,6 @@ public class Property extends Square{
 	private Player owner;
 	private boolean mortgaged;
 	private JLabel ownerToken;
-	private boolean transport;
 
 	/**
 	 * Constructor for property object. Initializes name, price, rent, owner,
@@ -29,7 +28,6 @@ public class Property extends Square{
 		owner = null;
 		mortgaged = false;
 		ownerToken = null;
-		transport = false;
 	}
 
 	/**
@@ -56,6 +54,15 @@ public class Property extends Square{
 	 * @return		The rent of this property
 	 */
 	public int getRent(){
+		int count=0;
+		if(this.isTransport()){
+			for(Property p:this.getOwner().getProperties()){
+				if(p.isTransport()){
+					count++;
+				}
+			}
+			rent = (int)(100 * Math.pow(2, (count-1)));
+		}
 		return rent;
 	}
 
@@ -169,6 +176,7 @@ public class Property extends Square{
 	 * @return	True if it is a transport property.
 	 */
 	public boolean isTransport(){
-		return transport;
+		return name.equals("63A") || name.equals("63B") || name.equals("63C") || name.equals("63D");
+		
 	}
 }
