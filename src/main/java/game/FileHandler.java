@@ -7,6 +7,7 @@ import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.lang.Throwable;
+import java.lang.StringBuilder;
 
 /**
  * A class that will handle the saving and loading of the game.
@@ -14,7 +15,8 @@ import java.lang.Throwable;
  * @author Woodrow Fulmer
  */
 public class FileHandler{
-	private static final String DEFAULT_FILE_NAME = "defaultFile.txt";
+	private static final String DEFAULT_FILE_NAME = "default_file_encrypt.txt";
+	private static final int CIPHER = 3;
 	
 	private ArrayList<Player> playerList;	
 	private Time time;
@@ -70,7 +72,8 @@ public class FileHandler{
 		try{
 			Scanner reader = new Scanner(f);
 			while (reader.hasNextLine()) {
-				String[] input = reader.nextLine().split("\t+");
+				String decrypted = decrypt(reader.nextLine());
+				String[] input = decrypted.split("\t+");
 				if(input.length > 1) {
 					loadLine(input, ownerList);
 				}
@@ -203,9 +206,11 @@ public class FileHandler{
 	public void save(File file, Time time, Player[] players, Square[] squares, int playerTurn) {
 		try {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-			bw.write("Time\t" + time.getTime());
+			String nextLine = encrypt("Time\t" + time.getTime());
+			bw.write(nextLine);
 			bw.newLine();
-			bw.write("GoPayout\t" + GO_PAYOUT);
+			nextLine = encrypt("GoPayout\t" + GO_PAYOUT);
+			bw.write(nextLine);
 			bw.newLine();
 			for(Player p: players) {
 				savePlayer(bw, p, playerTurn);
@@ -226,24 +231,26 @@ public class FileHandler{
 	 * @param	playerTurn	The ID of the player whose turn it is
 	 */
 	private void savePlayer(BufferedWriter bw, Player p, int playerTurn) throws IOException {
-		bw.write("Player\t");
-		bw.write(p.getId()+"\t");
-		bw.write(p.getName()+"\t");
-		bw.write(p.getColor()+"\t");
-		bw.write(p.getMoney() + "\t");
-		bw.write(p.getPosition() + "\t");
+		StringBuilder sb = new StringBuilder("Player\t");
+		sb.append(p.getId()+"\t");
+		sb.append(p.getName()+"\t");
+		sb.append(p.getColor()+"\t");
+		sb.append(p.getMoney() + "\t");
+		sb.append(p.getPosition() + "\t");
 		if(p.getId() == playerTurn) {
-			bw.write("*\t");
+			sb.append("*\t");
 		}
 		else {
-			bw.write("-\t");
+			sb.append("-\t");
 		}
 		if(p.isInJail()) {
-			bw.write(p.getJailCounter());
+			sb.append(p.getJailCounter());
 		}
 		else {
-			bw.write("-1");
+			sb.append("-1");
 		}
+		String encrypted = encrypt(sb.toString());
+		bw.write(encrypted);
 		bw.newLine();
 	}
 	
@@ -259,11 +266,13 @@ public class FileHandler{
 			saveProperty(bw, (Property)s, index);
 		}
 		else if(s instanceof JailSquare) {
-			bw.write("Jail\t" + index);
+			String encrypted = encrypt("Jail\t" + index);
+			bw.write(encrypted);
 			bw.newLine();
 		}
 		else if(s instanceof GoSquare) {
-			bw.write("Go\t" + index);
+			String encrypted = encrypt("Go\t" + index);
+			bw.write(encrypted);
 			bw.newLine();
 		}
 	}
@@ -276,24 +285,42 @@ public class FileHandler{
 	 * @param	index	The index of the given property within the board
 	 */	
 	private void saveProperty(BufferedWriter bw, Property p, int index) throws IOException {
-		bw.write("Property\t");
-		bw.write(index + "\t");
-		bw.write(p.getName() + "\t");
-		bw.write(p.getPrice() + "\t");
-		bw.write(p.getRent() + "\t");
+		StringBuilder sb = new StringBuilder("Property\t");
+		sb.append(index + "\t");
+		sb.append(p.getName() + "\t");
+		sb.append(p.getPrice() + "\t");
+		sb.append(p.getRent() + "\t");
 		Player owner = p.getOwner();
 		if(owner == null) {
-			bw.write("-1\t");
+			sb.append("-1\t");
 		}
 		else {
-			bw.write(owner.getId() + "\t" );
+			sb.append(owner.getId() + "\t" );
 		}
 		if(p.getMortgaged()) {
-			bw.write("m");
+			sb.append("m");
 		}
 		else {
-			bw.write("u");
+			sb.append("u");
 		}
+		String encrypted = encrypt(sb.toString());
+		bw.write(encrypted);
 		bw.newLine();
+	}
+	
+	private String decrypt(String input) {
+		char [] chars = input.toCharArray();
+		for(int i = 0; i < chars.length; i++) {
+			chars[i] = (char)(chars[i] + CIPHER);
+		}
+		return new String(chars);
+	}
+	
+	private String encrypt(String input) {
+		char [] chars = input.toCharArray();
+		for(int i = 0; i < chars.length; i++) {
+			chars[i] = (char)(chars[i] - CIPHER);
+		}
+		return new String(chars);
 	}
 }

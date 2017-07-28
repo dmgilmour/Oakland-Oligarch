@@ -26,7 +26,8 @@ public class OaklandOligarchy {
 	public static final int MAX_NUMBER_OF_PLAYERS = 4;
 	public static final int NUMBER_OF_ACTIONS = 14;
 	public static final int JAIL_COST = 50;
-	public static int JAIL_POS;
+	public static final int MAX_JAIL_TURNS = 3;	//the maximum amount of turns a player can spend in jail
+	public static int JAIL_POS;	//what tile jail is
 	public static int GO_PAYOUT;
 
 	public static Player[] playerList;
@@ -105,10 +106,9 @@ public class OaklandOligarchy {
 			playerList = Arrays.copyOfRange(fh.getPlayerList(), 0, num_players);
 		}
 		int playerTurn = fh.getPlayerTurn();
-		int activePlayers = fh.getActivePlayers();
 		GO_PAYOUT = fh.getPayout();
 		JAIL_POS = fh.getJailPosition();
-		game = new Game(playerList, squareList, window, random, playerTurn, activePlayers);
+		game = new Game(playerList, squareList, window, random, playerTurn);
 		PhaseListener[] tradeListeners = new PhaseListener[num_players];
 		for (int i = 0; i < num_players; i++) {
 			tradeListeners[i] = new PhaseListener(GamePhase.TRADE, playerList[i]);
@@ -277,10 +277,12 @@ public class OaklandOligarchy {
 
 	private static class PayListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
-			game.getCurrentPlayer().charge(JAIL_COST);	//TODO when charge returns a bool check to see if they could pay
-			game.getCurrentPlayer().leaveJail();
-			window.update(game.getCurrentPlayer());
-			JOptionPane.showMessageDialog(null, "You paid $" + JAIL_COST + " to leave jail.");
+			game.getCurrentPlayer().charge(JAIL_COST);
+			if (!game.getCurrentPlayer().getLoser()) {
+				game.getCurrentPlayer().leaveJail();
+				window.update(game.getCurrentPlayer());
+				JOptionPane.showMessageDialog(null, "You paid $" + JAIL_COST + " to leave jail.");
+			}
 		}
 	}
 
