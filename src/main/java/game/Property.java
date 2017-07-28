@@ -176,7 +176,7 @@ public class Property extends Square{
 	 * @return	True if it is a transport property.
 	 */
 	public boolean isTransport(){
-		return name.equals("63A") || name.equals("63B") || name.equals("63C") || name.equals("63D");
+		return (name.equals("61A") || name.equals("61B") || name.equals("61C") || name.equals("61D"));
 		
 	}
 }
