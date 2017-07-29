@@ -15,7 +15,7 @@ import java.lang.StringBuilder;
  * @author Woodrow Fulmer
  */
 public class FileHandler{
-	private static final String DEFAULT_FILE_NAME = "defaultFile.txt";
+	private static final String DEFAULT_FILE_NAME = "default_file_encrypt.txt";
 	private static final int CIPHER = 3;
 	
 	private ArrayList<Player> playerList;	
@@ -160,6 +160,13 @@ public class FileHandler{
 		else if(input[0].equals("Go")) {
 			squareList[Integer.parseInt(input[1])] = new GoSquare();
 			ownerList[current] = -1;
+		}
+		else if (input[0].equals("Transport")) {
+			squareList[current] = new Property(input[2], Integer.parseInt(input[3]), Integer.parseInt(input[4]));
+			ownerList[current] = Integer.parseInt(input[5]);
+			if(input[5].equals("m")) {
+				((Property)squareList[current]).setMortgaged(true);
+			}
 		}
 	}
 	
