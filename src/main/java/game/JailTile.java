@@ -23,6 +23,7 @@ public class JailTile extends Tile {
 		button.setToolTipText("Your mouse is currently in jail");
 		
 		prison = new JPanel();
+		prison.setPreferredSize(new Dimension(20,30));
 		prison.setBackground(Color.white);
 		this.add(prison);
 		
