@@ -30,6 +30,8 @@ public class Window extends JFrame {
 	 * @param	mortgageListener	Mortgage button trigger
 	 * @param	pl					Property info button trigger
 	 * @param	jl					Pay button trigger for paying to escape jail
+	 * @param	il					Instructions button trigger
+	 * @param	asl					Asction Square List button trigger
 	 */
 
 	public Window(Square[] squareList, Random random, ActionListener bl, ActionListener ml, ActionListener el, Time time, ActionListener ll, ActionListener sl,  ActionListener mortgageListener, ActionListener pl, ActionListener jl, ActionListener il, ActionListener asl) {
