@@ -108,7 +108,7 @@ public class Game {
 			String message = "You rolled a " + roll[0] + " and a " + roll[1] + " and landed on " + squareName;
 			if (roll[0] == roll[1]) {
 				message += "\nYou got doubles!";
-				if (this.getCurrentPlayer().addToDoublesCounter()==3){
+				if (this.getCurrentPlayer().addToDoublesCounter() == 3){
 					this.getCurrentPlayer().goToJail();
 					message += "\nYou got 3 doubles in a row so you go to jail.";
 					JOptionPane.showMessageDialog(null, message);
@@ -171,6 +171,7 @@ public class Game {
 	 * Runs the game phase that ends each players turn
 	 */
 	public void endPhase() {
+
 		Square curSquare = board.getSquare(getCurrentPlayer().getPosition());
 		if (curSquare instanceof Property) {
 			if (((Property) curSquare).getOwner() == null) {
@@ -188,38 +189,30 @@ public class Game {
 	}
 
 	/**
-	 *	A psuedo-random roll that simulates 2 six-sided dice
-	 *
-	 * @param	timeMillis		A long integer used to the seed the random roll
-	 * @returns					An integer value between 2-12 that is the result of rolling 2 six-sided dice
-	 */
-	private int[] roll(Long timeMillis) {
-		Random rand = new Random(timeMillis);
-		int[] roll = new int[2];
-		roll[0] = rand.nextInt(6) + 1;
-		roll[1] = rand.nextInt(6) + 1;
-		return roll;
-	}
-
-	/**
 	 * Runs the game phase where the player performs an action based on the tile they are on
 	 */
 	public void actionPhase() {
+
 		Player player = this.getCurrentPlayer();
 		Square square = board.getSquare(player.getPosition());
-		if(square == null) {									//Check to ensure that a tile was retrieved properly from the board
+		if (square == null) {									//Check to ensure that a tile was retrieved properly from the board
 			return;
 		}
 		// Either charges or prompts player to purchase depending on whether
 		// it is owned or not
 		boolean cannotBuy = square.act(player);
-		if(!cannotBuy) {
+		if (!cannotBuy) {
 			window.enableBuy();
 		}
 		if (square instanceof ActionSquare) {
 			actionHandler.run(player);
 		}
-		window.update(player);
+		if (getCurrentPlayer().getLoser()) {
+			endPhase();
+		} else {
+			window.update(getCurrentPlayer());
+		}
+
 	}
 
 	/**
@@ -228,7 +221,7 @@ public class Game {
 	public void buyPhase() {
 		Player player = this.getCurrentPlayer();
 		Square square = board.getSquare(player.getPosition());
-		if(square.act(player)) {
+		if (square.act(player)) {
 			window.disableBuy();
 		}
 		window.update(player);
@@ -374,11 +367,141 @@ public class Game {
 		updateBuyButton();
 	}
 
+	/**
+	 *	A psuedo-random roll that simulates 2 six-sided dice
+	 *
+	 * @param	timeMillis		A long integer used to the seed the random roll
+	 * @returns					An integer value between 2-12 that is the result of rolling 2 six-sided dice
+	 */
+	private int[] roll(Long timeMillis) {
+		Random rand = new Random(timeMillis);
+		int[] roll = new int[2];
+		roll[0] = rand.nextInt(6) + 1;
+		roll[1] = rand.nextInt(6) + 1;
+		return roll;
+	}
+
+	/*
+
+	private void auctionPhase(Property prop) {
+
+		int highestBid = prop.getPrice();
+
+		Player[] participatingPlayers = new Player[active_players];
+
+		int index = 0;
+		for (int i = 0; i < num_players; i++) {
+			if (!playerList[i].getLoser()) {
+				participatingPlayers[index] = playerList[i];	
+				index++;
+			}
+		}
+
+		JDialog auctionDialog = new JDialog(window, "Auction", true);
+
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.insets = new Insets(10,30,10,30);
+
+		JPanel auctionPanel = new JPanel();
+		auctionPanel.setLayout(new GridBagLayout());
+
+		JLabel header = new JLabel("Auction for " + prop.getName());
+		JLabel bid = new JLabel("Bidding starts at " + prop.getPrice());
+
+		auctionPanel.add(header, constraints);
+		constraints.gridy++;
+		auctionPanel.add(bid, constraints);
+
+
+		JPanel[] playerPanel = new JPanel[active_players];
+		JLabel[] playerLabel = new JLabel[active_players];
+		JButton[] submitButton = new JButton[active_players];
+		JButton[] endButton = new JButton[active_players];
+		JSpinner[] playerSpinner = new JSpinner[active_players];
+		SpinnerModel spinner; 
+		for (int i = 0; i < active_players; i++) {
+			playerPanel[i] = new JPanel();
+			playerPanel[i].setLayout(new GridBagLayout());
+
+			Player player = participatingPlayers[i];
+
+			playerLabel[i] = new JLabel(participatingPlayers[i].getName());
+
+			if (player.getMoney() <= highestBid) {
+				spinner = new SpinnerNumberModel(0, 0, 0, 1);
+			} else {
+				spinner = new SpinnerNumberModel(highestBid, 0, player.getMoney(), 1);
+			}
+			playerSpinner[i] = new JSpinner(spinner);
+
+			submitButton[i] = new JButton("Submit bid");
+			submitButton[i].setActionCommand(Integer.toString(i));
+			submitButton.addActionListener(new ActionListener() {
+
+				public void ActionPerformed(ActionEvent e) {
+					
+					int index = Integer.parseInt(e.getActionCommand());
+					
+					int bid = (Integer) playerSpinner[index].getValue();
+					if (bid > highestBid) {
+						highestBid = bid;
+						
+						// Next bidder		
+					} else {
+						return;
+					}
+				}
+			});
+			endButton[i] = new JButton("Withdraw");
+			endButton[i].addActionCommand(Integer.toString(i));
+			// endButton.addActionListener(new ActionListener(
+
+			constraints.gridx = 0;
+			constraints.anchor = GridBagConstraints.WEST;
+			playerPanel[i].add(playerLabel[i], constraints);
+
+			constraints.gridx++;
+			constraints.anchor = GridBagConstraints.EAST;
+			playerPanel[i].add(playerSpinner[i], constraints);
+
+			constraints.gridx++;
+			playerPanel[i].add(submitButton[i], constraints);
+			
+			constraints.gridx++;
+			playerPanel[i].add(endButton[i], constraints);
+			
+
+			constraints.gridx = 0;
+			constraints.gridy++;
+
+			auctionPanel.add(playerPanel[i], constraints);
+
+		}
+			
+		auctionDialog.getContentPane().add(auctionPanel);
+		auctionDialog.pack();
+
+		auctionDialog.setVisible(true);
+
+		/*
+		int finalPrice = auction(participatingPlayers);
+
+		if (participatingPlayers.size() == 1) {
+			Player winningBidder = participatingPlayers.get(0);
+			winningBidder.charge(finalPrice);
+			winningBidder.addProperty(prop);
+		}
+	}
+		*/
+
+
 
 	/**
 	 * Runs the game phase where the property is auctioned to the other players
 	 */
 	public void auctionPhase() {
+
+//		auctionPhase((Property) board.getSquare(getCurrentPlayer().getPosition()));
 		ArrayList<Player> remainingPlayers = new ArrayList<Player>(Arrays.asList(playerList));
 		int i = 0;
 		remainingPlayers.remove(getCurrentPlayer());
@@ -437,7 +560,9 @@ public class Game {
 		for (Property prop : tradeeProps) {
 			trader.addProperty(tradee.removeProperty(prop));
 		}
-		if (traderProfit > 0) {
+		if (traderProfit == 0) {
+			return;
+		} else if (traderProfit > 0) {
 			trader.getPaid(traderProfit);
 			tradee.charge(traderProfit);
 		} else {
@@ -496,6 +621,10 @@ public class Game {
 
 	public void debtCollection(Player debtor) {
 
+		if (debtor.getMoney() >= 0) {
+			return;
+		}
+
 		JDialog debtDialog = new JDialog(window, "Debt Collection", true);
 		debtDialog.setSize(600, 600);
 
@@ -505,12 +634,16 @@ public class Game {
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.insets = new Insets(10,30,10,30);
 
+		JLabel infoLabel = new JLabel(debtor.getName() + " is in debt for $" + debtor.getMoney() * -1);
 		JLabel tradeWithPlayersLabel = new JLabel("Trade with the following players");
 		constraints.gridwidth = active_players - 1;
 		constraints.gridy = 0;
+		debtPanel.add(infoLabel, constraints);
+		constraints.gridy++;
 		debtPanel.add(tradeWithPlayersLabel, constraints);
 
 		constraints.gridy++;	
+		constraints.gridwidth = 1;
 		for (Player p : playerList) {
 			if (p != debtor && !p.getLoser()) {
 				constraints.gridx++;
@@ -526,6 +659,9 @@ public class Game {
 				debtPanel.add(temp, constraints);
 			}
 		}
+
+		constraints.gridx = 0;
+		constraints.gridwidth = active_players - 1;
 
 		JLabel temp = new JLabel(" ");
 		constraints.gridy++;
@@ -622,10 +758,6 @@ public class Game {
 			loserCleanUp(player);
 
 			winCheck();
-
-			if (getCurrentPlayer() == player) {
-				endPhase();
-			}
 
 		}
 	}
