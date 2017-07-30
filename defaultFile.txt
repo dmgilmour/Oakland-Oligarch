@@ -1,10 +1,10 @@
 Time	0
 GoPayout	200
 
-Player	0	null	0xFFA9A9	1500	0	*	-1
-Player	1	null	0xA9BDFF	1500	0	-	-1
-Player	2	null	0xFAFFA9	1500	0	-	-1
-Player	3	null	0xA9FFB5	1500	0	-	-1
+Player	0	null	0xFFA9A9	1500	0	*	-1	null
+Player	1	null	0xA9BDFF	1500	0	-	-1	null
+Player	2	null	0xFAFFA9	1500	0	-	-1	null
+Player	3	null	0xA9FFB5	1500	0	-	-1	null
 
 Go	0
 Property	1	Griffiths Street		60	20	-1	u

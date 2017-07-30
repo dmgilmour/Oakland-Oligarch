@@ -7,7 +7,10 @@ import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.lang.Throwable;
+import javax.swing.JLabel;
+import javax.swing.ImageIcon;
 import java.lang.StringBuilder;
+
 
 /**
  * A class that will handle the saving and loading of the game.
@@ -134,6 +137,17 @@ public class FileHandler{
 				p.addToJailCounter();
 			}
 		}
+		
+		JLabel label = new JLabel();
+		label.setSize(40,40);
+		ImageIcon image = new ImageIcon("", "null");
+		if(!input[8].equals("null")) {
+			image = new ImageIcon(input[8] + ".png", input[8]);
+		}
+		image = new ImageIcon(image.getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH), image.toString());
+		label.setIcon(image);
+		p.setToken(label);
+		
 		playerList.add(p);
 	}
 	
@@ -244,11 +258,13 @@ public class FileHandler{
 			sb.append("-\t");
 		}
 		if(p.isInJail()) {
-			sb.append(p.getJailCounter());
+			sb.append(p.getJailCounter() + "\t");
 		}
 		else {
-			sb.append("-1");
+			sb.append("-1\t");
 		}
+  	sb.append(((ImageIcon)(p.getToken().getIcon())).getDescription());
+    
 		String encrypted = encrypt(sb.toString());
 		bw.write(encrypted);
 		bw.newLine();

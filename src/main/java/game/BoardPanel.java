@@ -12,6 +12,7 @@ public class BoardPanel extends JPanel {
 	private Tile[] tiles;
 	private ActionListener propertyListener;
 	private JailTile jail;
+	private JPanel centerSquare;
 	
 	/**
 	 * Constructor to build the board panel object.
@@ -35,7 +36,7 @@ public class BoardPanel extends JPanel {
 			}
 			else if(squareList[i] instanceof JailSquare){
 				jail = new JailTile(i, (JailSquare)squareList[i]);
-				jail.getButton().setBackground(Color.lightGray);
+        jail.getButton().setBackground(Color.lightGray);
 				tiles[i] = jail;
 			}
 			else {	//this is going to be an action square. This should probably change somehow
@@ -49,17 +50,7 @@ public class BoardPanel extends JPanel {
 		
 
 		GridBagConstraints constraint = new GridBagConstraints();
-
-		/*
-		JButton centerSquare = new JButton("Center");
-		constraint.gridx = 1;
-		constraint.gridy = 1;
-		constraint.gridheight = 8;
-		constraint.gridwidth = 8;
-		constraint.weightx = 0.8;
-		constraint.weighty = 0.8;
-		add(centerSquare, constraint);
-		*/
+		
 		
 		//r = button ROW
 		//c = button COLLUMN
@@ -95,6 +86,18 @@ public class BoardPanel extends JPanel {
 			this.add(tiles[i],constraint);
 			i++;
 		}
+		
+		
+		centerSquare = new JPanel(new BorderLayout());
+		centerSquare.setBackground(new Color(0x0196C3));
+		constraint.gridx = 1;
+		constraint.gridy = 1;
+		constraint.gridheight = 8;
+		constraint.gridwidth = 8;
+		constraint.weightx = 0.1;
+		constraint.weighty = 0.1;
+		constraint.fill = GridBagConstraints.BOTH;
+		add(centerSquare, constraint);
 	}	
 	
 	/**
@@ -128,4 +131,15 @@ public class BoardPanel extends JPanel {
 		}
 		jail.update();
 	}
+
+	public void updateMeeseeks() {
+		ImageIcon image = new ImageIcon("meeseeks2.jpg");
+
+		image = new ImageIcon(image.getImage().getScaledInstance((centerSquare.getHeight() / 2), (centerSquare.getHeight() / 2), java.awt.Image.SCALE_FAST));
+		JLabel background = new JLabel();
+		background.setIcon(image);
+		centerSquare.setLayout(new GridBagLayout());
+		centerSquare.add(background, new GridBagConstraints());
+	}
+		
 }
