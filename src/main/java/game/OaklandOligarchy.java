@@ -327,13 +327,13 @@ public class OaklandOligarchy {
 				audioClip.addLineListener(this);
 				audioClip.open(audioStream);
 				audioClip.start();
-				while(!playCompleted){
+				/*while(!playCompleted){
 					try{
 						Thread.sleep(100);
 					}catch(InterruptedException ie){
 						ie.printStackTrace();
 					}
-				}
+				}*/
 			} catch(UnsupportedAudioFileException uafe){
 				System.out.println("The specified audio file is not supported.");
 				uafe.printStackTrace();
@@ -349,11 +349,11 @@ public class OaklandOligarchy {
 		public void update(LineEvent event){
 			LineEvent.Type type = event.getType();
 			if(type == LineEvent.Type.START){
-				System.out.println("Playback started.");
+				//System.out.println("Playback started.");
 			}
 			else if(type == LineEvent.Type.STOP){
 				playCompleted = true;
-				System.out.println("Playback completed.");
+				//System.out.println("Playback completed.");
 			}
 		}
 	}
