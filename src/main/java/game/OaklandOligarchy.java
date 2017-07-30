@@ -24,6 +24,7 @@ public class OaklandOligarchy {
 
 	public enum GamePhase {MOVE, ACTION, END, START, BUY, TRADE};
 
+	private static final String[] ICON_FILE_NAMES = {"Helmet", "Insignia", "Mascot", "Script"};
 	public static final int NUMBER_OF_TILES = 36;
 	public static final int MAX_NUMBER_OF_PLAYERS = 4;
 	public static final int NUMBER_OF_ACTIONS = 14;
@@ -114,11 +115,20 @@ public class OaklandOligarchy {
 		JAIL_POS = fh.getJailPosition();
 		game = new Game(playerList, squareList, window, random, playerTurn);
 		PhaseListener[] tradeListeners = new PhaseListener[num_players];
+		
+		ArrayList<String> icons = new ArrayList<String>();
+		for(String name: ICON_FILE_NAMES) {
+			icons.add(name);
+		}
+		
 		for (int i = 0; i < num_players; i++) {
 			tradeListeners[i] = new PhaseListener(GamePhase.TRADE, playerList[i]);
 			if(playerList[i].getName().equals("null")) {
 				String name = promptName(i);
 				playerList[i].setName(name);
+			}
+			if(playerList[i].getToken().getIcon() == null) {
+				promptTokens(icons, playerList[i]);
 			}
 		}
 		window.setPlayers(playerList, tradeListeners);
@@ -196,6 +206,18 @@ public class OaklandOligarchy {
 			System.exit(0);
 		}
 		return toReturn;
+	}
+	
+	private static void promptTokens(ArrayList<String> icons, Player p) {
+		String selected = (String)(JOptionPane.showInputDialog(null, p.getName() + "\nSelect a token:", "Token Selection", JOptionPane.PLAIN_MESSAGE, null, icons.toArray(), (Object)icons.get(0)));
+		ImageIcon image = new ImageIcon(selected + ".png");
+
+		image = new ImageIcon(image.getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH), selected);
+		JLabel label = new JLabel();
+		label.setIcon(image);
+		
+		p.setToken(label);
+		icons.remove(selected);
 	}
 
 	/**
