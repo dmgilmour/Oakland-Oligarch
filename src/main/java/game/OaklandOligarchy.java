@@ -195,7 +195,29 @@ public class OaklandOligarchy {
 		if (toReturn == null) {
 			System.exit(0);
 		}
+		nameCheck(toReturn);
 		return toReturn;
+	}
+
+	/**
+	 * Method checking if the name entered is an "easter egg," and if something
+	 * special should happen
+	 *
+	 * @param	name	String entered as a name for a player.
+	 */
+	private static void nameCheck(String name){
+		if(name.equals("Morty")){
+			String audioFilePath = "./sounds/my_name_is_morty_smith.wav";
+			player.play(audioFilePath);
+		}
+		if(name.equals("Mr.Meeseeks")){
+			String audioFilePath = "./sounds/Hi_I'm_mr_meeseeks_look_at_me.wav";
+			player.play(audioFilePath);
+		}
+		if(name.equals("Tiny Rick")){
+			String audioFilePath = "./sounds/rick.wav";
+			player.play(audioFilePath);
+		}
 	}
 
 	/**
@@ -317,6 +339,11 @@ public class OaklandOligarchy {
 	public static class AudioPlayer implements LineListener{
 		boolean playCompleted;
 
+		/**
+		 * Tries to play the sound file with path equal to audioFilePath.
+		 *
+		 * @param	audioFilePath	String version of the path for a sound to be played.
+		 */
 		public void play(String audioFilePath){
 			File audioFile = new File(audioFilePath);
 			try{
