@@ -155,9 +155,13 @@ public class ActionHandler {
 		JOptionPane.showMessageDialog(null, "Bacteria in the water!!!\n" + prop.getName() + " has safe water...");
 		Player owner = prop.getOwner();
 		if (owner == null) {
-			int choice = JOptionPane.showConfirmDialog(null, "Would you like to buy " + prop.getName() + " for " + (prop.getPrice()*2) + "(twice the cost)?", "Buy property?", JOptionPane.YES_NO_OPTION);
-			if (choice == JOptionPane.YES_OPTION) {
-				p.buy(prop);
+			if (p.canAfford(prop.getPrice() * 2)) {
+				int choice = JOptionPane.showConfirmDialog(null, "Would you like to buy " + prop.getName() + " for " + (prop.getPrice()*2) + " (twice the cost)?", "Buy property?", JOptionPane.YES_NO_OPTION);
+				if (choice == JOptionPane.YES_OPTION) {
+					p.buy(prop);
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "You realize buying this property would be a sound investment...\nbut you're too poor to afford it");
 			}
 		} else {
 			String message = owner.getName() + " is selling water:\n";
@@ -416,7 +420,6 @@ public class ActionHandler {
 		}
 		p.moveDistance(moveAmount);
 		Property randProp = (Property)randSquare;
-
 		JOptionPane.showMessageDialog(null, "Become a subletter:\n" + p.getName() + " moves to " + randProp.getName() + "\nand pays $" + randProp.getRent());
 
 		p.payRent(randProp);
