@@ -55,7 +55,7 @@ public class Property extends Square{
 	 */
 	public int getRent(){
 		int count=0;
-		if(this.isTransport()){
+		if(this.isTransport() && this.getOwner() != null){
 			for(Property p:this.getOwner().getProperties()){
 				if(p.isTransport()){
 					count++;
