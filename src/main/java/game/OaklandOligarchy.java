@@ -232,7 +232,7 @@ public class OaklandOligarchy {
 			String audioFilePath = "./sounds/my_name_is_morty_smith.wav";
 			player.play(audioFilePath);
 		}
-		if(name.equals("Mr.Meeseeks")){
+		if(name.equals("Mr. Meeseeks")){
 			String audioFilePath = "./sounds/Hi_I'm_mr_meeseeks_look_at_me.wav";
 			player.play(audioFilePath);
 		}
