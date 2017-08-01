@@ -385,6 +385,8 @@ public class Game {
 		int[] roll = new int[2];
 		roll[0] = rand.nextInt(6) + 1;
 		roll[1] = rand.nextInt(6) + 1;
+		String audioFilePath = "./sounds/dice_roll.wav";
+		OaklandOligarchy.player.play(audioFilePath);
 		return roll;
 	}
 
