@@ -235,7 +235,7 @@ public class Game {
 	public void tradePhase(Player tradee) {
 		tradePhase(getCurrentPlayer(), tradee);
 	}
-		
+
 	public void tradePhase(Player trader, Player tradee) {
 
 		JDialog tradeDialog = new JDialog(window, "Trade", true);
@@ -325,7 +325,8 @@ public class Game {
 
 				int dialogResult = JOptionPane.showConfirmDialog (null, tradee.getName() + ": Do you accept this trade?" , "Confirm Trade", JOptionPane.YES_NO_OPTION);
 				if (dialogResult == JOptionPane.YES_OPTION) {
-
+					String audioFilePath = "./sounds/Oooo_yeah__caaan_doo!.wav";
+					OaklandOligarchy.player.play(audioFilePath);
 					int traderProfit = (Integer) tradeeMoneySpinner.getValue() - (Integer) traderMoneySpinner.getValue();
 
 
@@ -346,6 +347,10 @@ public class Game {
 					tradeDialog.dispose();
 					window.update(getCurrentPlayer());
 				}
+				else{
+					String audioFilePath = "./sounds/In_bird_culture.wav";
+					OaklandOligarchy.player.play(audioFilePath);
+				}
 			}
 		});
 
@@ -353,7 +358,7 @@ public class Game {
 	}
 
 
-		
+
 
 
 	public void toggleMortgage(int propIndex) {
@@ -391,7 +396,7 @@ public class Game {
 		int index = 0;
 		for (int i = 0; i < num_players; i++) {
 			if (!playerList[i].getLoser()) {
-				participatingPlayers[index] = playerList[i];	
+				participatingPlayers[index] = playerList[i];
 				index++;
 			}
 		}
@@ -417,7 +422,7 @@ public class Game {
 		JButton[] submitButton = new JButton[active_players];
 		JButton[] endButton = new JButton[active_players];
 		JSpinner[] playerSpinner = new JSpinner[active_players];
-		SpinnerModel spinner; 
+		SpinnerModel spinner;
 		for (int i = 0; i < active_players; i++) {
 			playerPanel[i] = new JPanel();
 			playerPanel[i].setLayout(new GridBagLayout());
@@ -438,14 +443,14 @@ public class Game {
 			submitButton.addActionListener(new ActionListener() {
 
 				public void ActionPerformed(ActionEvent e) {
-					
+
 					int index = Integer.parseInt(e.getActionCommand());
-					
+
 					int bid = (Integer) playerSpinner[index].getValue();
 					if (bid > highestBid) {
 						highestBid = bid;
-						
-						// Next bidder		
+
+						// Next bidder
 					} else {
 						return;
 					}
@@ -465,10 +470,10 @@ public class Game {
 
 			constraints.gridx++;
 			playerPanel[i].add(submitButton[i], constraints);
-			
+
 			constraints.gridx++;
 			playerPanel[i].add(endButton[i], constraints);
-			
+
 
 			constraints.gridx = 0;
 			constraints.gridy++;
@@ -476,7 +481,7 @@ public class Game {
 			auctionPanel.add(playerPanel[i], constraints);
 
 		}
-			
+
 		auctionDialog.getContentPane().add(auctionPanel);
 		auctionDialog.pack();
 
@@ -583,7 +588,7 @@ public class Game {
 				}
 			}
 		}
-					
+
 	}
 
 	/**
@@ -641,7 +646,7 @@ public class Game {
 		constraints.gridy++;
 		debtPanel.add(tradeWithPlayersLabel, constraints);
 
-		constraints.gridy++;	
+		constraints.gridy++;
 		constraints.gridwidth = 1;
 		for (Player p : playerList) {
 			if (p != debtor && !p.getLoser()) {
@@ -724,7 +729,7 @@ public class Game {
 		});
 
 		constraints.gridy++;
-		debtPanel.add(exit, constraints);		
+		debtPanel.add(exit, constraints);
 
 
 
@@ -751,9 +756,11 @@ public class Game {
 		if (player.getMoney() < 0) {
 
 			window.printLoser(player);
+			String audioFilePath = "./sounds/Riggity.wav";
+			OaklandOligarchy.player.play(audioFilePath);
 			player.setLoser(true);
 			active_players--;
-			
+
 			loserCleanUp(player);
 
 			winCheck();
