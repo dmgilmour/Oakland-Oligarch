@@ -21,7 +21,6 @@ public class Player {
 	private boolean inJail;
 	private int jailCounter;		//how many turns a player has been in jail
 	private int doublesCounter;		//how many times a player has rolled doubles
-	private int worth;				//amount of money a player can have with mortgaging their properties.
 	private boolean winner;
 
 
@@ -44,24 +43,6 @@ public class Player {
 		loser = false;
 		jailCounter=0;
 		inJail = false;
-		worth = money;
-		winner=false;
-	}
-
-	public int getWorth(){
-		return worth;
-	}
-
-	public void addWorth(int w){
-		worth += w;
-	}
-
-	public void setWorth(int value){
-		worth = value;
-	}
-
-	public void removeWorth(int w){
-		worth -= w;
 	}
 
 	public boolean getLoser(){
@@ -154,7 +135,6 @@ public class Player {
 		}
 		properties.add(property);
 		property.setOwner(this);
-		this.addWorth(property.getPrice() / 2);
 		int count = 0;
 		for(Property p: properties){
 			if(p.isTransport()){
