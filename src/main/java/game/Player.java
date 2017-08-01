@@ -21,6 +21,7 @@ public class Player {
 	private boolean inJail;
 	private int jailCounter;		//how many turns a player has been in jail
 	private int doublesCounter;		//how many times a player has rolled doubles
+	private boolean winner;
 
 
 	/**
@@ -119,7 +120,7 @@ public class Player {
 	}
 
 	/**
-	 * Adds a given property to this player's propertyList
+	 * Adds a given property to this player's propertyList. Any place where this is called, you must check for winner (isWinner) after.
 	 *
 	 * @param	property	the property to be added
 	 * @return				the success of adding this property
@@ -134,6 +135,15 @@ public class Player {
 		}
 		properties.add(property);
 		property.setOwner(this);
+		int count = 0;
+		for(Property p: properties){
+			if(p.isTransport()){
+				count++;
+				if(count==4){
+					winner=true;
+				}
+			}
+		}
 		return true;
 	}
 
@@ -285,5 +295,12 @@ public class Player {
 
 	public void resetDoublesCounter(){
 		doublesCounter = 0;
+	}
+	
+	/**
+	 * @return	a boolean that determines if a player owns all 4 transport tiles and wins automatically
+	 */
+	public boolean isWinner(){
+		return winner;
 	}
 }

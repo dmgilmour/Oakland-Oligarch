@@ -13,7 +13,7 @@ public class Property extends Square{
 	private JLabel ownerToken;
 
 	/**
-	 * Constructor for property object. Initializes name, pice, rent, owner,
+	 * Constructor for property object. Initializes name, price, rent, owner,
 	 * 		mortgaged, and ownerToken. Owner, Mortgaged, and OwnerToken are 
 	 *		initialized to null, false, and null, respectively.
 	 *
@@ -54,6 +54,15 @@ public class Property extends Square{
 	 * @return		The rent of this property
 	 */
 	public int getRent(){
+		int count=0;
+		if(this.isTransport() && this.getOwner() != null){
+			for(Property p:this.getOwner().getProperties()){
+				if(p.isTransport()){
+					count++;
+				}
+			}
+			rent = (int)(100 * Math.pow(2, (count-1)));
+		}
 		return rent;
 	}
 
@@ -159,5 +168,14 @@ public class Property extends Square{
 	 */
 	public void setMortgaged(boolean m) {
 		mortgaged = m;
+	}
+	
+	/**
+	 * Returns whether or not this is a transport property.
+	 * @return	True if it is a transport property.
+	 */
+	public boolean isTransport(){
+		return (name.equals("61A") || name.equals("61B") || name.equals("61C") || name.equals("61D"));
+		
 	}
 }

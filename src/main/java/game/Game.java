@@ -206,12 +206,12 @@ public class Game {
 		if (square instanceof ActionSquare) {
 			actionHandler.run(player);
 		}
-		if (getCurrentPlayer().getLoser()) {
-			endPhase();
-		} else {
-			window.update(getCurrentPlayer());
+		for(Player p: playerList){
+			if(p.isWinner()){
+				window.endGame(p);
+			}
 		}
-
+		window.update(player);
 	}
 
 	/**
@@ -222,6 +222,9 @@ public class Game {
 		Square square = board.getSquare(player.getPosition());
 		if (square.act(player)) {
 			window.disableBuy();
+		}
+		if(player.isWinner()){
+			window.endGame(player);
 		}
 		window.update(player);
 	}
@@ -546,6 +549,9 @@ public class Game {
 			JOptionPane.showMessageDialog(null, highestBidder.getName() + " wins the auction for " + prop.getName() + " for $" + topAmount);
 			highestBidder.addProperty(prop);
 			highestBidder.charge(topAmount);
+			if(highestBidder.isWinner()){
+				window.endGame(highestBidder);
+			}
 		}
 	}
 
@@ -560,9 +566,19 @@ public class Game {
 	public void trade(Player trader, Player tradee, Property[] traderProps, Property[] tradeeProps, int traderProfit) {
 		for (Property prop : traderProps) {
 			tradee.addProperty(trader.removeProperty(prop));
+			if(tradee.isWinner()){
+				window.endGame(tradee);
+			}
+			//tradee.addWorth(prop.getPrice() / 2);
+			//trader.removeWorth(prop.getPrice() / 2);
 		}
 		for (Property prop : tradeeProps) {
 			trader.addProperty(tradee.removeProperty(prop));
+			if(trader.isWinner()){
+				window.endGame(trader);
+			}
+			//trader.addWorth(prop.getPrice() / 2);
+			//tradee.removeWorth(prop.getPrice() / 2);
 		}
 		if (traderProfit == 0) {
 			return;
