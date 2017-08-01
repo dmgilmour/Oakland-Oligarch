@@ -134,6 +134,8 @@ public class Window extends JFrame {
 	 public void endGame(Player player){
 		 String winner = player.getName();
 		 JOptionPane.showMessageDialog(null, winner + " has won the game.");
+		 String audioFilePath = "./sounds/wubba_lubba_dub_dub.wav";
+		 OaklandOligarchy.player.play(audioFilePath);
 		 System.exit(0);
 	 }
 
