@@ -175,6 +175,13 @@ public class FileHandler{
 			squareList[Integer.parseInt(input[1])] = new GoSquare();
 			ownerList[current] = -1;
 		}
+		else if (input[0].equals("Transport")) {
+			squareList[current] = new Property(input[2], Integer.parseInt(input[3]), Integer.parseInt(input[4]));
+			ownerList[current] = Integer.parseInt(input[5]);
+			if(input[5].equals("m")) {
+				((Property)squareList[current]).setMortgaged(true);
+			}
+		}
 	}
 	
 	/**
@@ -279,7 +286,12 @@ public class FileHandler{
 	 */	
 	private void saveSquare(BufferedWriter bw, Square s, int index) throws IOException {
 		if(s instanceof Property) {
-			saveProperty(bw, (Property)s, index);
+			Property p = (Property)s;
+			StringBuilder sb = new StringBuilder("Property\t");
+			if (p.isTransport()) {
+				sb = new StringBuilder("Transport\t");
+			}
+			saveProperty(bw, p, index, sb);
 		}
 		else if(s instanceof JailSquare) {
 			String encrypted = encrypt("Jail\t" + index);
@@ -299,9 +311,9 @@ public class FileHandler{
 	 * @param	bw		The output buffer to write to
 	 * @param	p		The property to be saved to file
 	 * @param	index	The index of the given property within the board
+	 * @param	sb		A StringBuilder used to construct the output string
 	 */	
-	private void saveProperty(BufferedWriter bw, Property p, int index) throws IOException {
-		StringBuilder sb = new StringBuilder("Property\t");
+	private void saveProperty(BufferedWriter bw, Property p, int index, StringBuilder sb) throws IOException {
 		sb.append(index + "\t");
 		sb.append(p.getName() + "\t");
 		sb.append(p.getPrice() + "\t");
@@ -325,6 +337,7 @@ public class FileHandler{
 	}
 	
 	private String decrypt(String input) {
+		//return input;
 		char [] chars = input.toCharArray();
 		for(int i = 0; i < chars.length; i++) {
 			chars[i] = (char)(chars[i] + CIPHER);
@@ -333,6 +346,7 @@ public class FileHandler{
 	}
 	
 	private String encrypt(String input) {
+		//return input;
 		char [] chars = input.toCharArray();
 		for(int i = 0; i < chars.length; i++) {
 			chars[i] = (char)(chars[i] - CIPHER);
