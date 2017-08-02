@@ -49,7 +49,6 @@ public class StatusPanel extends JPanel {
 			playerButtons[id] = new JButton(playerList[id].getName() + ": $" + playerList[id].getMoney());	
 			playerButtons[id].addActionListener(tradeListeners[id]);
 			playerButtons[id].setToolTipText("Trade with this player");
-
 			c.gridy = id;
 			add(playerButtons[id], c);
 		}
@@ -85,7 +84,7 @@ public class StatusPanel extends JPanel {
 		}
 
 		GridBagConstraints c = new GridBagConstraints();
-
+		c.fill = GridBagConstraints.HORIZONTAL;
 		// Make new Mortgage/Unmortgage buttons
 		int index = 0;
 		for (Property prop : player.getProperties()) {
@@ -100,7 +99,7 @@ public class StatusPanel extends JPanel {
 			}
 			propButton.addActionListener(mortgageListener);
 			propButton.setActionCommand(Integer.toString(index));
-			c.gridy = index + num_players + 1;
+			c.gridy = index + num_players + 2;
 			this.add(propButton, c);
 			index ++;
 		}
