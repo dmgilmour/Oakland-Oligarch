@@ -174,7 +174,9 @@ public class Game {
 		Square curSquare = board.getSquare(getCurrentPlayer().getPosition());
 		if (curSquare instanceof Property) {
 			if (((Property) curSquare).getOwner() == null) {
-				auctionPhase();
+				if (!getCurrentPlayer().getLoser()) {
+					auctionPhase();
+				}
 			}
 		}
 		this.getCurrentPlayer().resetDoublesCounter();
@@ -388,127 +390,12 @@ public class Game {
 		return roll;
 	}
 
-	/*
-
-	private void auctionPhase(Property prop) {
-
-		int highestBid = prop.getPrice();
-
-		Player[] participatingPlayers = new Player[active_players];
-
-		int index = 0;
-		for (int i = 0; i < num_players; i++) {
-			if (!playerList[i].getLoser()) {
-				participatingPlayers[index] = playerList[i];
-				index++;
-			}
-		}
-
-		JDialog auctionDialog = new JDialog(window, "Auction", true);
-
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.insets = new Insets(10,30,10,30);
-
-		JPanel auctionPanel = new JPanel();
-		auctionPanel.setLayout(new GridBagLayout());
-
-		JLabel header = new JLabel("Auction for " + prop.getName());
-		JLabel bid = new JLabel("Bidding starts at " + prop.getPrice());
-
-		auctionPanel.add(header, constraints);
-		constraints.gridy++;
-		auctionPanel.add(bid, constraints);
-
-
-		JPanel[] playerPanel = new JPanel[active_players];
-		JLabel[] playerLabel = new JLabel[active_players];
-		JButton[] submitButton = new JButton[active_players];
-		JButton[] endButton = new JButton[active_players];
-		JSpinner[] playerSpinner = new JSpinner[active_players];
-		SpinnerModel spinner;
-		for (int i = 0; i < active_players; i++) {
-			playerPanel[i] = new JPanel();
-			playerPanel[i].setLayout(new GridBagLayout());
-
-			Player player = participatingPlayers[i];
-
-			playerLabel[i] = new JLabel(participatingPlayers[i].getName());
-
-			if (player.getMoney() <= highestBid) {
-				spinner = new SpinnerNumberModel(0, 0, 0, 1);
-			} else {
-				spinner = new SpinnerNumberModel(highestBid, 0, player.getMoney(), 1);
-			}
-			playerSpinner[i] = new JSpinner(spinner);
-
-			submitButton[i] = new JButton("Submit bid");
-			submitButton[i].setActionCommand(Integer.toString(i));
-			submitButton.addActionListener(new ActionListener() {
-
-				public void ActionPerformed(ActionEvent e) {
-
-					int index = Integer.parseInt(e.getActionCommand());
-
-					int bid = (Integer) playerSpinner[index].getValue();
-					if (bid > highestBid) {
-						highestBid = bid;
-
-						// Next bidder
-					} else {
-						return;
-					}
-				}
-			});
-			endButton[i] = new JButton("Withdraw");
-			endButton[i].addActionCommand(Integer.toString(i));
-			// endButton.addActionListener(new ActionListener(
-
-			constraints.gridx = 0;
-			constraints.anchor = GridBagConstraints.WEST;
-			playerPanel[i].add(playerLabel[i], constraints);
-
-			constraints.gridx++;
-			constraints.anchor = GridBagConstraints.EAST;
-			playerPanel[i].add(playerSpinner[i], constraints);
-
-			constraints.gridx++;
-			playerPanel[i].add(submitButton[i], constraints);
-
-			constraints.gridx++;
-			playerPanel[i].add(endButton[i], constraints);
-
-
-			constraints.gridx = 0;
-			constraints.gridy++;
-
-			auctionPanel.add(playerPanel[i], constraints);
-
-		}
-
-		auctionDialog.getContentPane().add(auctionPanel);
-		auctionDialog.pack();
-
-		auctionDialog.setVisible(true);
-
-		/*
-		int finalPrice = auction(participatingPlayers);
-
-		if (participatingPlayers.size() == 1) {
-			Player winningBidder = participatingPlayers.get(0);
-			winningBidder.charge(finalPrice);
-			winningBidder.addProperty(prop);
-		}
-	}
-		*/
-
-
 
 	/**
 	 * Runs the game phase where the property is auctioned to the other players
 	 */
 	public void auctionPhase() {
-
-//		auctionPhase((Property) board.getSquare(getCurrentPlayer().getPosition()));
+	
 		ArrayList<Player> remainingPlayers = new ArrayList<Player>(Arrays.asList(playerList));
 		int i = 0;
 		remainingPlayers.remove(getCurrentPlayer());
@@ -516,30 +403,34 @@ public class Game {
 		Property prop = (Property) board.getSquare(getCurrentPlayer().getPosition());
 		int topAmount = prop.getPrice() - 1;
 		while ((remainingPlayers.size() > 1 || highestBidder == null) && remainingPlayers.size() > 0) {
+			String message = "Auction for " + prop.getName() + "\n";
 			i %= remainingPlayers.size();
 			if (remainingPlayers.get(i).getMoney() <= topAmount) {
-				JOptionPane.showMessageDialog(null, "Cannot match bid");
+				message += remainingPlayers.get(i).getName() + ": Cannot match bid";
+				JOptionPane.showMessageDialog(null, message);
 				remainingPlayers.remove(i);
 				continue;
-			}
-			while (true) {
-				String amountString = JOptionPane.showInputDialog(remainingPlayers.get(i).getName() + ": Input a bid above $" + topAmount + " or cancel");
-				if (amountString == null) {
-					remainingPlayers.remove(i);
-					break;
-				} else {
-					try {
-						int amount = Integer.parseInt(amountString);
-						if (amount <= topAmount || amount > remainingPlayers.get(i).getMoney()) {
+			} else {
+				message += remainingPlayers.get(i).getName() + ": Input a bid of $" + (topAmount + 1) + " or greater or press cancel to exit auction";
+				while (true) {
+					String amountString = JOptionPane.showInputDialog(message);
+					if (amountString == null) {
+						remainingPlayers.remove(i);
+						break;
+					} else {
+						try {
+							int amount = Integer.parseInt(amountString);
+							if (amount <= topAmount || amount > remainingPlayers.get(i).getMoney()) {
+								continue;
+							} else {
+								topAmount = amount;
+								highestBidder = remainingPlayers.get(i);
+								i++;
+								break;
+							}
+						} catch (NumberFormatException e) {
 							continue;
-						} else {
-							topAmount = amount;
-							highestBidder = remainingPlayers.get(i);
-							i++;
-							break;
 						}
-					} catch (NumberFormatException e) {
-						continue;
 					}
 				}
 			}
