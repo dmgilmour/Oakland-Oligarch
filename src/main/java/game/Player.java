@@ -2,6 +2,7 @@ package game;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author Woodrow Fulmer
@@ -208,12 +209,24 @@ public class Player {
 
 		money -= cost;
 
+		if (this.getLoser()) {
+			return 0;
+		}
+
 		if (money < 0) {
 
 			OaklandOligarchy.game.debtCollection(this);
+			if (money < 0) {
+				OaklandOligarchy.game.mortgage(this, properties.toArray(new Property[properties.size()]));
+			}
+			int toReturn;
+			if (money < 0) {
+				toReturn = cost + money;
+			} else {
+				toReturn = cost;
+			}
 			OaklandOligarchy.game.lose(this);
-			return cost + money;
-
+			return toReturn;
 		} else {
 
 			return cost;
@@ -230,15 +243,15 @@ public class Player {
 	 */
 	public boolean payRent(Property property) {
 		int cost = property.getRent();
-		boolean success = canAfford(cost);
+		boolean success = this.canAfford(cost);
 
 		Player owner = property.getOwner();
 		if (owner != null) {
-			owner.getPaid(charge(cost));
+			owner.getPaid(this.charge(cost));
 		} else {
-			charge(cost);
+			this.charge(cost);
 		}
-		
+
 		return success;
 	}
 
@@ -248,7 +261,7 @@ public class Player {
 	 * @param	payment		An integer value that the player should receive
 	 */
 	public void getPaid(int payment) {
-		if(payment > 0)
+		if (payment > 0)
 			money += payment;
 	}
 
