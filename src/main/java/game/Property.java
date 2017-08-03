@@ -105,10 +105,12 @@ public class Property extends Square{
 	 * @return			Returns true if the "buy" button should be disabled
 	 */
 	public boolean act(Player player) {
-		if(owner != null && !owner.equals(player)) {
+		if(owner != null) {
 			if (this.mortgaged) {
 				JOptionPane.showMessageDialog(null, "Mortgaged property");
-			} else {
+			} 
+			//Do not try to buy a property you own
+			else if (!owner.equals(player)){
 				player.payRent(this);
 				JOptionPane.showMessageDialog(null, player.getName()+ " pays $" + getRent() + " to " + owner.getName());
 			}
