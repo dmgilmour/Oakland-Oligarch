@@ -209,17 +209,24 @@ public class Player {
 
 		money -= cost;
 
+		if (this.getLoser()) {
+			return 0;
+		}
+
 		if (money < 0) {
 
 			OaklandOligarchy.game.debtCollection(this);
-			OaklandOligarchy.game.mortgage(this, properties.toArray(new Property[properties.size()]));
-			OaklandOligarchy.game.lose(this);
 			if (money < 0) {
-				return cost + money;
-			} else {
-				return cost;
+				OaklandOligarchy.game.mortgage(this, properties.toArray(new Property[properties.size()]));
 			}
-
+			int toReturn;
+			if (money < 0) {
+				toReturn = cost + money;
+			} else {
+				toReturn = cost;
+			}
+			OaklandOligarchy.game.lose(this);
+			return toReturn;
 		} else {
 
 			return cost;
